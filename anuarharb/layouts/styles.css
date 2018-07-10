@@ -84,3 +84,15 @@ section {
 .sidenav__link:hover {
   color: var(--button-color);
 }
+
+@media screen and (max-width: 450px) {
+  .sidenav__link {
+    color: red;
+  }
+}
+
+@media screen and (min-width: 450px) {
+  .sidenav__link {
+    color: red;
+  }
+}
