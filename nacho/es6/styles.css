@@ -1,0 +1,25 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+html{
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+}
+
+.header{
+  display: flex;
+  margin: 30px;
+  justify-content: center;
+  align-items: center;
+  background-color: lightcyan;
+}
+.header_h1{
+  font-size: 48px;
+  font-weight: 100;
+  text-transform: uppercase;
+}
+.cards{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 50px;
+}
