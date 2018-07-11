@@ -1,0 +1,19 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+:root {
+	--color-bar: #f1f1f1;
+	--color-full-bar: #4CAF50;
+}
+
+.progress {
+	background-color: var(--color-bar);
+}
+
+.progress__bar {
+	height: 10px;
+	width: 0px;
+	background-color: var(--color-full-bar)
+}
