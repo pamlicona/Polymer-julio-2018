@@ -1,0 +1,40 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+:root {
+    --bar-height : 100px;
+}
+
+.progress_bar_container {
+    width: 100%;
+    height: var(--bar-height);
+    text-align: left;
+}
+
+.progress_bar {
+    width: 1px;
+    background-color: blue;
+    color: white;
+    height: 100%;
+    transition: 1s;
+    text-align: center;
+    transition-timing-function: linear;
+}
+
+.bar_buttons {
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.bar_button {
+    width: 300px;
+    color: azure;
+    background-color: blueviolet;
+    height: 30px;
+    border-radius: 6px;
+    cursor: pointer;
+}
