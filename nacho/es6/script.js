@@ -13,7 +13,8 @@ function extracNombre(persons){
   for(let person of persons){
     nombreEmail.push({nombre:`${person.name.first} ${person.name.last}`,
                       email:`${person.email}`,
-                      img:`${person.picture.medium}`});
+                      img:`${person.picture.medium}`,
+                      gender: `${person.gender}`});
   }
   return nombreEmail;
 }
@@ -21,8 +22,11 @@ function extracNombre(persons){
 function innerHtml(nomEmails){
   for(let person of nomEmails){
     SECTION_CARDS.innerHTML += `
-    <article class="cards__article">
-      <img class="cards__img" src="${person.img}" alt=" " />
+    <article class="cards__article ${person.gender}">
+      <picture>
+        <img class="cards__img" src="${person.img}" alt=" " media="(min-width:650px)"/>
+        <source src="${person.img}" media="(max-width:650px)"/>
+      </picture>
       <h1 class="article__name">
         ${person.nombre}
       </h1>
