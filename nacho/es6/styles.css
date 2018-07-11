@@ -23,3 +23,10 @@ html{
   grid-template-columns: 1fr 1fr;
   grid-gap: 50px;
 }
+
+.female{
+  background-color: #ff3f9f;
+}
+.male{
+  background-color: #7cb9e8;
+}
