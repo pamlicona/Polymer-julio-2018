@@ -5,5 +5,5 @@ button{
   width: .5%;
   height: 30px;
   background-color: #4CAF50;
-  transition: width 2s;
+  transition: width 900ms ;
 }
