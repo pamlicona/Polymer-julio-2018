@@ -10,3 +10,12 @@ for(let button of hamburguerMenu) {
 function showSidenav(event) {
   sidenav.classList.toggle('hidden');
 }
+
+// console.log(a);
+let a = "Abner";
+
+let scopeDeFuncion = () => { let name = "abner"; console.log(name); }
+console.log(name);
+console.log(a);
+
+scopeDeFuncion();
