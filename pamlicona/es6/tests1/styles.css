@@ -1,0 +1,35 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --color-card: aliceblue;
+}
+
+.section {
+  display: grid;
+  grid-template-columns: auto auto;
+}
+
+.section__card {
+  background-color: var(--color-card);
+  padding: 10px;
+  box-sizing: border-box;
+  margin: 10px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.section__info {
+  display: grid;
+  align-items: center;
+}
+
+.secction__image {
+  padding-right: 12px;
+}
+
+.capital {
+  text-transform: capitalize;
+}
