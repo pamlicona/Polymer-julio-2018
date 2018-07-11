@@ -87,7 +87,6 @@
 
 .grid_item {
     height: 90%;
-    background-color: aquamarine;
     padding: 15px;
 }
 
@@ -118,4 +117,30 @@
     margin-top: 15px;
     height: 60px;
     margin-bottom: 15px;
+}
+
+.people_grid {
+    margin-top: 15px;
+    display: grid;
+    grid-template-columns: repeat(5, 20%);
+    grid-template-rows: 250px 250px;
+}
+
+.person_item {
+    text-align: center;
+}
+
+.person_name {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.person_email {
+    font-size: 14px;
+    color: blue;
+}
+
+.centered {
+    margin: 0 auto;
+    text-align: center;
 }
