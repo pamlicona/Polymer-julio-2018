@@ -1,0 +1,9 @@
+button{
+  margin:20px;
+}
+.loader{
+  width: .5%;
+  height: 30px;
+  background-color: #4CAF50;
+  transition: width 900ms ;
+}
