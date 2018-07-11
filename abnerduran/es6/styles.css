@@ -21,6 +21,14 @@ h1 {
     color: aliceblue;
 }
 
+ul {
+    margin-left: 2rem;
+}
+
+li span {
+    font-weight: bold;
+}
+
 .container {
     padding: 0 15px;
     max-width: 1024px;
@@ -42,7 +50,8 @@ h1 {
 
 .person {
     display: grid;
-    grid-template-columns: 50px 1fr;
+    /* grid-template-columns: 50px 1fr; */
+    grid-template-columns: 1fr;
     grid-gap: 20px;
     align-items: center;
 }
