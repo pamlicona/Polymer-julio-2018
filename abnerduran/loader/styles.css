@@ -1,0 +1,47 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+:root {
+    --loader-color: blue;
+}
+
+h2 {
+    display: none;
+    text-align: center;
+    color: cadetblue;
+    font-size: 3rem;
+}
+
+.loader {
+    height: 20px;
+    width: 0vw;
+    transition: width 1s ease-in;
+}
+
+.blue {
+    background: var(--loader-color);
+}
+.red {
+    background: red;
+}
+.green {
+    background: green;
+}
+.orange {
+    background: orange;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 2rem;
+}
+
+button {
+    padding: 15px 10px;
+    width: 10vw;
+    color: white;
+    font-size: 1.2rem;
+}

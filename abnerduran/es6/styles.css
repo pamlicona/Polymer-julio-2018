@@ -1,0 +1,58 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 16px;
+}
+
+header, 
+footer {
+    height: 12vh;
+    background: rgb(0, 9, 117);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+h1 {
+    margin: 16px 0;
+    color: aliceblue;
+}
+
+.container {
+    padding: 0 15px;
+    max-width: 1024px;
+    margin: 2rem auto 3rem;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 20px;
+    margin-top: 2rem;
+}
+
+.card {
+    border: 1px solid rgb(72, 72, 72);
+    padding: 1rem;
+    box-shadow: 2px 1px 6px 0px rgb(72, 72, 72);
+}
+
+.person {
+    display: grid;
+    grid-template-columns: 50px 1fr;
+    grid-gap: 20px;
+    align-items: center;
+}
+
+.ame {
+    font-weight: bold;
+    font-size: 1.2rem;
+    text-transform: capitalize;
+}
+
+footer {
+    background: rgb(72, 72, 72);
+}
