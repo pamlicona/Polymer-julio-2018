@@ -1,0 +1,24 @@
+{
+  "people": [
+    {
+      "nombre": "anuar",
+      "especie": "humano"
+    },
+    {
+      "nombre": "nacho",
+      "especie": "humano"
+    },
+    {
+      "nombre": "pamela",
+      "especie": "humano"
+    },
+    {
+      "nombre": "abner",
+      "especie": "humano"
+    },
+    {
+      "nombre": "rafa",
+      "especie": "humano"
+    }
+  ]
+}

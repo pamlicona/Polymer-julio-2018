@@ -54,6 +54,8 @@ section {
 .sidenav {
   background-color: gray;
   box-sizing: border-box;
+  display:grid;
+  grid-template-columns: 1fr;
   position: fixed;
   right: 0;
   top: 0;
@@ -61,6 +63,13 @@ section {
   padding: 40px;
   width: 300px;
   transition: right .5s;
+}
+
+@supports not (display: grid) {
+  .sidenav {
+    display: flex;
+
+  }
 }
 
 .hidden {
@@ -83,4 +92,16 @@ section {
 
 .sidenav__link:hover {
   color: var(--button-color);
+}
+
+@media screen and (max-width: 450px) {
+  .sidenav__link {
+    color: red;
+  }
+}
+
+@media screen and (min-width: 450px) {
+  .sidenav__link {
+    color: red;
+  }
 }
