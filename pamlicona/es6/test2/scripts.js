@@ -3,13 +3,17 @@
 const section = document.querySelector('.section');
 const API_URL = 'https://randomuser.me/api/?results=10';
 
+let getData = resp => {
+  for(let item of resp.results) {
+    let person = new People(item.gender, item.location.city, item.dob.age, item.phone, item.picture.large);
+    person.createCards();
+  }
+}
+
 fetch(API_URL)
   .then(resp => resp.json())
   .then(resp => {
-    for(let item of resp.results) {
-      let person = new People(item.gender, item.location.city, item.dob.age, item.phone, item.picture.large);
-      person.createCards();
-    }
+    getData(resp)
   })
 
 class People {
