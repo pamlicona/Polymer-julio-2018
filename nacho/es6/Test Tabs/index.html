@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Tabs</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <p>Este es un generador de Tabs</p>
+
+    <div class="tab">
+      <button class="tablinks" onclick="openTab(event, 0)" id="defaultOpen">Crea tu Tab</button>
+    </div>
+
+    <div class="contentTabs">
+
+      <div id="0" class="tabcontent">
+        Title: <input type="text" id="title" value="">
+        <p>Ingresa el contenido de tu Tab:</p>
+        <textarea id="content" name="content" rows="8" cols="80"></textarea><br>
+        <button type="button" name="button" onclick="guardaTab()">Guardar</button>
+      </div>
+
+    </div>
+    <script src="script.js" charset="utf-8"></script>
+  </body>
+</html>
