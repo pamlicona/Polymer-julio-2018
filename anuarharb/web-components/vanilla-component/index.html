@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="import" href="basic-component.html">
+</head>
+<body>
+
+  <style>
+    basic-component {
+      /* --button-color: red; */
+    }
+  </style>
+
+  <basic-component class="green"></basic-component>
+  <basic-component></basic-component>
+  <basic-component class="green"></basic-component>
+  <basic-component class="green"></basic-component>
+  <basic-component class="green"></basic-component>
+  <basic-component></basic-component>
+  <basic-component class="green"></basic-component>
+  <basic-component class="green"></basic-component>
+
+  <script>
+    const components = document.querySelectorAll('basic-component');
+    for(let component of components) {
+      component.addEventListener('my-super-click', (event) => {
+        const color = event.detail.color;
+        component.setAttribute('color', color);
+      })
+    }
+  </script>
+</body>
+</html>
