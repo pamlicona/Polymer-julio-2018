@@ -1,0 +1,103 @@
+<template id="myTemplate">
+
+    <style>
+        :host {
+            display: inline-block;
+            --button-color: #86876f;
+        }
+
+        :host(.green) {
+            --button-color: green;
+        }
+
+        button {
+            border-radius: 4px;
+            background-color: var(--button-color);
+            color: white;
+            padding: 10px;
+        }
+    </style>
+
+    <button>My element button</button>
+
+</template>
+
+<script>
+    (function basicComponent(customElements) {
+       
+       'use strict';
+
+        class BasicComponent extends HTMLElement {
+
+            constructor() {
+
+                super();
+                this.color = 'purple';
+
+                const shadowRoot = this.attachShadow({mode: 'open'});
+                
+                // Opcion con template
+                const templ = document.currentScript.ownerDocument.querySelector('#myTemplate');
+                shadowRoot.appendChild(document.importNode(templ.content, true));
+
+                // Opcion innerHTML
+                // shadowRoot.innerHTML = `
+                //  <style></style>
+                //  ...
+                // `;
+
+            }
+
+            connectedCallback() {
+                this.addEventListener('click', this._onClick );
+            }
+            
+            // Se definen los atributos a los que se les da seguimiento
+            static get observedAttributes() {
+                return ['color'];
+            }
+            
+            // Muestra valor de atributo que cambio
+            attributeChangedCallback(name, oldValue, newValue) {
+                console.log(name, oldValue, newValue);
+                this._changeColor();
+            }
+
+            // Getter propiedad
+            get color() {
+                return this.getAttribute('color');
+            }
+
+            set color(val) {
+                return
+            }
+
+            _changeColor() {
+                const button = this.shadowRoot.querySelector('button');
+                button.style.backgroundColor = this.color;
+            }
+            
+            _onClick() {
+                this.dispatchEvent(new CustomEvent('my-super-click', {
+                    bubbles: true, // true el evento se propaga hacia arriba
+                    detail: { // aqui es donde mandamos cualquier info
+                        color: this._getRandomColor()
+                    }
+                }));
+            }
+
+            _getRandomColor() {
+                const letters = '0123456789ABCDEF';
+                let color = '#';
+                for (var i = 0; i < 6; i++) {
+                    color += letters[Math.floor(Math.random() * 16)];
+                }
+                return color;
+            }
+
+        } // End Class
+
+        customElements.define('basic-component', BasicComponent);
+
+    })(window.customElements);
+</script>
