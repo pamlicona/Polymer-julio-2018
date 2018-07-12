@@ -48,3 +48,20 @@
     max-height: 18px;
     height: 18px;
 }
+
+.multi_tab_controller_container {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.multi_tab_body {
+    padding: 30px;
+    background-color: aliceblue;
+    height: 500px;
+}
+
+.tab_input {
+    font-size: 16px;
+    border-radius: 6px;
+    width: 60%;
+}
