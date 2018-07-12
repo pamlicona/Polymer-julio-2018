@@ -13,7 +13,13 @@
       border-radius: 4px;
       background-color: var(--button-color);
       color: white;
-      padding: 10px;
+      cursor: pointer;
+      font-size: 25px;
+      padding: 30px;
+    }
+
+    button:focus {
+      outline: none;
     }
   </style>
   <button>My element button</button>
@@ -53,7 +59,7 @@
       attributeChangedCallback(name, oldVal, newVal) {
         console.log(name, oldVal, newVal);
         console.log(this.color);
-        this._changeColor();
+        this._changeColor(oldVal);
       }
 
       get color() {
@@ -64,14 +70,15 @@
         return
       }
 
-      _changeColor() {
+      _changeColor(oldVal) {
         const button = this.shadowRoot.querySelector('button');
         button.style.backgroundColor = this.color;
+        button.style.color = oldVal;
       }
 
       _onClick(event) {
-        const colors = ['red', 'blue', 'green'];
-        const activeColor = colors[Math.floor(Math.random()*3)];
+        const colors = ['darkred', 'lightblue', 'darkgreen', 'gray'];
+        const activeColor = colors[Math.floor(Math.random()*4)];
         this.dispatchEvent(new CustomEvent('my-super-click', {
           bubbles: true,
           composed: true,
