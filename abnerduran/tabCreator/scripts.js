@@ -22,7 +22,7 @@ function submitHandler(submitEvent) {
 
     tab.addTab();
 
-    cleanForm();
+    resetForm();
 }
 
 function showMainTab() {
@@ -39,7 +39,6 @@ function showMainTab() {
     
 }
 
-function cleanForm() {
-    document.getElementById("#titulo-tab").innerHTML = "";
-    document.getElementById("contenido-tab").innerHTML = "";
+function resetForm() {
+    document.getElementById("myForm").reset();
 }
