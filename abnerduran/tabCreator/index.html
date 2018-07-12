@@ -7,21 +7,35 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Tabs</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <!-- <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> -->
 </head>
 
 <body>
     <div class="container">
         <section class="tabs_container">
             <div class="tabs">
-                <div class="tab">Main</div>
+                <div class="tab main" id="tab_main">Main</div>
             </div>
             <div class="tabContent">
-                <div class="content">contenido tab</div>
+                <div class="content main_content content_main">
+                    <form>
+                        <div class="group">
+                            <label for="title">Titulo Tab:</label>
+                            <input autofocus type="text" id="titulo-tab" name="titulo-tab" required>
+                        </div>
+                        <div class="group">
+                            <label for="title">Titulo Tab:</label>
+                            <textarea name="content" id="contenido-tab" cols="30" rows="10" required></textarea>
+                        </div>
+
+                        <input type="submit" id="submit">
+                    </form>
+                </div>
             </div>
         </section>
     </div>
     <script src="scripts.js"></script>
+    <script src="tab.js"></script>
 </body>
 
 </html>

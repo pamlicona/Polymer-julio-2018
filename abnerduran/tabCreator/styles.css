@@ -14,6 +14,27 @@ body {
     --black: rgb(44, 44, 44);
 }
 
+label {
+    display: block;
+}
+
+input, 
+textarea {
+    padding: .2rem 1rem;
+    border-radius: 8px;
+    border-style: solid;
+    border-color: cornflowerblue;
+}
+
+button {
+    padding: .5rem 1rem;
+    color: white;
+    border-radius: 8px;
+    background: rgb(39, 39, 255);
+    margin: 1rem;
+}
+
+
 .container {
     width: 1024px;
     margin: 2rem auto
@@ -68,3 +89,8 @@ body {
 .show {
     display: block !important;
 }
+
+.group {
+    padding: 1rem;
+}
+
