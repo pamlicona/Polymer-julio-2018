@@ -1,0 +1,38 @@
+<template id="myImgTemplate">
+
+        <style>
+        </style>
+    
+       <img src="" alt="">
+    
+    </template>
+    
+    <script>
+        (function imgShow(customElements) {
+            'use strict';
+    
+            class ImgShow extends HTMLElement {
+    
+                constructor() {
+    
+                    super();
+                    this. src = 'https://loremflickr.com/cache/resized/4162_34739152085_9975e2dbf1_h_760_80_nofilter.jpg';
+                    const shadowRoot = this.attachShadow({ mode: 'open' });
+    
+                    // Opcion con template
+                    const templ = document.currentScript.ownerDocument.querySelector('#myImgTemplate');
+                    shadowRoot.appendChild(document.importNode(templ.content, true));
+    
+                }
+    
+                connectedCallback() {
+                    this.shadowRoot.querySelector('img').src = this.src;
+                }
+    
+            }
+    
+            customElements.define('image-show', ImgShow);
+    
+        })(window.customElements);
+    
+    </script>
