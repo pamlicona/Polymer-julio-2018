@@ -2,7 +2,7 @@
     <link rel="stylesheet" href="css/progress_bar_style.css">
     <style>
         :host {
-            display: inline-block;
+            display: block;
             --button-color: #86876f;
             --bar-height : 100px;
         }
@@ -12,46 +12,131 @@
         }
 
         button {
-          border-radius: 4px;
-          background-color: var(--button-color);
-          color: white;
-          cursor: pointer;
-          font-size: 25px;
-          padding: 30px;
+            border-radius: 4px;
+            background-color: var(--button-color);
+            color: white;
+            cursor: pointer;
+            font-size: 25px;
+            height: 30px;
         }
 
         button:focus {
-          outline: none;
+            outline: none;
         }
     </style>
     <section class="progress_bar_container">
         <div class="progress_bar" style="transition: 6s; width: 1px;"></div>
     </section>
     <section class="bar_buttons">
-        <button class="bar_button" onclick="startLoader();">Iniciar</button>
-        <button class="bar_button" onclick="changeBarColor();">Cambiar Color</button>
+        <button class="bar_button" id="startLoaderButton">Iniciar</button>
+        <button class="bar_button" id="changeColorButton">Cambiar Color</button>
     </section>
-    <script src="js/progress_bar_script.js" async></script>
+    <!--<script src="js/progress_bar_script.js"></script>
+    ¿Se puede acceder a un objeto dentro del shadow?
+    -->
 </template>
 <script>
     (function progressBar(customElements){
         'use strict';
+        
+        class Interval {
+            constructor(min, max){
+                this.min = min;
+                this.max = max;
+            }
+        }
         
         class ProgressBar extends HTMLElement {
             
             constructor(){
                 super();
 
+                //inicializacion del web componente
                 const shadowRoot = this.attachShadow({mode: 'open'});
                 
                 // Opcion con template
                 const templ = document.currentScript.ownerDocument.querySelector('#progressBarTemplate');
                 shadowRoot.appendChild(document.importNode(templ.content, true));
+                
+                //inicializacion variables loader
+                this.currentBarProgress = 0;
+                this.currentTransitionTime = 0;
+                this.bar = this.shadowRoot.querySelector(".progress_bar");
+                this.colors = ['blue', 'red', 'green', 'orange', 'purple', 'cyan', 'gray'];
+                
+                //variables para controlar avance y tiempo de carga
+                this.time = 'slow';
+                this.space = 'slow';
             }
             
             //método invocado cuando el contenido de template entra en el DOM
             connectedCallback(){
-                console.log("se agregó el template al shadowDOM");
+                console.log("se agregó el template al shadowDOM");                
+                
+                let startButton = this.shadowRoot.querySelector("#startLoaderButton");
+                startButton.onclick = (event) => {
+                    console.log("start button pressed"); 
+                    this.currentBarProgress = 0;
+                    this.currentTransitionTime = 0;
+                    this.setBarProperties(1, 0);
+                    this.addWidthToProgressBar();
+                };
+                
+                let changeColorButton = this.shadowRoot.querySelector("#changeColorButton");
+                changeColorButton.onclick = (event) => {
+                    console.log("changeColor button pressed");  
+                    this.changeBarColor();
+                };
+            }
+            
+            //métodos de la implementación del loader
+            setBarProperties(newWidth, newTransitionTime){
+                console.log(`newWidth: ${newWidth} newTime: ${newTransitionTime}`);
+                /*this.bar.style.transition = `${newTransitionTime}"s linear`;
+                this.bar.style.width = `${newWidth}"%`; */
+                
+                this.bar.setAttribute("style", `transition: ${newTransitionTime}s linear; width: ${newWidth}%;`); 
+            }
+            
+            getSpaceValuesForInterval(value){
+                if(value.toUpperCase() == 'SLOW') return {minSpace:5, maxSpace:10};
+                else if(value.toUpperCase() == 'MEDIUM') return {minSpace:14, maxSpace:25};
+                else if(value.toUpperCase() == 'FAST') return {minSpace:30, maxSpace:50};
+            }
+            
+            getTimeValuesForInterval(value){
+                if(value.toUpperCase() == 'SLOW') return {minTime: 10, maxTime: 15};
+                else if(value.toUpperCase() == 'MEDIUM') return {minSpace:4, maxSpace:8};
+                else if(value.toUpperCase() == 'FAST') return {minSpace:1, maxSpace:3};
+            }
+            
+            addWidthToProgressBar(){
+                console.log(`currentProgress: ${this.currentBarProgress}`);
+                if(this.currentBarProgress >= 100){
+                    //la barra se ha cargado completamente
+                    alert("status : 500 - Internal Server Error");
+                    return;
+                }   
+
+                let {minSpace, maxSpace} = this.getSpaceValuesForInterval(this.space);
+                this.currentBarProgress += this.getRandomNumber(minSpace, maxSpace);
+                if(this.currentBarProgress > 100) this.currentBarProgress = 100;
+                
+                let {minTime, maxTime} = this.getTimeValuesForInterval(this.time);
+                this.currentTransitionTime = this.getRandomNumber(minTime, maxTime);
+                
+                this.setBarProperties(this.currentBarProgress, this.currentTransitionTime);
+
+                setTimeout(()=>{this.addWidthToProgressBar()}, this.currentTransitionTime*1000);
+            }
+            
+            getRandomNumber(numeroInferior, numeroSuperior){
+                console.log(`numeros: ${numeroInferior} ${numeroSuperior}`);
+                return Math.floor((Math.random() * numeroSuperior) + numeroInferior);
+            }
+
+            changeBarColor(){
+                this.bar.style['background-color'] = this.colors[this.getRandomNumber(0, this.colors.length)];
             }
         }
         customElements.define('progress-bar', ProgressBar);
