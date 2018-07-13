@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Loader</title>
+    <link rel="import" href="loader-component.html">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <h1>Loader Random</h1>
+    <loader-component></loader-component>
+
+    <label class="container">Slow
+      <input type="radio" onclick="setMode('slow')" name="mode">
+      <span class="checkmark"></span>
+    </label>
+    <label class="container">Fast
+      <input type="radio" onclick="setMode('fast')" name="mode">
+      <span class="checkmark"></span>
+    </label>
+
+    <button type="button" name="button" onclick="startLoader()">Inicia el Proceso </button>
+    <button type="button" name="button" onclick="changeColor()">Cambia el Color</button>
+    <h1 id="message"></h1>
+    <script type="text/javascript">
+      const loaderComponent =  document.querySelector('loader-component');
+
+      loaderComponent.addEventListener('finish',(event)=>{
+        setTimeout(()=>{
+          document.querySelector('#message').innerHTML = event.detail.message;
+        },event.detail.timeFinish);
+      });
+
+      const startLoader = () => loaderComponent.startLoader();
+
+      const changeColor = () => loaderComponent.changeColor();
+
+      const setMode = mode => loaderComponent.setAttribute('mode',mode);
+    </script>
+  </body>
+</html>
