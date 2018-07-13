@@ -1,0 +1,58 @@
+<template id="myTemplate">
+  <style>
+    .header {
+      align-items: center;
+      background-color: gray;
+      border-bottom: 1px solid darkgray;
+      display: flex;
+      height: 100px;
+      justify-content: center;
+    }
+    .header__title {
+      color: white;
+    }
+    footer {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 20px;
+      background-color: gray;
+    }
+  </style>
+
+  <header class="header">
+    <h2 class="header__title">Ejericio de App Shell</h2>
+  </header>
+  <button is="cool-button" side="dark">dark</button>
+  <button is="cool-button" side="light">light</button>
+  <image-show></image-show>
+  <footer></footer>
+
+</template>
+<script>
+  (function appShell(customElements) {
+    'use strict';
+
+    class AppShell extends HTMLElement {
+      constructor() {
+        super();
+        const templ = document.currentScript.ownerDocument.querySelector('#myTemplate');
+        const shadowRoot = this.attachShadow({mode: 'open'});
+        shadowRoot.appendChild(document.importNode(templ.content, true));
+      }
+
+      connectedCallback() {
+        this.addEventListener('change-image-event', this.setImage);
+      }
+
+      setImage(event) {
+        const side = event.detail;
+        const image = this.shadowRoot.querySelector('image-show');
+        image.setAttribute('side', side);
+      }
+
+    }
+    customElements.define('app-shell', AppShell);
+  })(window.customElements);
+</script>

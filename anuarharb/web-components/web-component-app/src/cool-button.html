@@ -1,0 +1,36 @@
+<script>
+  (function coolButton(customElements) {
+    'use strict';
+
+    class CoolButton extends HTMLButtonElement {
+      constructor() {
+        super();
+        this.side = 'dark';
+        this.addEventListener('click', e => this.pressEffect());
+      }
+
+      observedAttributes() {
+        return ['side'];
+      }
+
+      get side() {
+        return this.getAttribute('side');
+      }
+
+      set side(val) {
+        return
+      }
+
+      // Material design ripple animation.
+      pressEffect() {
+        this.classList.add('active');
+        this.dispatchEvent(new CustomEvent('change-image-event', {
+          bubbles: true,
+          composed: true,
+          detail: this.side
+        }))
+      }
+    }
+    customElements.define('cool-button', CoolButton , {extends: 'button'});
+  })(window.customElements);
+</script>
