@@ -1,0 +1,59 @@
+<template id="progressBarTemplate">
+    <link rel="stylesheet" href="css/progress_bar_style.css">
+    <style>
+        :host {
+            display: inline-block;
+            --button-color: #86876f;
+            --bar-height : 100px;
+        }
+
+        :host(.green){
+            --button-color: green;
+        }
+
+        button {
+          border-radius: 4px;
+          background-color: var(--button-color);
+          color: white;
+          cursor: pointer;
+          font-size: 25px;
+          padding: 30px;
+        }
+
+        button:focus {
+          outline: none;
+        }
+    </style>
+    <section class="progress_bar_container">
+        <div class="progress_bar" style="transition: 6s; width: 1px;"></div>
+    </section>
+    <section class="bar_buttons">
+        <button class="bar_button" onclick="startLoader();">Iniciar</button>
+        <button class="bar_button" onclick="changeBarColor();">Cambiar Color</button>
+    </section>
+    <script src="js/progress_bar_script.js" async></script>
+</template>
+<script>
+    (function progressBar(customElements){
+        'use strict';
+        
+        class ProgressBar extends HTMLElement {
+            
+            constructor(){
+                super();
+
+                const shadowRoot = this.attachShadow({mode: 'open'});
+                
+                // Opcion con template
+                const templ = document.currentScript.ownerDocument.querySelector('#progressBarTemplate');
+                shadowRoot.appendChild(document.importNode(templ.content, true));
+            }
+            
+            //método invocado cuando el contenido de template entra en el DOM
+            connectedCallback(){
+                console.log("se agregó el template al shadowDOM");
+            }
+        }
+        customElements.define('progress-bar', ProgressBar);
+    })(window.customElements)
+</script>
