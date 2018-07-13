@@ -1,0 +1,150 @@
+<template id="myTemplate">
+  <style>
+    :host {
+    	--color-bar: aliceblue;
+    	--color-full-bar: blue;
+    	--margin-top: 20px;
+    }
+
+    .section-button {
+    	display: flex;
+    	justify-content: center;
+    	margin-top: var(--margin-top);
+    }
+
+    .section-button__button {
+      background-color: var(--color-full-bar);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 10px 17px 10px 17px;
+      letter-spacing: 1px;
+      transition: all .4s;
+    }
+
+    .image {
+    	text-align: center;
+    	margin-top: var(--margin-top)
+    }
+
+    .progress {
+    	background-color: var(--color-bar);
+    }
+
+    .progress__bar {
+    	height: 10px;
+    	max-width: 100%;
+      width: 0px;
+    }
+  </style>
+
+  <div class="progress">
+    <div class="progress__bar"></div>
+  </div>
+
+  <div class="section-button">
+    <button class="section-button__button">Puchame</button>
+  </div>
+</template>
+
+<script>
+  (function progressComponent(customElements) {
+    'use strict';
+
+    class ProgressComponent extends HTMLElement {
+      constructor() {
+        super();
+        this.speed = 'fast';
+        this.color = 'blue';
+
+        const template = document.currentScript.ownerDocument.querySelector('#myTemplate');
+        const shadowRoot = this.attachShadow({mode: 'open'}); //Crea ShadowDom
+
+        shadowRoot.appendChild(document.importNode(template.content, true));
+      }
+
+      connectedCallback() {
+        this.addEventListener("click", () => this._startProgress(0));
+      }
+
+      static get observedAttributes() {
+        return ['color', 'speed'];
+      }
+
+      attributeChangedCallback(name, oldValue, newValue) {
+        if (name === 'color') {
+          const progessBar = this.shadowRoot.querySelector('.progress__bar');
+          progessBar.style.backgroundColor = this.color;
+        }
+      }
+
+      //Ligado al attributeChangedCallback
+      // Va del atributo a la propiedad
+      get color() {
+        return this.getAttribute('color');
+      }
+
+      // Va de la propiedad al atributo
+      set color(value) {
+        return
+      }
+
+      get speed() {
+        return this.getAttribute('speed');
+      }
+
+      // Va de la propiedad al atributo
+      set speed(value) {
+        return
+      }
+
+      _getRandomSpedd(speed) {
+        if (speed === 'fast') {
+          return Math.floor(Math.random() * 2) + 1;
+        }
+        return Math.floor(Math.random() * 5) + 3;
+      }
+
+      _getRandomWidth(speed) {
+        console.log(speed)
+        if (speed === 'fast') {
+          return Math.floor(Math.random() * 59) + 1;
+        }
+        return Math.floor(Math.random() * 14) + 1;
+      }
+
+      _sendMessage() {
+        this.dispatchEvent(new CustomEvent('my-message', {
+          detail: {
+            message: `Termnié en modalidad ${this.speed}`
+          }
+        }));
+      }
+
+      _stylesBar(progress) {
+        let speed = this._getRandomSpedd(this.speed);
+        const progessBar = this.shadowRoot.querySelector('.progress__bar');
+        progessBar.style.width = `${progress}%`;
+        progessBar.style.transition = `width ${speed}s`;
+        setTimeout(() => {
+          this._startProgress(progress);
+        }, `${speed}000`);
+      }
+
+      _updateProgressbar(progress) {
+        if (progress >= 100) {
+          this._sendMessage();
+        } else {
+          progress += this._getRandomWidth(this.speed);
+          console.log(progress)
+          this._stylesBar(progress);
+        }
+      }
+
+      _startProgress(progress) {
+        this._updateProgressbar(progress);
+      }
+    }
+    customElements.define('progress-component', ProgressComponent);
+  })(window.customElements);
+</script>

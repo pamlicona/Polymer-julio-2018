@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Web Component</title>
+  <link rel="import" href="basic-component.html">
+</head>
+<body>
+  <basic-component class="green"></basic-component>
+  <script>
+    const component = document.querySelector('basic-component');
+
+    component.addEventListener('my-super-click', event => {
+      const color = event.detail.color;
+      component.setAttribute('color', color);
+    })
+  </script>
+</body>
+</html>
