@@ -37,21 +37,28 @@
   }
 </style>
 
-<progress-component speed="slow" color="blue"></progress-component>
+<progress-component speed="fast" color="blue"></progress-component>
+
+<div class="message"></div>
 
 <div class="section-button">
   <button class="section-button__button" onclick="setColor()">Cambiar color</button>
 </div>
 
-<div class="message"></div>
-
 <script>
+  const component = document.querySelector('progress-component');
+  const messageContainer = document.querySelector('.message');
+
   let setColor = () => {
     const colors = ['red', 'purple', 'green', 'aqua', 'brown', 'cadetblue', 'chartreuse'];
     const activeColor = colors[Math.floor(Math.random()*7)];
-    const progessBar = document.querySelector('progress-component');
-    progessBar.setAttribute('color', activeColor);
+    component.setAttribute('color', activeColor);
   }
+
+  component.addEventListener('my-message', (event) => {
+    const message = event.detail.message;
+    messageContainer.innerHTML = `<p>${message}</p>`
+  })
 </script>
 
 </body>
