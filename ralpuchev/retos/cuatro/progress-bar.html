@@ -65,8 +65,30 @@
                 this.colors = ['blue', 'red', 'green', 'orange', 'purple', 'cyan', 'gray'];
                 
                 //variables para controlar avance y tiempo de carga
-                this.time = 'slow';
+                this.time = 'fast';
                 this.space = 'slow';
+            }
+            
+            static get observedAttributes() {
+                return ['time', 'space'];
+            }
+
+            attributeChangedCallback(name, oldVal, newVal) {
+                console.log(name, oldVal, newVal);
+                
+                if(name.toUpperCase() == "TIME"){
+                    this.time = newVal;
+                }else if(name.toUpperCase() == "SPACE"){
+                    this.space = newVal
+                }
+            }
+
+            get color() {
+                return this.getAttribute('color');
+            }
+
+            set color(val) {
+                return
             }
             
             //método invocado cuando el contenido de template entra en el DOM
@@ -106,15 +128,22 @@
             
             getTimeValuesForInterval(value){
                 if(value.toUpperCase() == 'SLOW') return {minTime: 10, maxTime: 15};
-                else if(value.toUpperCase() == 'MEDIUM') return {minSpace:4, maxSpace:8};
-                else if(value.toUpperCase() == 'FAST') return {minSpace:1, maxSpace:3};
+                else if(value.toUpperCase() == 'MEDIUM') return {minTime:4, maxTime:8};
+                else if(value.toUpperCase() == 'FAST') return {minTime:1, maxTime:3};
             }
             
             addWidthToProgressBar(){
                 console.log(`currentProgress: ${this.currentBarProgress}`);
                 if(this.currentBarProgress >= 100){
                     //la barra se ha cargado completamente
-                    alert("status : 500 - Internal Server Error");
+                    this.dispatchEvent(new CustomEvent('progress-bar-loading-finish', {
+                      bubbles: true,
+                      composed: true,
+                      detail: {
+                        space: this.space,
+                        time: this.time
+                      }
+                    }))
                     return;
                 }   
 

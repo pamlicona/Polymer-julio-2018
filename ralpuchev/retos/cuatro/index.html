@@ -9,6 +9,20 @@
         <link rel="import" href="progress-bar.html">
     </head>
     <body>
-        <progress-bar></progress-bar>
+        <progress-bar time="slow" space="slow"></progress-bar>
+        <br/>
+        <progress-bar time="medium" space="medium"></progress-bar>
+        <br/>
+        <progress-bar time="fast" space="fast"></progress-bar>
+        <script>
+            const bars = document.querySelectorAll('progress-bar');
+            for(bar of bars){
+                bar.addEventListener('progress-bar-loading-finish', (event) => {
+                    const time = event.detail.time;
+                    const space = event.detail.space;
+                    console.log(`valores finales - time: ${time} space: ${space}`);
+                })   
+            }
+        </script>
     </body>
 </html>
