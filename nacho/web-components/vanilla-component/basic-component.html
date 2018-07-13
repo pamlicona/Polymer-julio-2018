@@ -1,0 +1,84 @@
+<template id="myTemplate">
+  <style media="screen">
+
+    :host{
+      display: inline-block;
+      --button-color: gray;
+    }
+    :host(.green){
+      --button-color: green;
+    }
+    button{
+      border-radius: 4px;
+      color: var(--button-color);
+      padding: 10px;
+    }
+  </style>
+  <button type="button" name="button">My element button</button>
+</template>
+
+<script type="text/javascript">
+  (function basicComponent(customElements){
+    'use strict';
+    class BasicComponent extends HTMLElement {
+      constructor() {
+        super();
+        this.selected = true;
+        this.color = 'purple';
+
+        const shadowRoot = this.attachShadow({mode: 'open'});
+        //Opcion con Template
+        const template =
+        document.currentScript.ownerDocument.querySelector('#myTemplate');
+        shadowRoot.appendChild(document.importNode(template.content,true));
+        //Opcion con innerHTML
+        /*
+          shadowRoot.innerHTML = `TODO EL ESTILO`
+        */
+      }
+
+      connectedCallback(){
+        //shadowRoot.querySelector('button');
+        this.addEventListener('click',this._onClick);
+      }
+
+      static get observedAttributes(){
+        return ['color'];
+      }
+
+      attributeChangedCallback(name,oldVal,newVal){
+        console.log(name,oldVal,newVal);
+        console.log(this.color);
+        this._changeColor();
+      }
+
+      get color(){
+        return this.getAttribute('color');
+      }
+      set color(val){
+        return
+      }
+
+      _changeColor(){
+        const button = this.shadowRoot.querySelector('button');
+        button.style.backgroundColor = this.color;
+      }
+
+      _onClick(event){
+        console.log(event);
+        const colors = ['red','blue','green'];
+        const activeColor = colors[Math.floor(Math.random()*3)];
+        this.dispatchEvent(new CustomEvent('my-super-click',{
+          bubbles: true,
+          detail:{
+            color: activeColor
+          }
+        }));
+
+        //bubbles => propagar evento hasta arriba
+        //composed => si salio del shadow Dom
+      }
+    }
+    customElements.define('basic-component', BasicComponent);
+  })(window.customElements)
+</script>

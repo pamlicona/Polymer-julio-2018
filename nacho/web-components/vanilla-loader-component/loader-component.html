@@ -1,0 +1,107 @@
+<template id="loader">
+  <style media="screen">
+    .loader{
+      width: .5%;
+      height: 30px;
+      background-color: #4CAF50;
+      transition: width 900ms ;
+    }
+  </style>
+  <div class="loader"></div>
+</template>
+
+<script type="text/javascript">
+  (function loaderComponent(customElements) {
+    'use strict';
+    class LoaderComponent extends HTMLElement {
+      constructor() {
+        super();
+        this.startTime = 1;
+        this.endTime = 2;
+        this.startWidth = 1;
+        this.endWidth = 100;
+        this.initialWidth = 0;
+
+        const shadowRoot = this.attachShadow({mode: 'open'});
+        const template =
+        document.currentScript.ownerDocument.querySelector('#loader');
+        shadowRoot.appendChild(document.importNode(template.content,true));
+      }
+
+      connectedCallback(){
+        this.elem = this.shadowRoot.querySelector('.loader');
+      }
+
+      static get observedAttributes(){
+        return ['mode'];
+      }
+
+      attributeChangedCallback(name,oldVal,newVal){
+        if(name === "mode" && !!newVal){
+          if(newVal == "fast"){
+            this.endWidth = 60;
+            this.endTime = 3;
+          }else if(newVal == "slow"){
+            this.endWidth = 15;
+            this.endTime = 8;
+          }else{
+            return;
+          }
+        }
+      }
+
+      _executeDispatchEvent(timeFinish){
+        this.dispatchEvent(new CustomEvent('finish',{
+          bubbles: true,
+          detail:{
+            message: "Finished 100%",
+            timeFinish: timeFinish
+          }
+        }));
+      }
+
+      _calculaTime(){
+        return parseInt((Math.floor(Math.random() * this.endTime)
+                        + this.startTime).toString() + "000");
+      }
+
+      _calculaWidth(){
+        let newWidth = Math.floor(Math.random() * this.endWidth)
+                       + this.startWidth ;
+        if((this.initialWidth + newWidth) > 100){
+          return 100;
+        }else{
+          return this.initialWidth += newWidth;
+        }
+      }
+
+      _timeOut(){
+        const time = this._calculaTime();
+        const width = this._calculaWidth();
+        this.elem.style.transition = `width ${time}ms`;
+        this.elem.style.width = `${width}%`;
+        if (width == 100) {
+          this._executeDispatchEvent(time);
+        }else {
+          setTimeout(()=>this._timeOut(),time);
+        }
+      }
+      _getRandomColor() {
+        let letters = '0123456789ABCDEF';
+        let color = '#';
+        for (let i = 0; i < 6; i++) {
+          color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+      }
+
+      changeColor(){
+        this.elem.style.backgroundColor = this._getRandomColor();
+      }
+      startLoader(){
+        this._timeOut();
+      }
+    }
+    customElements.define('loader-component', LoaderComponent);
+  }(window.customElements));
+</script>

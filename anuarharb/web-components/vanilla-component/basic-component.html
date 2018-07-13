@@ -1,0 +1,96 @@
+<template id="myTemplate">
+  <style>
+    :host {
+      display: inline-block;
+      --button-color: #86876f;
+    }
+
+    :host(.green){
+      --button-color: green;
+    }
+
+    button {
+      border-radius: 4px;
+      background-color: var(--button-color);
+      color: white;
+      cursor: pointer;
+      font-size: 25px;
+      padding: 30px;
+    }
+
+    button:focus {
+      outline: none;
+    }
+  </style>
+
+  <button>
+    <slot name="button-text"></slot>
+  </button>
+</template>
+
+<script>
+  (function basicComponent(customElements) {
+    'use strict';
+
+    class BasicComponent extends HTMLElement {
+      constructor() {
+        super();
+        this.color = 'purple';
+
+        const shadowRoot = this.attachShadow({mode: 'open'});
+        // Opcion con template
+        const templ = document.currentScript.ownerDocument.querySelector('#myTemplate');
+        shadowRoot.appendChild(document.importNode(templ.content, true));
+        // Opcion con innerHTML
+        // shadowRoot.innerHTML = `
+        //   <style>
+        //
+        //   </style>
+        //   ...
+        // `
+      }
+
+      connectedCallback(){
+        // shadowRoot.querySelector('button');
+        this.addEventListener('click', this._onClick);
+      }
+
+      static get observedAttributes() {
+        return ['color'];
+      }
+
+      attributeChangedCallback(name, oldVal, newVal) {
+        console.log(name, oldVal, newVal);
+        console.log(this.color);
+        this._changeColor(oldVal);
+      }
+
+      get color() {
+        return this.getAttribute('color');
+      }
+
+      set color(val) {
+        return
+      }
+
+      _changeColor(oldVal) {
+        const button = this.shadowRoot.querySelector('button');
+        button.style.backgroundColor = this.color;
+        button.style.color = oldVal;
+      }
+
+      _onClick(event) {
+        const colors = ['darkred', 'lightblue', 'darkgreen', 'gray'];
+        const activeColor = colors[Math.floor(Math.random()*4)];
+        this.dispatchEvent(new CustomEvent('my-super-click', {
+          bubbles: true,
+          composed: true,
+          detail: {
+            color: activeColor
+          }
+        }))
+      }
+    }
+    customElements.define('basic-component', BasicComponent);
+  })(window.customElements);
+</script>

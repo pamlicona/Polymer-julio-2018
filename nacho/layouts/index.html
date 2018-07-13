@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="only__mobil">
+    <span style="font-size:30px;cursor:pointer;margin-right: 15px;" class="only__mobil__show" onclick="openNav()">&#9776;</span>
+    <nav class="sidenav">
+      <a href="javascript:void(0)" class="closebtn only__mobil__show" onclick="closeNav()">&times;</a>
+      <ul class="sidenav__list">
+        <li class="sidenav__item"><a class="sidenav__link" href="#home">HOME</a></li>
+        <li class="sidenav__item"><a class="sidenav__link" href="#shop">SHOP</a></li>
+        <li class="sidenav__item"><a class="sidenav__link" href="#contact">SPECIALS</a></li>
+        <li class="sidenav__item"><a class="sidenav__link" href="#about">SUPPORT</a></li>
+        <li class="sidenav__item"><a class="sidenav__link" href="#about">CYCLING CLUB</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="brand">
+    <h1 class="brand__h1">Hill Valley Cars</h1>
+  </section>
+
+  <section class="cards">
+    <article class="cards__article">
+      <img class="cards__img" src="http://placekitten.com/305/205" alt=" " />
+      <h1 class="article__title">
+        The all new
+      </h1>
+      <h2 class="article__subtitle">
+        Lightning Bolt
+      </h2>
+      <p class="article__p">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+        incididunt ut labore et dolore magna aliqua.</p>
+    </article>
+    <article class="cards__article">
+      <img class="cards__img" src="http://placekitten.com/320/220" alt=" " />
+      <h1 class="article__title">
+        The Classic
+      </h1>
+      <h2 class="article__subtitle">
+        Starter
+      </h2>
+      <p class="article__p">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+        incididunt ut labore et dolore magna aliqua.</p>
+    </article>
+    <article class="cards__article mobil__hidden">
+      <img class="cards__img" src="http://placekitten.com/330/240" alt=" " />
+      <h1 class="article__title">
+        Move cargo with
+      </h1>
+      <h2 class="article__subtitle">
+        The capacitor
+      </h2>
+      <p class="article__p">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+        incididunt ut labore et dolore magna aliqua.</p>
+    </article>
+    <article class="cards__article tablet__hidden mobil__hidden">
+      <img class="cards__img" src="http://placekitten.com/280/250" alt=" " />
+      <h1 class="article__title">
+        Great gift
+      </h1>
+      <h2 class="article__subtitle">
+        certificates
+      </h2>
+      <p class="article__p">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+        incididunt ut labore et dolore magna aliqua.</p>
+    </article>
+  </section>
+
+  <section class="more_info mobil__hidden">
+    <div>
+      <p class="more_info__p">"Great Scott this is a great ride. I wouldn´t be
+      without my Classic Starter"
+      </p>
+      <p class="more_info__cite">-Goerge R. R. Martin</p>
+    </div>
+    <div class="tablet__hidden">
+      <article class="article__blog">
+        <div>
+          <h1 class="article__blog__title">From the blog: Struck by Lightning</h1>
+        </div>
+        <div class="article__blog__text__img">
+            <p class="article__blog__text">Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+              sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              <a href="#" class="article__blog__link">Read more</a>
+            </p>
+            <img src="http://placekitten.com/280/250" class="article__blog__img">
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="find__car">
+    <button class="find__car__button"type="button" name="button">Find your perfect ride</button>
+  </section>
+
+  <script src="scripts.js" async></script>
+</body>
+</html>

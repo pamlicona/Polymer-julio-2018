@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="import" href="basic-component.html">
+    <title></title>
+  </head>
+  <body>
+  <style media="screen">
+    basic-component{
+      --button-color:red;
+    }
+  </style>
+
+    <basic-component class="green"></basic-component>
+  <script type="text/javascript">
+    const component = document.querySelector('basic-component');
+    component.addEventListener('my-super-click',(event)=>{
+      console.log(event);
+      const color = event.detail.color;
+      component.setAttribute('color',color);
+    });
+  </script>
+  </body>
+</html>

@@ -1,0 +1,80 @@
+<template id="myTemplate">
+  <style>
+    :host {
+      display: inline-block;
+      --button-color: #86876f;
+    }
+
+    :host(.green) {
+      --button-color: green;
+    }
+
+    button {
+      border-radius: 4px;
+      background-color: var(--button-color);
+      color: white;
+      padding: 10px;
+    }
+  </style>
+  <button>My button</button>
+</template>
+
+<script>
+  (function basicComponent(customElements) {
+    'use strict';
+
+    class BassicComponent extends HTMLElement {
+      constructor() {
+        super();
+        this.color = 'purple';
+
+        const template = document.currentScript.ownerDocument.querySelector('#myTemplate');
+        const shadowRoot = this.attachShadow({mode: 'open'}); //Crea ShadowDom
+
+        shadowRoot.appendChild(document.importNode(template.content, true));
+      }
+
+      connectedCallback() {
+        //shadowRoot.querySelector('button'); //Get element of shadowRoot
+        this.addEventListener('click', this._onClick);
+      }
+
+      static get observedAttributes() {
+        return ['color'];
+      }
+
+      attributeChangedCallback(name, oldValue, newValue) {
+        this._changeColor();
+      }
+
+      //Ligado al attributeChangedCallback
+      // Va del atributo a la propiedad
+      get color() {
+        return this.getAttribute('color');
+      }
+
+      // Va de la propiedad al atributo
+      set color(value) {
+        return
+      }
+
+      _changeColor() {
+        const button = this.shadowRoot.querySelector('button');
+        button.style.backgroundColor = this.color;
+      }
+
+      _onClick(event) {
+        const colors = ['red', 'blue', 'green'];
+        const activeColor = colors[Math.floor(Math.random()*3)];
+
+        this.dispatchEvent(new CustomEvent('my-super-click', {
+          bubbles: true,
+          detail: {
+            color: activeColor
+          }
+        }));
+      }
+    }
+    customElements.define('basic-component', BassicComponent);
+  })(window.customElements);
+</script>
