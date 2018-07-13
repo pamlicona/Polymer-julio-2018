@@ -29,7 +29,7 @@
     </header>
 
     <image-show></image-show>
-    <button is="button" side="light">Light</button>
+    <button is="cool-button" side="light">Light</button>
     <button is="cool-button" side="dark">Dark</button>
 
     <footer></footer>
@@ -43,15 +43,12 @@
         class AppShell extends HTMLElement {
 
             constructor() {
-
                 super();
-
                 const shadowRoot = this.attachShadow({ mode: 'open' });
 
                 // Opcion con template
                 const templ = document.currentScript.ownerDocument.querySelector('#myShellTemplate');
                 shadowRoot.appendChild(document.importNode(templ.content, true));
-
             }
 
             connectedCallback() {
@@ -59,9 +56,9 @@
             }
 
             setImage(event) {
-                console.log(event.detail);
+                const side = event.detail;
                 const image = this.shadowRoot.querySelector('image-show');
-                image.setAttribute('side', event.detail);
+                image.setAttribute('side', side);
             }
 
         }
