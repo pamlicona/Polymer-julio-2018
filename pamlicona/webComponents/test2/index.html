@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Progess Bar</title>
+  <link rel="import" href="progress-component.html">
+</head>
+
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+  }
+
+  .message {
+    display: flex;
+    justify-content: center;
+    margin-top: 35px;
+  }
+
+  .section-button {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+  }
+
+  .section-button__button {
+    background-color: blue;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 17px 10px 17px;
+    letter-spacing: 1px;
+    transition: all .4s;
+  }
+</style>
+
+<progress-component speed="fast" color="blue"></progress-component>
+
+<div class="message"></div>
+
+<div class="section-button">
+  <button class="section-button__button" onclick="setColor()">Cambiar color</button>
+</div>
+
+<script>
+  const component = document.querySelector('progress-component');
+  const messageContainer = document.querySelector('.message');
+
+  let setColor = () => {
+    const colors = ['red', 'purple', 'green', 'aqua', 'brown', 'cadetblue', 'chartreuse'];
+    const activeColor = colors[Math.floor(Math.random()*7)];
+    component.setAttribute('color', activeColor);
+  }
+
+  component.addEventListener('my-message', (event) => {
+    const message = event.detail.message;
+    messageContainer.innerHTML = `<p>${message}</p>`
+  })
+</script>
+
+</body>
+</html>
