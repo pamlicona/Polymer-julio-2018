@@ -1,0 +1,136 @@
+<template id="myLoader">
+
+    <style>
+        :host {
+            display: block;
+            --loader-color: blue;
+        }
+
+        .loader {
+            height: 20px;
+            width: 0vw;
+            transition: width 1s ease-in;
+            background-color: var(--loader-color);
+        }
+    </style>
+
+    <div class="loader"></div>
+
+</template>
+
+<script>
+    (function loaderComponent(customElements) {
+
+        'use strict';
+
+        class LoaderComponent extends HTMLElement {
+
+            constructor() {
+
+                super();
+                this.speed = 'slow';
+                this.width = 0;
+                this.totalWidth = 100;
+
+                const shadowRoot = this.attachShadow({ mode: 'open' });
+
+                // Opcion con template
+                const template = document.currentScript.ownerDocument.querySelector('#myLoader');
+                shadowRoot.appendChild(document.importNode(template.content, true));
+
+            }
+
+            connectedCallback() {
+                // this.addEventListener('click', this._startLoader );
+            }
+
+            // Se definen los atributos a los que se les da seguimiento
+            static get observedAttributes() {
+                return ['speed'];
+            }
+
+            // Muestra valor de atributo que cambio
+            attributeChangedCallback(name, oldValue, newValue) {
+                console.log(name, oldValue, newValue);
+                this._startLoader();
+            }
+
+            // Getter propiedad
+            get speed() {
+                return this.getAttribute('speed');
+            }
+
+            set speed(val) {
+                return;
+            }
+
+            _getRandomInteger(min, max) {
+                return Math.floor(Math.random() * (max - min + 1)) + min
+            };
+
+            _startLoader() {
+                this._showLoader(this.width);
+            }
+
+            _showLoader(width) {
+                const { minWidth, maxWidth, minSpeed, maxSpeed } = this._getSpeedAndWidth();
+                const randomWidth = this._getRandomInteger(minWidth, maxWidth);
+                const randomTime = this._getRandomInteger(minSpeed, maxSpeed);
+                width = width + randomWidth;
+
+                this._setStyles(width, randomTime)
+            }
+
+            _getSpeedAndWidth() {
+                const minWidth = 1;
+                const maxWidth = this.speed == 'fast' ? 60 : 15;
+
+                const minSpeed = this.speed == 'fast' ? 1 : 3;
+                const maxSpeed = this.speed == 'fast' ? 3 : 8;
+
+                return { minWidth, maxWidth, minSpeed, maxSpeed };
+            }
+
+            _setStyles(width, timeToTransition) {
+                const loader = this.shadowRoot.querySelector('.loader');
+
+                if (width < this.totalWidth) {
+                    loader.style.transition = `width ${timeToTransition}s ease`;
+                    loader.style.width = `${width}vw`;
+                    setTimeout(() => {
+                        this._showLoader(width);
+                    }, timeToTransition * 1000);
+                } else {
+                    loader.style.transition = `width 5s ease`;
+                    loader.style.width = `100vw`;
+                    setTimeout(() => {
+                        this._dispatchEvent('finish-event', `Mensaje final: Terminó modalidad ${this.speed}`);
+                    }, 5001);
+                }
+
+            }
+
+            _dispatchEvent(event, message, bubbles = true ) {
+                this.dispatchEvent(new CustomEvent(event, {
+                    bubbles: bubbles,
+                    detail: {
+                        message: message
+                    }
+                }));
+            }
+
+            _getRandomColor() {
+                const letters = '0123456789ABCDEF';
+                let color = '#';
+                for (var i = 0; i < 6; i++) {
+                    color += letters[Math.floor(Math.random() * 16)];
+                }
+                return color;
+            }
+
+        } // End Class
+
+        customElements.define('loader-component', LoaderComponent);
+
+    })(window.customElements);
+</script>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Loader component</title>
+    <link rel="import" href="loader-component.html">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <style>
+        loader-component {
+            --loader-color: rgb(199, 42, 71);
+        }
+    </style>
+
+    <loader-component></loader-component>
+
+    <div class="buttons">
+        <button onclick="startLoader('fast')">Fast</button>
+        <button onclick="startLoader('slow')">Slow</button>
+    </div>
+
+    <script>
+        const component = document.querySelector('loader-component');
+        component.addEventListener('finish-event', (event) => {
+            console.log(event.detail.message);
+            const message = event.detail.message;
+            component.setAttribute('message', message);
+        });
+        function startLoader(speed) {
+            component.setAttribute('speed', speed);
+        }
+    </script>
+</body>
+</html>

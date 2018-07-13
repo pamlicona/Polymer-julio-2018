@@ -2,18 +2,11 @@
 
 const loaderButton = document.querySelector('.loader_button');
 const loader = document.querySelector('.loader');
-const redBtn = document.querySelector('.red');
-const greenBtn = document.querySelector('.green');
-const orangeBtn = document.querySelector('.orange');
 const h2 = document.querySelector('.h2');
 const totalWidth = 100;
 let width = 0;
 
-
 loaderButton.addEventListener('click', startLoader);
-redBtn.addEventListener('click', changeToRed);
-greenBtn.addEventListener('click', changeToGreen);
-orangeBtn.addEventListener('click', changeToOrange);
 
 function getRandomInteger(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min
@@ -24,8 +17,6 @@ function startLoader() {
 }
 
 function showLoader(width) {
-
-    console.log('loader init');
 
     const randomWidth = getRandomInteger(10, 30);
     const randomTime = getRandomInteger(1, 5);
@@ -52,12 +43,6 @@ function setStyles(width, timeToTransition) {
 
 }
 
-function changeToRed() {
-    loader.style.background = 'red';
-}
-function changeToGreen() {
-    loader.style.background = 'green';
-}
-function changeToOrange() {
-    loader.style.background = 'orange';
+function changeLoaderColor(color) {
+    loader.style.background = color;
 }
