@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
     <link rel="import" href="loader-component.html">
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
 
     <style>
@@ -21,18 +23,36 @@
     <div class="buttons">
         <button onclick="startLoader('fast')">Fast</button>
         <button onclick="startLoader('slow')">Slow</button>
+        <button class="color" onclick="changeColor()">Color</button>
     </div>
 
     <script>
         const component = document.querySelector('loader-component');
+        const btnColor = document.querySelector('.color');
+
+        const startLoader = (speed) => component.setAttribute('speed', speed);
+
+        const changeColor = () => {
+            const color = getRandomColor();
+            component.shadowRoot.querySelector('.loader').style.background = color;
+            btnColor.style.background = color;
+        };
+
+        const getRandomColor = () => {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
         component.addEventListener('finish-event', (event) => {
             console.log(event.detail.message);
             const message = event.detail.message;
             component.setAttribute('message', message);
         });
-        function startLoader(speed) {
-            component.setAttribute('speed', speed);
-        }
     </script>
 </body>
+
 </html>
