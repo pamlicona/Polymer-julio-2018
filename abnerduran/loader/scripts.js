@@ -6,57 +6,50 @@ const redBtn = document.querySelector('.red');
 const greenBtn = document.querySelector('.green');
 const orangeBtn = document.querySelector('.orange');
 const h2 = document.querySelector('.h2');
+const totalWidth = 100;
+let width = 0;
 
-const getRandomtime = () => (Math.floor((Math.random() * 20) + 10)) * 1000; // 10 - 30
-// const segmentsNumber = () => Math.floor((Math.random() * 7) + 4); // 4 - 10
-const segmentsNumber = 5; // 4 - 10
-const incrementWidth = 100 / segmentsNumber;
-const incrementTime = () => getRandomtime() / segmentsNumber;
 
-loaderButton.addEventListener('click', showLoader);
+loaderButton.addEventListener('click', startLoader);
 redBtn.addEventListener('click', changeToRed);
 greenBtn.addEventListener('click', changeToGreen);
 orangeBtn.addEventListener('click', changeToOrange);
 
-function showLoader() {
-    const time = getRandomtime();
-    console.log(time);
-    let width = 0;
-    width += incrementWidth;
-    setStyles(width).then(() => {
+function getRandomInteger(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min
+};
 
-        width += incrementWidth;
-
-        setStyles(width).then(() => {
-
-            width += incrementWidth;
-            setStyles(width).then(() => {
-
-                width += incrementWidth;
-                setStyles(width).then(() => {
-
-                    width += incrementWidth;
-                    setStyles(width).then(() => {
-                        h2.style.display = 'block';
-                    })
-
-                })
-
-            })
-
-        })
-    })
+function startLoader() {
+    showLoader(width);
 }
 
-function setStyles(width) {
-    let timeToTransition = incrementTime() / 1000 ;
-    return new Promise((resolve, reject) => {
-        loader.style.width = `${width}vw`;
+function showLoader(width) {
+
+    console.log('loader init');
+
+    const randomWidth = getRandomInteger(10, 30);
+    const randomTime = getRandomInteger(1, 5);
+    width = width + randomWidth;
+
+    setStyles(width, randomTime)
+}
+
+function setStyles(width, timeToTransition) {
+
+    if (width < totalWidth) {
         loader.style.transition = `width ${timeToTransition}s ease`;
+        loader.style.width = `${width}vw`;
         setTimeout(() => {
-            resolve(true)
-        }, incrementTime());
-    });
+            showLoader(width);
+        }, timeToTransition * 1000);
+    } else {
+        loader.style.transition = `width 5s ease`;
+        loader.style.width = `100vw`;
+        setTimeout(() => {
+            h2.style.display = 'block';
+        }, 5001);
+    }
+
 }
 
 function changeToRed() {
