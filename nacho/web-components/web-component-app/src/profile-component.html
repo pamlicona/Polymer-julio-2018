@@ -1,0 +1,104 @@
+<template id="profileTemplate">
+  <style>
+    .container__profile{
+      border: 1px solid #e3eaf1;
+      padding: 25px;
+      background-color: #fff;
+      box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.04);
+      width: 500px;
+      height: auto;
+      margin: 30px auto;
+    }
+    .profile__img{
+      margin-bottom: 15px;
+      text-align: center;
+    }
+    .profile__img img{
+      max-width: 128px;
+      max-height: 128px
+      height: auto;
+    }
+    .info__profile ul{
+      list-style: none;
+      margin-top: 0px;
+      margin-bottom: 0px;
+      padding-left: 0px;
+    }
+    .info__profile ul li {
+      padding: 14px 0 14px 115px;
+      position: relative;
+      font-size: 14px;
+      color: #363636;
+      font-weight: 400;
+      border-bottom: 1px dashed rgba(0, 0, 0, 0.2);
+    }
+    .info__profile ul li strong {
+      padding: 0 20px 0 0;
+      position: absolute;
+      top: 14px;
+      left: 0;
+      display: block;
+      width: 115px;
+    }
+    strong {
+      font-weight: 500;
+      color: #363636;
+    }
+    .info__profile ul li strong span {
+      padding: 2px 5px;
+      background: #4fd6a7;
+      color: #fefefe;
+      font-weight: 400;
+      border-radius: 2px;
+    }
+  </style>
+  <div class="container__profile"></div>
+</template>
+<script>
+  (function profileComponent(customElements) {
+    'use strict';
+
+    class ProfileComponent extends HTMLElement {
+      constructor() {
+        super();
+
+        const shadowRoot = this.attachShadow({mode: 'open'});
+        // Opcion con template
+        const templ = document.currentScript.ownerDocument.querySelector('#profileTemplate');
+        shadowRoot.appendChild(document.importNode(templ.content, true));
+      }
+
+      connectedCallback() {
+        this.elemContainer = this.shadowRoot.querySelector('.container__profile');
+      }
+
+      static get observedAttributes() {
+        return ['profile'];
+      }
+
+      attributeChangedCallback(name, oldVal, newVal) {
+        if(name=='profile' && !!newVal){
+          this._setProfile(newVal);
+        }
+      }
+
+      _setProfile(contact){
+        contact = JSON.parse(contact);
+        this.elemContainer.innerHTML = `
+        <div class="profile__img">
+          <img src="${contact.img[0]}" alt="Super Heroe">
+        </div>
+        <div class="info__profile">
+          <ul>
+            <li><strong><span>Nombre:</span></strong>${contact.name}</li>
+            <li><strong><span>Telefono:</span></strong>${contact.phone}</li>
+            <li><strong><span>Dirección:</span></strong>${contact.address}</li>
+          </ul>
+        </div>
+        `;
+      }
+    }
+
+    customElements.define('profile-component', ProfileComponent);
+  })(window.customElements);
+</script>
