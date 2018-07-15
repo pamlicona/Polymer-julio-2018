@@ -60,11 +60,9 @@
           </style>
 
           <div>
-            <label class="cards__button" for="create">Crear nuevo contacto</label>
+            <label class="cards__button" for="create">Crear nuevo superhéroe</label>
             <input id="create" type="checkbox">
             <div class="cards__form hidden">
-              <label for="gender">Género</label>
-              <input type="text" id="gender" type="text">
               <label for="name">Nombre</label>
               <input type="text" id="name" type="text">
               <label for="lastName">Apellido</label>
@@ -88,21 +86,12 @@
 
       serializeData() {
         this.item = {
-          gender: this.shadowRoot.querySelector('#gender').value,
-          name: {
-            first: this.shadowRoot.querySelector('#name').value,
-            last: this.shadowRoot.querySelector('#lastName').value,
-          },
+          name: this.shadowRoot.querySelector('#name').value,
+          lastname: this.shadowRoot.querySelector('#lastName').value,
           email: this.shadowRoot.querySelector('#email').value,
           phone: this.shadowRoot.querySelector('#phone').value,
-          location: {
-            street: this.shadowRoot.querySelector('#direction').value
-          },
-          picture: {
-            medium: 'https://thevoicefinder.com/wp-content/themes/the-voice-finder/images/default-img.png',
-            large: 'https://thevoicefinder.com/wp-content/themes/the-voice-finder/images/default-img.png',
-            thumbnail: 'https://thevoicefinder.com/wp-content/themes/the-voice-finder/images/default-img.png'
-          }
+          direction: this.shadowRoot.querySelector('#direction').value,
+          image: 'https://thevoicefinder.com/wp-content/themes/the-voice-finder/images/default-img.png'
         }
         this.newContact();
       }

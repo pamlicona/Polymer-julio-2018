@@ -28,6 +28,7 @@
                 align-items: center;
                 cursor: pointer;
                 min-width: 550px;
+                max-width: 550px;
                 border: 3px solid #5FC2FF;
                 border-radius: 10px;
               }
@@ -37,7 +38,7 @@
               }
 
               img {
-                width: 100%;
+                width: 75%;
               }
             </style>
 
@@ -80,18 +81,13 @@
         cardsContainer.innerHTML = `
           <article class="cards__card">
             <div class="cards__card__image">
-              <picture>
-                <source media="(max-width: 650px)" srcset="${dataItem.picture.medium}">
-                <source media="(max-width: 465px)" srcset="${dataItem.picture.thumbnail}">
-                <img src="${dataItem.picture.large}">
-              </picture>
+              <img src="${dataItem.image}">
             </div>
             <div class="cards__card__info">
-              <p>Género: ${dataItem.gender}</p>
-              <p>Nombre: ${dataItem.name.first} ${dataItem.name.last}</p>
+              <p>Nombre: ${dataItem.name} ${dataItem.lastname}</p>
               <p>Email: ${dataItem.email}</p>
               <p>Teléfono: ${dataItem.phone}</p>
-              <p>Dirección: ${dataItem.location.street}</p>
+              <p>Dirección: ${dataItem.direction}</p>
             </div>
           </article>
         `

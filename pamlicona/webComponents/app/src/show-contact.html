@@ -41,7 +41,6 @@
         <img src="https://thevoicefinder.com/wp-content/themes/the-voice-finder/images/default-img.png">
       </div>
       <div class="info__card__info">
-        <p class="info__card__info__text">Género</p>
         <p class="info__card__info__text">Nombre</p>
         <p class="info__card__info__text">Email</p>
         <p class="info__card__info__text">Teléfono</p>
@@ -87,18 +86,13 @@
         cardsContainer.innerHTML = `
           <article class="info__card">
             <div class="info__card__image">
-              <picture>
-                <source media="(max-width: 650px)" srcset="${dataItem.picture.medium}">
-                <source media="(max-width: 465px)" srcset="${dataItem.picture.thumbnail}">
-                <img src="${dataItem.picture.large}">
-              </picture>
+              <img src="${dataItem.image}">
             </div>
             <div class="info__card__info">
-              <p class="info__card__info__text capitalize">${dataItem.gender}</p>
-              <p class="info__card__info__text capitalize">${dataItem.name.first} ${dataItem.name.last}</p>
+              <p class="info__card__info__text capitalize">${dataItem.name} ${dataItem.lastname}</p>
               <p class="info__card__info__text">${dataItem.email}</p>
               <p class="info__card__info__text">${dataItem.phone}</p>
-              <p class="info__card__info__text">${dataItem.location.street}</p>
+              <p class="info__card__info__text">${dataItem.direction}</p>
             </div>
           </article>
         `
