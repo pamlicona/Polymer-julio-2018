@@ -22,36 +22,6 @@
       grid-template-columns: 1fr 1fr;
       margin-top: 75px;
     }
-
-    .cards__button {
-      font-size: 14px;
-      cursor: pointer;
-      background-color: var(--primary-color);
-      color: white;
-      padding: 11px;
-      border-radius: 7px;
-    }
-
-    .cards__button + input {
-     display: none;
-    }
-
-    .cards__button + input + * {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.5s, overflow 0s;
-    }
-
-    .cards__button + input:checked + *, .cards__form {
-      max-height: 16em;
-      overflow: auto;
-      transition: max-height 0.5s, overflow 0.5s 0.5s;
-      margin-top: 40px;
-      display: grid;
-      justify-content: center;
-      grid-template-columns: 0.3fr 0.5fr;
-      margin-bottom: 35px;
-    }
   </style>
 
   <header class="header">
@@ -61,24 +31,7 @@
   <section class="container">
     <show-contact></show-contact>
     <div class="cards">
-      <div>
-        <label class="cards__button" for="create">Crear nuevo contacto</label>
-        <input id="create" type="checkbox">
-        <div class="cards__form hidden">
-          <label for="gender">Género</label>
-          <input id="gender" type="text">
-          <label for="name">Nombre</label>
-          <input id="name" type="text">
-          <label for="lastName">Apellido</label>
-          <input id="lastName" type="text">
-          <label for="phone">Teléfono</label>
-          <input id="phone" type="text">
-          <label for="email">Email</label>
-          <input id="email" type="text">
-          <label for="direction">Dirección</label>
-          <input id="direction" type="text">
-        </div>
-      </div>
+      <form-contact></form-contact>
     </div>
   </section>
 
@@ -105,6 +58,12 @@
             this.sendData(resp);
           })
         this.addEventListener('show-contact', this.setItem);
+        this.addEventListener('new-contact', this.getNewItem);
+      }
+
+      getNewItem(event) {
+        const item = event.detail;
+        this.createCard(item)
       }
 
       setItem(event) {

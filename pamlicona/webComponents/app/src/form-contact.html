@@ -1,0 +1,120 @@
+<script>
+  (function formContact(customElements) {
+    class FormContact extends HTMLElement {
+      constructor() {
+        super();
+        this.item = {};
+
+        const shadowRoot = this.attachShadow({mode: 'open'}); //Crea ShadowDom
+
+        shadowRoot.innerHTML = `
+          <style>
+            :host {
+              --primary-color: darkblue;
+            }
+
+            .cards__button {
+              font-size: 14px;
+              cursor: pointer;
+              background-color: var(--primary-color);
+              color: white;
+              padding: 13px;
+              border-radius: 7px;
+              letter-spacing: 1px;
+              margin-left: 41px;
+            }
+
+            .cards__button + input {
+             display: none;
+            }
+
+            .cards__button + input + * {
+              max-height: 0;
+              overflow: hidden;
+              transition: max-height 0.5s, overflow 0s;
+            }
+
+            .cards__button + input:checked + *, .cards__form {
+              max-height: 16em;
+              overflow: auto;
+              transition: max-height 0.5s, overflow 0.5s 0.5s;
+              margin-top: 40px;
+              display: grid;
+              justify-content: center;
+              grid-template-columns: 0.3fr 0.5fr;
+              margin-bottom: 35px;
+              grid-row-gap: 5px;
+            }
+
+            .cards__form__button {
+              background: #5FC2FF;
+              border: none;
+              border-radius: 5px;
+              color: white;
+              font-size: 15px;
+              margin-top: 27px;
+              grid-column: 2;
+              width: 100px;
+              cursor: pointer;
+            }
+          </style>
+
+          <div>
+            <label class="cards__button" for="create">Crear nuevo contacto</label>
+            <input id="create" type="checkbox">
+            <div class="cards__form hidden">
+              <label for="gender">Género</label>
+              <input type="text" id="gender" type="text">
+              <label for="name">Nombre</label>
+              <input type="text" id="name" type="text">
+              <label for="lastName">Apellido</label>
+              <input type="text" id="lastName" type="text">
+              <label for="phone">Teléfono</label>
+              <input type="number" id="phone" type="text">
+              <label for="email">Email</label>
+              <input type="text" id="email" type="text">
+              <label for="direction">Dirección</label>
+              <input type="text" id="direction" type="text">
+              <button class="cards__form__button">Crear</button>
+            </div>
+          </div>
+        `
+      }
+
+      connectedCallback() {
+        const button = this.shadowRoot.querySelector('.cards__form__button');
+        button.addEventListener('click', () => this.serializeData());
+      }
+
+      serializeData() {
+        this.item = {
+          gender: this.shadowRoot.querySelector('#gender').value,
+          name: {
+            first: this.shadowRoot.querySelector('#name').value,
+            last: this.shadowRoot.querySelector('#lastName').value,
+          },
+          email: this.shadowRoot.querySelector('#email').value,
+          phone: this.shadowRoot.querySelector('#phone').value,
+          location: {
+            street: this.shadowRoot.querySelector('#direction').value
+          },
+          picture: {
+            medium: 'https://thevoicefinder.com/wp-content/themes/the-voice-finder/images/default-img.png',
+            large: 'https://thevoicefinder.com/wp-content/themes/the-voice-finder/images/default-img.png',
+            thumbnail: 'https://thevoicefinder.com/wp-content/themes/the-voice-finder/images/default-img.png'
+          }
+        }
+        this.newContact();
+      }
+
+      newContact() {
+        this.dispatchEvent(new CustomEvent('new-contact', {
+          bubbles: true,
+          composed: true,
+          detail: this.item
+        }))
+      }
+    }
+    customElements.define('form-contact', FormContact);
+  })(window.customElements);
+</script>
