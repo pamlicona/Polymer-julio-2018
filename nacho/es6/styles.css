@@ -23,19 +23,9 @@ html{
   grid-template-columns: 1fr 1fr;
   grid-gap: 50px;
 }
-<<<<<<< HEAD
-.male {
-  background-color: purple;
-}
-
-.female {
-  background-color: green;
-=======
-
 .female{
   background-color: #ff3f9f;
 }
 .male{
   background-color: #7cb9e8;
->>>>>>> 4e780759426e41cb22a3dc37cc6397f17c004ff0
 }
