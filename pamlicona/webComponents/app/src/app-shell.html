@@ -1,0 +1,130 @@
+<template id="myTemplate">
+  <style>
+    :host {
+      --primary-color: darkblue;
+    }
+
+    .header {
+      align-items: center;
+      background-color: var(--primary-color);
+      border-bottom: 1px solid darkgray;
+      display: flex;
+      height: 100px;
+      justify-content: center;
+    }
+
+    .header__title {
+      color: white;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      margin-top: 75px;
+    }
+
+    .cards__button {
+      font-size: 14px;
+      cursor: pointer;
+      background-color: var(--primary-color);
+      color: white;
+      padding: 11px;
+      border-radius: 7px;
+    }
+
+    .cards__button + input {
+     display: none;
+    }
+
+    .cards__button + input + * {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s, overflow 0s;
+    }
+
+    .cards__button + input:checked + *, .cards__form {
+      max-height: 16em;
+      overflow: auto;
+      transition: max-height 0.5s, overflow 0.5s 0.5s;
+      margin-top: 40px;
+      display: grid;
+      justify-content: center;
+      grid-template-columns: 0.3fr 0.5fr;
+      margin-bottom: 35px;
+    }
+  </style>
+
+  <header class="header">
+    <h2 class="header__title">Contactos</h2>
+  </header>
+
+  <section class="container">
+    <show-contact></show-contact>
+    <div class="cards">
+      <div>
+        <label class="cards__button" for="create">Crear nuevo contacto</label>
+        <input id="create" type="checkbox">
+        <div class="cards__form hidden">
+          <label for="gender">Género</label>
+          <input id="gender" type="text">
+          <label for="name">Nombre</label>
+          <input id="name" type="text">
+          <label for="lastName">Apellido</label>
+          <input id="lastName" type="text">
+          <label for="phone">Teléfono</label>
+          <input id="phone" type="text">
+          <label for="email">Email</label>
+          <input id="email" type="text">
+          <label for="direction">Dirección</label>
+          <input id="direction" type="text">
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+</template>
+
+<script>
+  (function appShell(customElements) {
+    class AppShell extends HTMLElement {
+      constructor() {
+        super();
+        this.apiUrl = 'https://randomuser.me/api/?results=3';
+
+        const template = document.currentScript.ownerDocument.querySelector('#myTemplate');
+        const shadowRoot = this.attachShadow({mode: 'open'});
+
+        shadowRoot.appendChild(document.importNode(template.content, true));
+      }
+
+      connectedCallback() {
+        fetch(this.apiUrl)
+          .then(resp => resp.json())
+          .then(resp => {
+            this.sendData(resp);
+          })
+        this.addEventListener('show-contact', this.setItem);
+      }
+
+      setItem(event) {
+        const item = event.detail;
+        const showContact = this.shadowRoot.querySelector('show-contact');
+        showContact.setAttribute('item', item);
+      }
+
+      createCard(item) {
+        const cardContainer = this.shadowRoot.querySelector('.cards');
+        let itemString = JSON.stringify(item);
+        cardContainer.innerHTML += `<card-contact item='${itemString}'></card-contact>`
+      }
+
+      sendData(resp) {
+        for (let item of resp.results) {
+          this.createCard(item);
+        }
+      }
+    }
+    customElements.define('app-shell', AppShell);
+  })(window.customElements);
+</script>

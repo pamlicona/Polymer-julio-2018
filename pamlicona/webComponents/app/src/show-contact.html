@@ -1,0 +1,109 @@
+<template id="infoTemplate">
+  <style>
+    :host {
+      --primary-color: #5FC2FF;
+    }
+
+    .info {
+      display: grid;
+      justify-content: center;
+      grid-template-columns: 1fr 2fr 1fr;
+    }
+
+    .info__card {
+      grid-column: 2;
+      text-align: center;
+    }
+
+    .info__card__info {
+      margin-top: 40px;
+    }
+
+    .info__card__info__text {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 10px;
+      margin-bottom: 23px;
+    }
+
+    img {
+      width: 70%;
+    }
+
+    .capitalize {
+      text-transform: capitalize;
+    }
+  </style>
+
+  <div class="info">
+    <article class="info__card">
+      <div class="info__card__image">
+        <img src="https://thevoicefinder.com/wp-content/themes/the-voice-finder/images/default-img.png">
+      </div>
+      <div class="info__card__info">
+        <p class="info__card__info__text">Género</p>
+        <p class="info__card__info__text">Nombre</p>
+        <p class="info__card__info__text">Email</p>
+        <p class="info__card__info__text">Teléfono</p>
+        <p class="info__card__info__text">Dirección</p>
+      </div>
+    </article>
+  </div>
+</template>
+
+<script>
+  (function showContact(customElements) {
+    class showContact extends HTMLElement {
+      constructor() {
+        super();
+        this.item = '';
+
+        const template = document.currentScript.ownerDocument.querySelector('#infoTemplate');
+        const shadowRoot = this.attachShadow({mode: 'open'});
+
+        shadowRoot.appendChild(document.importNode(template.content, true));
+      }
+
+      static get observedAttributes() {
+        return ['item'];
+      }
+
+      attributeChangedCallback(name, oldValue, newValue) {
+        this._showInfo();
+      }
+
+      get item() {
+        return this.getAttribute('item');
+      }
+
+      set item(value) {
+        return
+      }
+
+      _showInfo() {
+        let dataItem = JSON.parse(this.item);
+        const cardsContainer = this.shadowRoot.querySelector('.info');
+
+        cardsContainer.innerHTML = `
+          <article class="info__card">
+            <div class="info__card__image">
+              <picture>
+                <source media="(max-width: 650px)" srcset="${dataItem.picture.medium}">
+                <source media="(max-width: 465px)" srcset="${dataItem.picture.thumbnail}">
+                <img src="${dataItem.picture.large}">
+              </picture>
+            </div>
+            <div class="info__card__info">
+              <p class="info__card__info__text capitalize">${dataItem.gender}</p>
+              <p class="info__card__info__text capitalize">${dataItem.name.first} ${dataItem.name.last}</p>
+              <p class="info__card__info__text">${dataItem.email}</p>
+              <p class="info__card__info__text">${dataItem.phone}</p>
+              <p class="info__card__info__text">${dataItem.location.street}</p>
+            </div>
+          </article>
+        `
+      }
+    }
+    customElements.define('show-contact', showContact);
+  })(window.customElements);
+</script>

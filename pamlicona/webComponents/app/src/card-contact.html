@@ -1,0 +1,102 @@
+<script>
+  (function cardContact(customElements) {
+    class CardContact extends HTMLElement {
+      constructor() {
+        super();
+        this.item = '';
+
+        const shadowRoot = this.attachShadow({mode: 'open'});
+
+        shadowRoot.innerHTML = `
+
+            <style>
+              :host {
+                margin-top: 35px;
+                --primary-color: #5FC2FF;
+                --letter-color: azure;
+              }
+
+              .cards {
+                display: grid;
+                justify-content: center;
+              }
+
+              .cards__card {
+                display: grid;
+                grid-template-columns: 0.5fr 1fr;
+                margin-bottom: 20px;
+                align-items: center;
+                background-color: var(--primary-color);
+                color: var(--letter-color);
+                cursor: pointer;
+                min-width: 550px;
+              }
+
+              .cards__card__info {
+                padding-left: 50px;
+              }
+
+              img {
+                width: 100%;
+              }
+            </style>
+
+            <div class="cards"></div>
+        `
+      }
+
+      connectedCallback() {
+        this.addEventListener("click", this._sendData);
+      }
+
+      static get observedAttributes() {
+        return ['item'];
+      }
+
+      attributeChangedCallback(name, oldValue, newValue) {
+        this._showCard();
+      }
+
+      get item() {
+        return this.getAttribute('item');
+      }
+
+      set item(value) {
+        return
+      }
+
+      _sendData() {
+        this.dispatchEvent(new CustomEvent('show-contact', {
+          bubbles: true,
+          composed: true,
+          detail: this.item
+        }))
+      }
+
+      _showCard() {
+        let dataItem = JSON.parse(this.item);
+        const cardsContainer = this.shadowRoot.querySelector('.cards');
+
+        cardsContainer.innerHTML = `
+          <article class="cards__card">
+            <div class="cards__card__image">
+              <picture>
+                <source media="(max-width: 650px)" srcset="${dataItem.picture.medium}">
+                <source media="(max-width: 465px)" srcset="${dataItem.picture.thumbnail}">
+                <img src="${dataItem.picture.large}">
+              </picture>
+            </div>
+            <div class="cards__card__info">
+              <p>Género: ${dataItem.gender}</p>
+              <p>Nombre: ${dataItem.name.first} ${dataItem.name.last}</p>
+              <p>Email: ${dataItem.email}</p>
+              <p>Teléfono: ${dataItem.phone}</p>
+              <p>Dirección: ${dataItem.location.street}</p>
+            </div>
+          </article>
+        `
+      }
+    }
+    customElements.define('card-contact', CardContact);
+  })(window.customElements);
+</script>
