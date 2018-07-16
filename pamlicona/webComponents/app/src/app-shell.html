@@ -1,0 +1,93 @@
+<template id="myTemplate">
+  <style>
+    :host {
+      --primary-color: darkblue;
+    }
+
+    .header {
+      align-items: center;
+      border-bottom: 1px solid darkgray;
+      display: flex;
+      height: 200px;
+      justify-content: center;
+      background-image: url('https://www.eluniverso.com/sites/default/files/styles/powgallery_800/public/fotos/2014/10/dccomics0.42170553.jpg?itok=HhgdaDIS');
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position-y: -34px;
+    }
+
+    .header__title {
+      color: white;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      margin-top: 75px;
+    }
+  </style>
+
+  <header class="header">
+    <h2 class="header__title">Superhéroes</h2>
+  </header>
+
+  <section class="container">
+    <show-contact></show-contact>
+    <div class="cards">
+      <form-contact></form-contact>
+    </div>
+  </section>
+
+
+</template>
+
+<script>
+  (function appShell(customElements) {
+    class AppShell extends HTMLElement {
+      constructor() {
+        super();
+        //this.apiUrl = 'https://randomuser.me/api/?results=3';
+        this.apiUrl = 'http://demo7585059.mockable.io/superheroes';
+
+        const template = document.currentScript.ownerDocument.querySelector('#myTemplate');
+        const shadowRoot = this.attachShadow({mode: 'open'});
+
+        shadowRoot.appendChild(document.importNode(template.content, true));
+      }
+
+      connectedCallback() {
+        fetch(this.apiUrl)
+          .then(resp => resp.json())
+          .then(resp => {
+            this.sendData(resp);
+          })
+        this.addEventListener('show-contact', this.setItem);
+        this.addEventListener('new-contact', this.getNewItem);
+      }
+
+      getNewItem(event) {
+        const item = event.detail;
+        this.createCard(item)
+      }
+
+      setItem(event) {
+        const item = event.detail;
+        const showContact = this.shadowRoot.querySelector('show-contact');
+        showContact.setAttribute('item', item);
+      }
+
+      createCard(item) {
+        const cardContainer = this.shadowRoot.querySelector('.cards');
+        let itemString = JSON.stringify(item);
+        cardContainer.innerHTML += `<card-contact item='${itemString}'></card-contact>`
+      }
+
+      sendData(resp) {
+        for (let item of resp) {
+          this.createCard(item);
+        }
+      }
+    }
+    customElements.define('app-shell', AppShell);
+  })(window.customElements);
+</script>

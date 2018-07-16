@@ -22,11 +22,6 @@
       transition: all .4s;
     }
 
-    .image {
-    	text-align: center;
-    	margin-top: var(--margin-top)
-    }
-
     .progress {
     	background-color: var(--color-bar);
     }
@@ -106,7 +101,6 @@
       }
 
       _getRandomWidth(speed) {
-        console.log(speed)
         if (speed === 'fast') {
           return Math.floor(Math.random() * 59) + 1;
         }
