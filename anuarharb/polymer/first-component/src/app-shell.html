@@ -1,0 +1,44 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+
+<dom-module id="app-shell">
+  <template>
+    <style>
+      h1 {
+        color: red;
+      }
+    </style>
+    <h1>Hola [[myName]]</h1>
+    <button id="button" on-click="_changeName">Cambiar nombre</button>
+  </template>
+  <script>
+    (function appShell(customElements){
+      'use strict';
+
+      class AppShell extends Polymer.Element {
+        static get is() { return 'app-shell'; }
+        static get properties() {
+          return {
+            myName: {
+              type: String,
+              value: "Anuar",
+              observer: "_newName"
+            }
+          }
+        }
+        connectedCallback() {
+          super.connectedCallback();
+        }
+
+        _changeName() {
+          this.myName = 'Osvaldo';
+          console.log(this.myName)
+        }
+
+        _newName() {
+          console.log('la propiedad cambió');
+        }
+      }
+      customElements.define(AppShell.is, AppShell);
+    })(window.customElements);
+  </script>
+</dom-module>
