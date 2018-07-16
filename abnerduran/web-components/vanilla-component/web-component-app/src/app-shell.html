@@ -1,0 +1,70 @@
+<template id="myShellTemplate">
+
+    <style>
+        header {
+            align-items: center;
+            background-color: gray;
+            border-bottom: 1px solid darkgray;
+            display: flex;
+            height: 100px;
+            justify-content: center;
+        }
+
+        header h2 {
+            color: white;
+        }
+
+        footer {
+            height: 50px;
+            background-color: gray;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+    </style>
+
+    <header>
+        <h2>Hola, soy app shell</h2>
+    </header>
+
+    <image-show></image-show>
+    <button is="cool-button" side="light">Light</button>
+    <button is="cool-button" side="dark">Dark</button>
+
+    <footer></footer>
+
+</template>
+
+<script>
+    (function appShell(customElements) {
+        'use strict';
+
+        class AppShell extends HTMLElement {
+
+            constructor() {
+                super();
+                const shadowRoot = this.attachShadow({ mode: 'open' });
+
+                // Opcion con template
+                const templ = document.currentScript.ownerDocument.querySelector('#myShellTemplate');
+                shadowRoot.appendChild(document.importNode(templ.content, true));
+            }
+
+            connectedCallback() {
+                this.addEventListener('change-image-event', this.setImage);
+            }
+
+            setImage(event) {
+                const side = event.detail;
+                const image = this.shadowRoot.querySelector('image-show');
+                image.setAttribute('side', side);
+            }
+
+        }
+
+        customElements.define('app-shell', AppShell);
+
+    })(window.customElements);
+
+</script>

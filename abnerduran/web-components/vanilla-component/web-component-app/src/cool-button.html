@@ -1,0 +1,44 @@
+<script>
+    (function coolButton(customElements) {
+        'use strict';
+
+        class CoolButton extends HTMLButtonElement {
+            constructor() {
+                super();
+                this.side = 'light';
+                this.addEventListener('click', e => this.pressEffect());
+            }
+
+            observedAttributes() {
+                return ['side'];
+            }
+
+            get side() {
+                return this.getAttribute('side');
+            }
+
+            set side(val) {
+                return;
+            }
+
+            pressEffect() {
+                console.log('press btn');
+
+                this.classList.add('active');
+                this._dispatchEvent('change-image-event');
+            }
+
+            _dispatchEvent(event, message = "", bubbles = true) {
+                this.dispatchEvent(new CustomEvent(event, {
+                    bubbles: bubbles,
+                    composed: true,
+                    detail: this.side
+                }));
+            }
+        }
+
+        customElements.define('cool-button', CoolButton, { extends: 'button' });
+
+    })(window.customElements);
+
+</script>

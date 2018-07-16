@@ -18,7 +18,12 @@
         }
     </style>
 
-    <button>My element button</button>
+    <button>
+        <slot name="button-text">Slot 1</slot>
+        <slot name="button-text2">Slot 2</slot>
+        My element button
+        <slot>Slot 2</slot>
+    </button>
 
 </template>
 

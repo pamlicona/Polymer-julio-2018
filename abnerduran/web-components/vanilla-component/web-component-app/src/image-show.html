@@ -1,0 +1,67 @@
+<template id="myImgTemplate">
+
+    <style>
+        img {
+            width: 300px;
+        }
+    </style>
+
+    <img src="" alt="">
+
+</template>
+
+<script>
+    (function imgShow(customElements) {
+        'use strict';
+
+        class ImgShow extends HTMLElement {
+
+            constructor() {
+
+                super();
+                this.src = 'https://loremflickr.com/cache/resized/4162_34739152085_9975e2dbf1_h_760_80_nofilter.jpg';
+                const shadowRoot = this.attachShadow({ mode: 'open' });
+
+                // Opcion con template
+                const templ = document.currentScript.ownerDocument.querySelector('#myImgTemplate');
+                shadowRoot.appendChild(document.importNode(templ.content, true));
+
+            }
+
+            static get observedAttributes() {
+                return ['side'];
+            }
+
+            get side() {
+                return this.getAttribute('side');
+            }
+
+            set side(val) {
+                return
+            }
+
+            connectedCallback() {
+                this.changeImage();
+            }
+
+            attributeChangedCallback(name, oldVal, newVal) {
+                console.log(newVal);
+                if (newVal == 'dark') {
+                    this.src = 'https://cdn.shopify.com/s/files/1/0651/7205/products/dark-side-vader-detail_643b1aef-06bf-4e63-96d1-2eb2e2fcc433_1024x1024.jpg?v=1527502858';
+                } else {
+                    this.src = 'https://i.ytimg.com/vi/9ak6l31HJ4c/maxresdefault.jpg';
+                }
+                this.changeImage()
+            }
+
+            changeImage() {
+                this.shadowRoot.querySelector('img').src = this.src;
+            }
+
+        }
+
+        customElements.define('image-show', ImgShow);
+
+    })(window.customElements);
+
+</script>

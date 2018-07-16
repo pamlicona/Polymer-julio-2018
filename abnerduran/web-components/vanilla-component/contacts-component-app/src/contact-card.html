@@ -1,0 +1,148 @@
+<template id="myContactTemplate">
+
+    <style>
+        :host {
+            position: relative;
+            cursor: pointer;
+        }
+
+        :host:hover {
+            filter: brightness(1.5);
+        }
+
+        .cards-container {
+            display: flex;
+            flex-direction: column;
+            /* height: 100vh; */
+            justify-content: flex-start;
+            padding: 0 20px;
+            width: 35vw;
+            max-width: 300px;
+            align-items: center
+        }
+
+        .cards-container>div {
+            border: 1px solid gray;
+            margin-top: 1vh;
+            width: 100%;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+
+        .cards-container>div ul {
+            list-style: none;
+            padding: 0 .5rem;
+            padding-left: 0.8rem;
+        }
+
+        .cards-container>div ul span {
+            font-weight: bold;
+        }
+
+        .card {
+            display: grid;
+            grid-template-columns: .5fr 1fr;
+        }
+
+        .person {
+            display: flex;
+            align-items: center;
+        }
+    </style>
+
+    <div class="cards-container"></div>
+
+</template>
+
+<script>
+    (function contactCard(customElements) {
+        'use strict';
+
+        class ContactCard extends HTMLElement {
+
+            constructor() {
+                super();
+                // this.src = 'https://loremflickr.com/cache/resized/4162_34739152085_9975e2dbf1_h_760_80_nofilter.jpg';
+                this.endpoint = 'https://randomuser.me/api/?results=1';
+                this.contact = undefined;
+                const shadowRoot = this.attachShadow({ mode: 'open' });
+                // Opcion con template
+                const templ = document.currentScript.ownerDocument.querySelector('#myContactTemplate');
+                shadowRoot.appendChild(document.importNode(templ.content, true));
+                this.addEventListener('click', e => this.sendData());
+            }
+
+            static get observedAttributes() {
+                return ['contact'];
+            }
+
+            get contact() {
+                return this.getAttribute('contact');
+            }
+
+            set contact(val) {
+                return
+            }
+
+            connectedCallback() {
+                this.getContactData();
+            }
+
+            sendData() {
+                this.classList.add('active');
+                this._dispatchEvent('send-contact-data');
+            }
+
+            _dispatchEvent(event, message = "", bubbles = true) {
+                this.dispatchEvent(new CustomEvent(event, {
+                    bubbles: bubbles,
+                    composed: true,
+                    detail: this.contact
+                }));
+            }
+
+            getContactData() {
+                fetch(this.endpoint)
+                    .then(response => response.json())
+                    .then(response => {
+                        const person = response.results[0];
+                        const filterData = this._getOnlyCustomData(person);
+                        this._addCard(filterData);
+                        this.setAttribute('contact', JSON.stringify(filterData));
+                    })
+                    .catch(err => console.log('Fetch Error', err))
+            }
+
+            _getOnlyCustomData(person) {
+                const contactData = {
+                    picture: person.picture.large,
+                    name: {
+                        first: person.name.first,
+                        last: person.name.last
+                    },
+                    phone: person.phone,
+                    location: person.location.city
+                }
+                return contactData;
+            }
+
+            _addCard(person) {
+                const cards_container = this.shadowRoot.querySelector('.cards-container');
+                cards_container.innerHTML += `
+                <div class="card">
+                    <img src="${person.picture}" alt="${person.name.first} ${person.name.last}">
+                    <div class="person">
+                        <ul>
+                            <li><span>Name:</span> ${person.name.first} ${person.name.last}</li>
+                        </ul>
+                    </div>
+                </div>`;
+            }
+
+        }
+
+        customElements.define('contact-card', ContactCard);
+
+    })(window.customElements);
+
+</script>
