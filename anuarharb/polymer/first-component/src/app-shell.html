@@ -1,44 +1,71 @@
 <link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="slider-component.html">
 
 <dom-module id="app-shell">
   <template>
     <style>
-      h1 {
-        color: red;
+      :host {
+        text-align: center;
+      }
+      slider-component {
+        display: block;
+      }
+      form {
+        margin-top: 40px;
       }
     </style>
-    <h1>Hola [[myName]]</h1>
-    <button id="button" on-click="_changeName">Cambiar nombre</button>
+    <h1>[[fullTitle]]</h1>
+    <slider-component image-list="[[imageArray]]"></slider-component>
+    <form action="">
+      <label for="imagrInput">Añade más imágenes!</label>
+      <input id="imageInput" type="text">
+      <button type="button" on-click="_addImage">New Image</button>
+    </form>
   </template>
   <script>
-    (function appShell(customElements){
+    (function appShell(customElements) {
       'use strict';
 
       class AppShell extends Polymer.Element {
         static get is() { return 'app-shell'; }
         static get properties() {
           return {
-            myName: {
+            imageArray: {
+              type: Array,
+              value: [
+                "https://vignette.wikia.nocookie.net/avatar/images/f/fa/Aang_en_el_Drag%C3%B3n_del_Jazm%C3%ADn.png/revision/latest?cb=20150414231706&path-prefix=es",
+                "https://vignette.wikia.nocookie.net/avatar/images/c/ca/Korra.png/revision/latest?cb=20150407234059&path-prefix=es",
+                "https://vignette.wikia.nocookie.net/avatar/images/0/07/Avatar_Kyoshi.png/revision/latest?cb=20140215111846"
+              ]
+            },
+            //Computed property
+            theme: {
               type: String,
-              value: "Anuar",
-              observer: "_newName"
+              value: 'Avatar'
+            },
+            feature: {
+              type: String,
+              value: 'Slider'
+            },
+            fullTitle: {
+              type: String,
+              computed: 'getFullTitle(theme, feature)'
             }
           }
         }
-        connectedCallback() {
-          super.connectedCallback();
+
+        getFullTitle(theme, feature) {
+          return `${theme} ${feature}`;
         }
 
-        _changeName() {
-          this.myName = 'Osvaldo';
-          console.log(this.myName)
-        }
-
-        _newName() {
-          console.log('la propiedad cambió');
+        //add new image Method
+        _addImage() {
+          let url = this.$.imageInput.value;
+          // polymer push helper
+          this.push('imageArray', url);
         }
       }
-      customElements.define(AppShell.is, AppShell);
+    customElements.define(AppShell.is, AppShell);
     })(window.customElements);
   </script>
 </dom-module>
