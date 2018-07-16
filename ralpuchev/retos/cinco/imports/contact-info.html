@@ -1,0 +1,243 @@
+<template id="contact_detail_template">
+    <style>
+        .contact{
+            text-align: center;
+            width: 300px;
+            border: 2px solid black;
+        }
+        
+        .image_container{
+            flex-grow: 2;
+        }
+        
+        .data_container{
+            flex-grow: 4;
+        }
+    </style>
+    <section class="contact">
+        <div class="image_container">
+            <img src="" class="contact_image" width="120px"/>
+        </div>
+        <div class="data_container">
+            <div class="contact_full_name"></div>
+            <div class="contact_email"></div>
+            <div class="contact_phone"></div>
+        </div>
+    </section>
+</template>
+<template id="contact_detail_edit_template">
+    <style>
+        .contact{
+            text-align: center;
+            width: 300px;
+            border: 2px solid black;
+            padding: 6px;
+        }
+    </style>
+    <section class="contact">
+        <div class="image_container">
+            <img src="" class="contact_image" width="10%"/>
+            <div class="contact_input_label">URL de la Imagen:</div>
+            <input type="text" id="contact_image_input" placeholder="Pega aquí la URL"/>
+        </div>
+        <div class="data_container">
+            <div class="contact_input_label">Nombre completo:</div>
+            <input type="text" id="contact_fullname_input" placeholder="Escribe el nombre completo"/>
+            <div class="contact_input_label">Dirección de Correo:</div>
+            <input type="text" id="contact_email_input"  placeholder="Escribe un correo válido"/>
+            <div class="contact_input_label">Télefono:</div>
+            <input type="text" id="contact_phone_input" placeholder="Escribe el número de teléfono"/>
+            <br/><br/>
+            <button class="contact_button">Guardar</button>
+        </div>
+    </section>
+</template>
+<template id="contact_card_template">
+    <style>
+        .contact{
+            display: flex;
+            align-items: center;
+            width: 300px;
+            border: 2px solid black;
+        }
+        
+        .image_container{
+            flex-grow: 2;
+        }
+        
+        .data_container{
+            flex-grow: 4;
+        }
+    </style>
+    <section class="contact">
+        <div class="image_container">
+            <img src="" class="contact_image" width="80px;"/>
+        </div>
+        <div class="data_container">
+            <div class="contact_full_name"></div>
+            <div class="contact_email"></div>
+            <div class="contact_phone"></div>
+        </div>
+    </section>
+</template>
+<script>
+    (function contact(customElements){
+        'use strict';
+
+        class ContactInfo extends HTMLElement{
+            
+            constructor(){
+                super();
+
+                // Opcion con template
+                const shadowRoot = this.attachShadow({mode: 'open'});
+                
+                this.contactID = null;
+                this.mode = 'card';
+                
+                this.defaultTemplate = document.currentScript.ownerDocument.querySelector('#contact_card_template');
+                this.detailTemplate = document.currentScript.ownerDocument.querySelector('#contact_detail_template');
+                this.editTemplate = document.currentScript.ownerDocument.querySelector('#contact_detail_edit_template');
+                
+                this.contactImageElement = null;
+                
+                //inicializacion de variables
+                this.imageSrc = "";
+                this.fullName = "";
+                this.email = "";
+                this.phone = "";
+                
+                this._changeMode();
+            }
+            
+            connectedCallback(){
+                console.log(`template agregado al shadow root con mode: ${this.mode}`);
+            }
+
+            static get observedAttributes() {
+                return ['contact-id', 'contact-image', 'contact-fullname', 'contact-email', 'contact-phone', 'mode'];
+            }
+
+            attributeChangedCallback(name, oldVal, newVal) {
+                console.log(name, oldVal, newVal);
+
+                switch(name.toUpperCase()){
+                    case 'CONTACT-IMAGE':   this.imageSrc = newVal;
+                                            break;
+                        
+                    case 'CONTACT-FULLNAME':this.fullName = newVal;
+                                            break;
+                        
+                    case 'CONTACT-EMAIL':   this.email = newVal;
+                                            break;
+                        
+                    case 'CONTACT-PHONE':   this.phone = newVal;
+                                            break;
+                        
+                    case 'CONTACT-ID':      this.contactID = newVal;
+                                            break;
+                        
+                    case 'MODE':            this.mode = newVal;
+                                            this._changeMode();
+                                            break;
+                }
+                
+                this._showAttributes();
+            }
+            
+            _changeMode() {
+                this.shadowRoot.innerHTML = "";
+                console.log(`edit val: ${this.mode.toUpperCase()}`);
+                if(this.mode.toUpperCase() == 'CARD'){
+                    console.log(this.defaultTemplate);
+                    this.shadowRoot.appendChild(document.importNode(this.defaultTemplate.content, true));
+                }else if(this.mode.toUpperCase() == 'EDIT'){
+                    console.log(this.editTemplate);
+                    this.shadowRoot.appendChild(document.importNode(this.editTemplate.content, true));
+                }else if(this.mode.toUpperCase() == 'DETAIL'){
+                    console.log(this.editTemplate);
+                    this.shadowRoot.appendChild(document.importNode(this.detailTemplate.content, true));
+                }
+                
+                this.contactImageElement = null;
+            }
+            
+            _showAttributes(){
+                console.log("set atributes");
+                if(!this.contactImageElement){
+                    this.contactImageElement = this.shadowRoot.querySelector(".contact_image");
+                    this.contactFullnameElement = this.shadowRoot.querySelector(".contact_full_name");
+                    this.contactEmailElement = this.shadowRoot.querySelector(".contact_email");
+                    this.contactPhoneElement = this.shadowRoot.querySelector(".contact_phone"); 
+                    
+                    if(this.mode.toUpperCase() == "CARD"){
+                        this.contactCard = this.shadowRoot.querySelector(".contact");
+                        this.contactCard.onclick = (event) => {
+                            console.log("click en la forma de contacto principal");
+                            this.dispatchEvent(new CustomEvent('contact_card_selected', {
+                                bubbles: true,
+                                composed: true,
+                                detail: {
+                                    contactID: this.contactID
+                                }
+                            }))
+                        }
+                    }else if(this.mode.toUpperCase() == "EDIT"){
+                        this.contactButton = this.shadowRoot.querySelector(".contact_button");
+                        this.contactButton.onclick = (event) => {
+                            console.log("click en guardar contacto");
+                            this._saveContact();
+                        }
+                    }
+                }
+                console.log(this.contactImageElement);
+                if(!this.contactFullnameElement) return;
+                
+                this.contactImageElement.setAttribute('src', this.imageSrc);
+                this.contactFullnameElement.innerHTML = this.fullName;
+                this.contactEmailElement.innerHTML = this.email;
+                this.contactPhoneElement.innerHTML = this.phone;
+            }
+            
+            _saveContact(){
+                let contactImageField = this.shadowRoot.querySelector("#contact_image_input");
+                if(contactImageField.value.length == 0){
+                    contactImageField.focus();
+                    return;
+                }
+                
+                let contactFullnemaField = this.shadowRoot.querySelector("#contact_fullname_input");
+                if(contactFullnemaField.value.length == 0){
+                    contactFullnemaField.focus();
+                    return;
+                }
+                
+                let contactEmailField = this.shadowRoot.querySelector("#contact_email_input");
+                if(contactEmailField.value.length == 0){
+                    contactEmailField.focus();
+                    return;
+                }
+                
+                let contactPhoneField = this.shadowRoot.querySelector("#contact_phone_input");
+                if(contactPhoneField.value.length == 0){
+                    contactPhoneField.focus();
+                    return;
+                }
+                
+                let info = `{"imageSrc" : "${contactImageField.value}", "fullName" : "${contactFullnemaField.value}", "email" : "${contactEmailField.value}", "phone" : "${contactPhoneField.value}"}`;
+                
+                console.log(info);
+                
+                this.dispatchEvent(new CustomEvent('save_contact', {
+                    bubbles: true,
+                    composed: true,
+                    detail: {
+                        contactInfo: info
+                    }
+                }))
+            }
+        }
+        
+        customElements.define('contact-info', ContactInfo);
+    })(window.customElements);
+</script>

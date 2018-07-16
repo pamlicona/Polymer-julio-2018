@@ -1,0 +1,67 @@
+* {
+    padding: 0px;
+    margin: 0px;
+}
+
+.multi_tab_head {
+    display: flex;
+    align-items: center;
+}
+
+.tab_title {
+    font-size: 14px;
+    color: white;
+    background-color: darkgray;
+    text-align: center;
+    padding: 9px;
+    border-radius: 6px 6px 0 0;
+    margin-right: 3px;
+    margin-left: 3px;
+    overflow : hidden;
+    max-height: 18px;
+    height: 18px;
+}
+
+.tab_title:hover {
+    font-size: 14px;
+    color: white;
+    background-color: black;
+    text-align: center;
+    padding: 9px;
+    border-radius: 6px 6px 0 0;
+    margin-right: 3px;
+    cursor: pointer;
+    overflow : hidden;
+    max-height: 18px;
+    height: 18px;
+}
+
+.tab_title_selected {
+    font-size: 14px;
+    color: white;
+    background-color: black;
+    text-align: center;
+    padding: 9px;
+    border-radius: 6px 6px 0 0;
+    margin-right: 3px;
+    overflow : hidden;
+    max-height: 18px;
+    height: 18px;
+}
+
+.multi_tab_controller_container {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.multi_tab_body {
+    padding: 30px;
+    background-color: aliceblue;
+    height: 500px;
+}
+
+.tab_input {
+    font-size: 16px;
+    border-radius: 6px;
+    width: 60%;
+}
