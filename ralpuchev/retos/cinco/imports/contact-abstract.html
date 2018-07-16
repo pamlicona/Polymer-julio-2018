@@ -1,0 +1,84 @@
+<template id="contact_card_template">
+    <style>
+    </style>
+    <section class="contact_card">
+        <div class="image_container">
+            <img src="" class="contact_thumbnail"/>
+        </div>
+        <div class="data_container">
+            <div class="contact_full_name"></div>
+            <div class="contact_email"></div>
+            <div class="contact_phone"></div>
+        </div>
+    </section>
+</template>
+<template id="contact_card_detail_template">
+    <style>
+    </style>
+    <section class="contact_card">
+        <div class="image_container">
+            <img src="" class="contact_thumbnail"/>
+        </div>
+        <div class="data_container">
+            <div class="contact_full_name"></div>
+            <div class="contact_email"></div>
+            <div class="contact_phone"></div>
+        </div>
+    </section>
+</template>
+<script>
+    class ContactAbstract extends HTMLElement{
+            
+        constructor(){
+            super();            
+
+            //inicializacion del web componente
+            const shadowRoot = this.attachShadow({mode: 'open'});
+            const contactCardTemplate = this.querySelector('#contact_card_template');
+            console.log(contactCardTemplate);
+            
+            const contactCardDetailTemplate = document.currentScript.ownerDocument.querySelector('#contact_card_detail_template');
+            console.log(contactCardDetailTemplate);
+        }
+            
+            /*connectedCallback(){
+                const contactCard = this.shadowRoot.querySelector(".contact_card");
+                contactCard.onclick = (event) => {
+                    console.log("click en la forma de contacto principal");
+                }
+            }
+
+            static get observedAttributes() {
+                return ['contact-id', 'contact-image', 'contact-fullname', 'contact-email', 'contact-phone'];
+            }
+
+            attributeChangedCallback(name, oldVal, newVal) {
+                console.log(name, oldVal, newVal);
+                
+                if(!this.contactThumbnailElement){
+                    this.contactThumbnailElement = this.shadowRoot.querySelector(".contact_thumbnail");
+                    this.contactFullnameElement = this.shadowRoot.querySelector(".contact_full_name");
+                    this.contactEmailElement = this.shadowRoot.querySelector(".contact_email");
+                    this.contactPhoneElement = this.shadowRoot.querySelector(".contact_phone"); 
+                    this.contactID = null;
+                }
+                
+                switch(name.toUpperCase()){
+                    case 'CONTACT-IMAGEN':  this.contactThumbnailElement.src = newVal;
+                                            break;
+                        
+                    case 'CONTACT-FULLNAME':this.contactFullnameElement.innerHTML = newVal;
+                                            break;
+                        
+                    case 'CONTACT-EMAIL':   this.contactEmailElement.innerHTML = newVal;
+                                            break;
+                        
+                    case 'CONTACT-PHONE':   this.contactPhoneElement.innerHTML = newVal;
+                                            break;
+                        
+                    case 'CONTACT-ID':      this.contactID = newVal;
+                                            break;
+                }
+            }   */
+    }
+</script>

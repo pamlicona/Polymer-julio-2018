@@ -1,0 +1,113 @@
+<template id="myTemplate">
+  <style>
+        .body {
+            height: 100%;
+        }
+      
+        .header {
+          align-items: center;
+          background-color: gray;
+          border-bottom: 1px solid darkgray;
+          display: flex;
+          height: 100px;
+          justify-content: center;
+        }
+      
+        .header__title {
+          color: white;
+        }
+      
+        footer {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          height: 20px;
+          background-color: gray;
+        }
+      
+        .directorio {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-direction: row;
+            height: 600px;
+        }  
+      
+        .contact_list{
+            flex-grow: 1;
+            background-color: aqua;
+            height: 100%;
+        }
+      
+        .contact_detail{
+            flex-grow: 4;
+            height: 100%;
+        }
+  </style>
+    <header class="header">
+        <h2 class="header__title">Ejericio de App Shell</h2>
+    </header>
+    <section class="directorio">
+        <section class="contact_list">
+        </section>
+        <section class="contact_detail"></section>
+    </section>
+    <footer></footer>
+</template>
+<script>
+  (function appShell(customElements) {
+    'use strict';
+
+    class AppShell extends HTMLElement {
+        constructor() {
+            super();
+            const templ = document.currentScript.ownerDocument.querySelector('#myTemplate');
+            const shadowRoot = this.attachShadow({mode: 'open'});
+            shadowRoot.appendChild(document.importNode(templ.content, true));
+        }
+
+        connectedCallback() {
+            console.log("app shell iniciado");
+          
+            this.addEventListener('contact_card_selected', this.contactSelected);
+            this.addEventListener('save_contact', this.saveContact);
+            
+            //cargamos los registros de personas random
+            this.loadContacts();
+        }
+        
+        loadContacts(){
+            const API = 'https://randomuser.me/api/?results=10';
+
+            fetch(API)
+                .then(response => response.json())
+                .then(jsonResponse => jsonResponse.results)
+                .then(results => this.showResults(results))
+                .catch(error => console.log("No hay internet"))
+        }
+        
+        showResults(results){
+            console.log(results);
+            
+            let contacts = '';
+            let personNumber = 1;
+            for(let person of results){
+                let fullName = person.name.title+" "+person.name.first+" "+person.name.last;
+                contacts += `<contact-info contact-id='${personNumber}' contact-image='${person.picture.thumbnail}' contact-fullname="${fullName}" contact-email='${person.email}' contact-phone='${person.phone}' mode='card'></contact-info>`;
+            }
+            
+            this.shadowRoot.querySelector('.contact_list').innerHTML = contacts;
+        }
+        
+        contactSelected(event){
+            
+        }
+        
+        saveContact(event){
+            
+        }
+    }
+    customElements.define('app-shell', AppShell);
+  })(window.customElements);
+</script>
