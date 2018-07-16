@@ -1,0 +1,270 @@
+<template id="contactTemplate">
+    <style>
+      .container__contacs{
+        padding: 30px;
+      }
+      .contacs{
+        border: 1px solid #e3eaf1;
+        padding: 25px;
+        background-color: #fff;
+        box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.04);
+        margin-bottom: 30px;
+      }
+      .contacs__title{
+        color: #8da2b7;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        flex-grow: 1;
+      }
+      .contact{
+        display: flex;
+        margin: 15px 0 15px 0;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #f6f9fc;
+      }
+      .contact:hover .contact__info h1 {
+        color: #ae55ff;
+        cursor: pointer;
+      }
+      .contact:hover .contact__info p {
+        color: #ae55ff;
+        cursor: pointer;
+      }
+      .contact__img{
+        border-radius: 100px;
+        width: 60px;
+        height: 60px;
+        overflow: hidden;
+      }
+      img{
+        width: 100%;
+      }
+      .contact__info{
+        margin-left: 30px;
+        margin-top: 5px;
+        flex: 1;
+      }
+      .contact__info h1{
+        font-size: 17px;
+        color: #8da2b7;
+        font-weight: 600;
+        margin: 0;
+        transition: .5s;
+      }
+
+      .contact__info p{
+        margin: 0;
+        padding: 0;
+        color: #363636;
+        letter-spacing: 1.4px;
+        font-size: 12px;
+        transition: .5s;
+      }
+      .btn{
+        background-color: #ae55ff;
+        box-shadow: 0px 4px 5px 0px rgba(174, 85, 255, 0.43);
+        border: 0;
+        cursor: pointer;
+        text-transform: capitalize;
+        letter-spacing: 1px;
+        border: 1px solid transparent;
+        padding: .5rem 1rem;
+        font-size: 1rem;
+        border-radius: .25rem;
+        color:white;
+        flex-grow: .5;
+        outline: none;
+      }
+      .contacs__header{
+        display: flex;
+      }
+
+      /* The Modal (background) */
+      .modal {
+          display: none; /* Hidden by default */
+          position: fixed; /* Stay in place */
+          z-index: 1; /* Sit on top */
+          left: 0;
+          top: 0;
+          width: 100%; /* Full width */
+          height: 100%; /* Full height */
+          overflow: auto; /* Enable scroll if needed */
+          background-color: rgb(0,0,0); /* Fallback color */
+          background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+      }
+
+      /* Modal Content/Box */
+      .modal-content {
+          margin: 15% auto; /* 15% from the top and centered */
+          border: 1px solid #888;
+          width: 40vw; /* Could be more or less, depending on screen size */
+          border-radius: 5px;
+          background-color: #f2f2f2;
+          padding: 20px;
+      }
+
+      /* The Close Button */
+      .close {
+          color: #aaa;
+          float: right;
+          font-size: 28px;
+          font-weight: bold;
+      }
+
+      .close:hover,
+      .close:focus {
+          color: black;
+          text-decoration: none;
+          cursor: pointer;
+      }
+
+      input[type=text] {
+        width: 100%;
+        padding: 14px 10px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+      input[type=submit]:hover {
+        background-color: #45a049;
+      }
+    </style>
+
+    <div id="myModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Agrega tu Contacto</h2>
+        <label for="name">Nombre:</label>
+        <input type="text" id="name" value=""><br>
+        <label for="phone">Celular:</label>
+        <input type="text" id="phone" value=""><br>
+        <label for="address">Dirección:</label>
+        <input type="text" id="address" value=""><br>
+        <button class="add__contacto btn">Agregar</button>
+      </div>
+    </div>
+
+    <div class="container__contacs">
+      <div class="contacs">
+        <div class="contacs__header">
+          <h3 class="contacs__title">Contactos</h3>
+          <button class="contacs__btn btn">Agregar</button>
+        </div>
+        <div class="contacs__content">
+        </div>
+      </div>
+    </div>
+  </template>
+  <script>
+    (function contactComponent(customElements) {
+      'use strict';
+
+      class ContactComponent extends HTMLElement {
+        constructor() {
+          super();
+
+          const shadowRoot = this.attachShadow({mode: 'open'});
+          // Opcion con template
+          const templ = document.currentScript.ownerDocument.querySelector('#contactTemplate');
+          shadowRoot.appendChild(document.importNode(templ.content, true));
+        }
+
+        connectedCallback() {
+          this.containerContacs = this.shadowRoot.querySelector('.contacs__content');
+          this.addContact = this.shadowRoot.querySelector('.contacs__btn');
+          this.addClose = this.shadowRoot.querySelector('.close');
+          this.btnContact = this.shadowRoot.querySelector('.add__contacto');
+
+          this.btnContact.addEventListener('click',()=>this._eventContact());
+          this.addClose.addEventListener('click',()=>this._closeForm(this));
+          this.addContact.addEventListener('click',()=>this._openForm(this));
+        }
+
+        static get observedAttributes() {
+          return ['contacts'];
+        }
+
+        attributeChangedCallback(name, oldVal, newVal) {
+          if(name=='contacts' && !!newVal){
+            this._setListContacts(newVal);
+          }
+        }
+        _setListContacts(contacts){
+          contacts = JSON.parse(contacts);
+          if(contacts.length){
+            this._setAllContacts(contacts);
+          }
+        }
+
+        _setAllContacts(contacts){
+          contacts.forEach((contact)=>{
+            this.containerContacs.innerHTML += `
+                <div class="contact">
+                  <div class="contact__img"><img src="${contact.img[1]}" alt=""></div>
+                  <div class="contact__info">
+                    <h1>${contact.name}</h1>
+                    <p>Tel: ${contact.phone}</p>
+                  </div>
+                </div>
+              `;
+            });
+          this._addEventListener();
+        }
+
+        _setContact(contact){
+          this.containerContacs.innerHTML += `
+              <div class="contact">
+                <div class="contact__img"><img src="${contact.img[1]}" alt=""></div>
+                <div class="contact__info">
+                  <h1>${contact.name}</h1>
+                  <p>Tel: ${contact.phone}</p>
+                </div>
+              </div>
+            `;
+          this._addEventListener();
+        }
+        _addEventListener(){
+          const contactAll = this.shadowRoot.querySelectorAll('.contact');
+          contactAll.forEach((contact,i)=>{
+            contact.addEventListener('click',()=>this._selectContact(i));
+          });
+        }
+
+        _selectContact(id){
+          this._executeDispatchEvent('select-contact',id);
+        }
+        _executeDispatchEvent(event,message,bubbles = true){
+          this.dispatchEvent(new CustomEvent(event,{
+            bubbles: bubbles,
+            detail:{
+              message: message
+            }
+          }));
+        }
+        _openForm(){
+          this.shadowRoot.querySelector('.modal').style.display = 'block';
+        }
+        _closeForm(){
+            this.shadowRoot.querySelector('.modal').style.display = 'none';
+        }
+        _eventContact(){
+          const name = this.shadowRoot.getElementById('name');
+          const phone = this.shadowRoot.getElementById('phone');
+          const address = this.shadowRoot.getElementById('address');
+          this._setContact({img:['../img/batman.png','../img/batman.png'], name: name.value, phone: phone.value, address: address.value});
+          this._closeForm();
+          this._executeDispatchEvent('add-contact',{img:['../img/batman.png','../img/batman.png'], name: name.value, phone: phone.value, address: address.value});
+          this._resetValue();
+        }
+        _resetValue(){
+          this.shadowRoot.getElementById('name').value = '';
+          this.shadowRoot.getElementById('phone').value = '';
+          this.shadowRoot.getElementById('address').value = '';
+        }
+      }
+
+      customElements.define('contact-component', ContactComponent);
+    })(window.customElements);
+  </script>

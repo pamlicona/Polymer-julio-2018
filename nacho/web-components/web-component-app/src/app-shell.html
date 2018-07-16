@@ -1,0 +1,97 @@
+<template id="appShellTemplate">
+    <link rel="stylesheet" href="../css/app-shell.css">
+
+    <header class="header">
+      <h1 class="header__title">Contactos</h1>
+    </header>
+
+    <div class="container">
+      <profile-component></profile-component>
+      <contact-component></contact-component>
+    </div>
+    <footer class="footer">
+      <p class="footer__item">Posted by: Ignacio Villarreal</p>
+      <p class="footer__item">Contact information: <a class="footer__link" href="mailto:ignaciovillarreal@gmail.com">ignaciovillarreal@gmail.com</a>.</p>
+    </footer>
+
+  </template>
+  <script>
+    (function appShell(customElements) {
+      'use strict';
+      const API_USER = 'https://randomuser.me/api/?results=3';
+
+      class AppShell extends HTMLElement {
+
+        constructor() {
+          super();
+          this.contacts = [];
+          const templ = document.currentScript.ownerDocument.querySelector('#appShellTemplate');
+          const shadowRoot = this.attachShadow({mode: 'open'});
+          shadowRoot.appendChild(document.importNode(templ.content, true));
+        }
+
+        connectedCallback() {
+          this.profileComponent = this.shadowRoot.querySelector('profile-component');
+          this.contactComponent = this.shadowRoot.querySelector('contact-component');
+
+          this.contactComponent.addEventListener('select-contact',(message)=>{
+            this._sendProfile(this.contacts[message.detail.message]);
+          });
+
+          this.contactComponent.addEventListener('add-contact',(message)=>{
+            this.contacts.push(new Contact(message.detail.message.img,
+                                           message.detail.message.name,
+                                           message.detail.message.phone,
+                                           message.detail.message.address));
+          });
+
+          this._getContacts();
+        }
+
+        static get API_USER() {
+          return API_USER;
+        }
+
+        _getContacts(){
+          fetch(API_USER)
+            .then(data => data.json())
+            .then(contacts => this._createListContacts(contacts.results))
+            .then(()=> this._sendProfile())
+            .then(()=> this._sendContacts());
+        }
+
+        _createListContacts(contacts){
+          for(let contact of contacts){
+            this.contacts.push(
+              new Contact([contact.picture.large,contact.picture.medium],
+                          `${contact.name.first} ${contact.name.last}`,
+                          contact.phone,
+                          `${contact.location.city} ${contact.location.state}`));
+          }
+        }
+        _sendProfile(profile){
+          if(!!profile){
+              this.profileComponent.setAttribute("profile",JSON.stringify(profile));
+          }else{
+            this.profileComponent.setAttribute("profile",JSON.stringify(this.contacts[0]));
+          }
+        }
+        _sendContacts(contact){
+            if(!!contact){
+              this.contactComponent.setAttribute("contacts",JSON.stringify(this.contacts));
+            }else{
+              this.contactComponent.setAttribute("contacts",JSON.stringify(this.contacts));
+            }
+        }
+      }
+      class Contact {
+        constructor(img,name,phone,address) {
+          this.img = img;
+          this.name = name;
+          this.phone = phone;
+          this.address = address;
+        }
+      }
+      customElements.define('app-shell', AppShell);
+    })(window.customElements);
+  </script>
