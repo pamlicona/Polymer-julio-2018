@@ -1,0 +1,102 @@
+<template id="myTemplate">
+
+    <style>
+        span {
+            font-weight: bold;
+        }
+
+        .data {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .data div {
+            text-align: center;
+        }
+    </style>
+
+    <div class="data">
+        <div>
+            <span>Nombre:</span>
+            <p class="name"></p>
+        </div>
+        <div>
+            <span>Teléfono:</span>
+            <p class="phone"></p>
+        </div>
+        <div>
+            <span>Ciudad</span>
+            <p class="city"></p>
+        </div>
+    </div>
+
+</template>
+
+<script>
+    (function contactData(customElements) {
+        'use strict';
+
+        class ContactData extends HTMLElement {
+
+            constructor() {
+
+                super();
+                this.name = 'Selecciona un contacto de la lista';
+                this.phone = 'Selecciona un contacto de la lista';
+                this.city = 'Selecciona un contacto de la lista';
+                const shadowRoot = this.attachShadow({ mode: 'open' });
+
+                // Opcion con template
+                const templ = document.currentScript.ownerDocument.querySelector('#myTemplate');
+                shadowRoot.appendChild(document.importNode(templ.content, true));
+
+            }
+
+            static get observedAttributes() {
+                return ['name', 'phone', 'city'];
+            }
+
+            get name() {
+                return this.getAttribute('name');
+            }
+
+            set name(val) {
+                return
+            }
+            get phone() {
+                return this.getAttribute('phone');
+            }
+
+            set phone(val) {
+                return
+            }
+            get city() {
+                return this.getAttribute('city');
+            }
+
+            set city(val) {
+                return
+            }
+
+            connectedCallback() {
+                this.changeData();
+            }
+
+            attributeChangedCallback(name, oldVal, newVal) {
+                console.log(name, newVal);
+                this.changeData();
+            }
+
+            changeData() {
+                this.shadowRoot.querySelector('.name').innerHTML = this.name;
+                this.shadowRoot.querySelector('.phone').innerHTML = this.phone;
+                this.shadowRoot.querySelector('.city').innerHTML = this.city;
+            }
+
+        }
+
+        customElements.define('contact-data', ContactData);
+
+    })(window.customElements);
+
+</script>

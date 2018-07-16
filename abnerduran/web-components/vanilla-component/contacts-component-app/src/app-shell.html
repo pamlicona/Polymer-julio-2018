@@ -1,6 +1,11 @@
 <template id="myShellTemplate">
 
     <style>
+        :host {
+            font-family: 'Roboto', sans-serif;
+            font-size: 16px;
+        }
+
         header {
             align-items: center;
             background-color: #4e4cff;
@@ -22,9 +27,11 @@
             left: 0;
             right: 0;
         }
+
         contacts-list {
             position: relative;
         }
+
         .grid {
             display: grid;
             grid-template-columns: repeat(10, 1fr);
@@ -37,13 +44,15 @@
             grid-row: 2 / 7;
             margin: 0 auto;
         }
+
         .right {
             grid-column: 8 / 11;
             grid-row: 1 / 7;
         }
+
         .bottom {
-            grid-column: 1 / 11;
-            grid-row: 8 / 11;
+            grid-column: 1 / 8;
+            grid-row: 7/ 11;
         }
     </style>
 
@@ -60,7 +69,7 @@
             <contact-card></contact-card>
         </div>
         <div class="bottom">
-
+            <contact-data></contact-data>
         </div>
     </div>
 
@@ -82,14 +91,18 @@
             }
 
             connectedCallback() {
-                this.addEventListener('send-contact-data', this.setImage);
+                this.addEventListener('send-contact-data', this.shareData);
             }
 
-            setImage(event) {
+            shareData(event) {
                 const contact = event.detail;
-                const contactObject = JSON.parse( event.detail );
+                const contactObject = JSON.parse(event.detail);
                 const image = this.shadowRoot.querySelector('contact-image');
+                const contactData = this.shadowRoot.querySelector('contact-data');
                 image.setAttribute('image_src', contactObject.picture);
+                contactData.setAttribute('name', `${contactObject.name.first} ${contactObject.name.last}`);
+                contactData.setAttribute('phone', contactObject.phone);
+                contactData.setAttribute('city', contactObject.location);
             }
 
         }
