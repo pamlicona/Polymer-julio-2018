@@ -1,0 +1,101 @@
+<template id="myShellTemplate">
+
+    <style>
+        header {
+            align-items: center;
+            background-color: #4e4cff;
+            border-bottom: 1px solid white;
+            display: flex;
+            height: 100px;
+            justify-content: center;
+        }
+
+        header h1 {
+            color: white;
+        }
+
+        footer {
+            height: 50px;
+            background-color: gray;
+            position: relative;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+        contacts-list {
+            position: relative;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            grid-template-rows: repeat(10, 80px);
+            align-content: center;
+        }
+
+        .left {
+            grid-column: 1 / 8;
+            grid-row: 2 / 7;
+            margin: 0 auto;
+        }
+        .right {
+            grid-column: 8 / 11;
+            grid-row: 1 / 7;
+        }
+        .bottom {
+            grid-column: 1 / 11;
+            grid-row: 8 / 11;
+        }
+    </style>
+
+    <header>
+        <h1>Lista de contactos</h1>
+    </header>
+
+    <div class="grid">
+        <div class="left">
+            <contact-image></contact-image>
+        </div>
+        <div class="right">
+            <contact-card></contact-card>
+            <contact-card></contact-card>
+        </div>
+        <div class="bottom">
+
+        </div>
+    </div>
+
+</template>
+
+<script>
+    (function appShell(customElements) {
+        'use strict';
+
+        class AppShell extends HTMLElement {
+
+            constructor() {
+                super();
+                const shadowRoot = this.attachShadow({ mode: 'open' });
+
+                // Opcion con template
+                const templ = document.currentScript.ownerDocument.querySelector('#myShellTemplate');
+                shadowRoot.appendChild(document.importNode(templ.content, true));
+            }
+
+            connectedCallback() {
+                this.addEventListener('send-contact-data', this.setImage);
+            }
+
+            setImage(event) {
+                const contact = event.detail;
+                const contactObject = JSON.parse( event.detail );
+                const image = this.shadowRoot.querySelector('contact-image');
+                image.setAttribute('image_src', contactObject.picture);
+            }
+
+        }
+
+        customElements.define('app-shell', AppShell);
+
+    })(window.customElements);
+
+</script>

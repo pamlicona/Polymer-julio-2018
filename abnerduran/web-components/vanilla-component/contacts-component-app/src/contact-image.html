@@ -1,0 +1,62 @@
+<template id="myImgTemplate">
+
+    <style>
+        img {
+            width: 300px;
+        }
+    </style>
+
+    <img src="" alt="">
+
+</template>
+
+<script>
+    (function imgShow(customElements) {
+        'use strict';
+
+        class ImgShow extends HTMLElement {
+
+            constructor() {
+
+                super();
+                this.src = 'https://lorempixel.com/300/300';
+                const shadowRoot = this.attachShadow({ mode: 'open' });
+
+                // Opcion con template
+                const templ = document.currentScript.ownerDocument.querySelector('#myImgTemplate');
+                shadowRoot.appendChild(document.importNode(templ.content, true));
+
+            }
+
+            static get observedAttributes() {
+                return ['image_src'];
+            }
+
+            get image_src() {
+                return this.getAttribute('image_src');
+            }
+
+            set image_src(val) {
+                return
+            }
+
+            connectedCallback() {
+                this.changeImage();
+            }
+
+            attributeChangedCallback(name, oldVal, newVal) {
+                this.src = newVal;
+                this.changeImage()
+            }
+
+            changeImage() {
+                this.shadowRoot.querySelector('img').src = this.src;
+            }
+
+        }
+
+        customElements.define('contact-image', ImgShow);
+
+    })(window.customElements);
+
+</script>
