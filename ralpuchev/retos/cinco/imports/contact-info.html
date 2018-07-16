@@ -1,9 +1,22 @@
 <template id="contact_detail_template">
     <style>
+        .contact{
+            text-align: center;
+            width: 300px;
+            border: 2px solid black;
+        }
+        
+        .image_container{
+            flex-grow: 2;
+        }
+        
+        .data_container{
+            flex-grow: 4;
+        }
     </style>
     <section class="contact">
         <div class="image_container">
-            <img src="" class="contact_image" width="10%"/>
+            <img src="" class="contact_image" width="120px"/>
         </div>
         <div class="data_container">
             <div class="contact_full_name"></div>
@@ -14,6 +27,12 @@
 </template>
 <template id="contact_detail_edit_template">
     <style>
+        .contact{
+            text-align: center;
+            width: 300px;
+            border: 2px solid black;
+            padding: 6px;
+        }
     </style>
     <section class="contact">
         <div class="image_container">
@@ -28,17 +47,31 @@
             <input type="text" id="contact_email_input"  placeholder="Escribe un correo válido"/>
             <div class="contact_input_label">Télefono:</div>
             <input type="text" id="contact_phone_input" placeholder="Escribe el número de teléfono"/>
-            <br/>
+            <br/><br/>
             <button class="contact_button">Guardar</button>
         </div>
     </section>
 </template>
 <template id="contact_card_template">
     <style>
+        .contact{
+            display: flex;
+            align-items: center;
+            width: 300px;
+            border: 2px solid black;
+        }
+        
+        .image_container{
+            flex-grow: 2;
+        }
+        
+        .data_container{
+            flex-grow: 4;
+        }
     </style>
     <section class="contact">
         <div class="image_container">
-            <img src="" class="contact_image" width="10%"/>
+            <img src="" class="contact_image" width="80px;"/>
         </div>
         <div class="data_container">
             <div class="contact_full_name"></div>
