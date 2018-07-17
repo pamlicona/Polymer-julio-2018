@@ -1,0 +1,58 @@
+  <link rel="import" href="/bower_components/polymer/polymer-element.html">
+
+  <dom-module id="sentence-component">
+    <template>
+      <style>
+      </style>
+
+      <p class="sentence">[[sentence]]</p>
+    </template>
+    <script>
+      (function sentenceComponent(customElements){
+        'use strict';
+
+        class SentenceComponent extends Polymer.Element {
+          static get is() { return 'sentence-component'; }
+          static get properties() {
+            return {
+              sentence: {
+                type: String,
+                value: ''
+              },
+              subjectWord: {
+                type: String,
+                value: ''
+              },
+              verbWord: {
+                type: String,
+                value: ''
+              },
+              adjectiveWord: {
+                type: String,
+                value: ''
+              },
+              placeWord: {
+                type: String,
+                value: ''
+              }
+            }
+          }
+
+          connectedCallback() {
+            super.connectedCallback();
+          }
+
+          static get observers() {
+            return [
+              '_formSentence(placeWord, adjectiveWord, verbWord, subjectWord)'
+            ]
+          }
+
+          _formSentence(placeWord, adjectiveWord, verbWord, subjectWord) {
+            this.sentence = `${subjectWord} ${verbWord} ${adjectiveWord} ${placeWord}`
+          }
+        }
+        customElements.define(SentenceComponent.is, SentenceComponent);
+      })(window.customElements);
+    </script>
+  </dom-module>

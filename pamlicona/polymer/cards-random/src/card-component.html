@@ -1,0 +1,83 @@
+  <link rel="import" href="/bower_components/polymer/polymer-element.html">
+
+  <dom-module id="card-component">
+    <template>
+      <style>
+      </style>
+
+      <div class="card-container">[[word]]</div>
+    </template>
+    <script>
+      (function cardComponent(customElements){
+        'use strict';
+
+        class CardComponent extends Polymer.Element {
+          static get is() { return 'card-component'; }
+          static get properties() {
+            return {
+              listSubject: {
+                type: Array,
+                value: ['El perro', 'El tucan', 'Juan', 'María', 'Dios', 'La vecina', 'Mi profe']
+              },
+              listVerb: {
+                type: Array,
+                value: ['come', 'baila', 'corre', 'juega', 'fuma', 'ladra', 'muerde']
+              },
+              listAdjective: {
+                type: Array,
+                value: ['con superman ', 'un ladrillo', 'un nopal', 'con el Peje', 'Dios', 'marihuana', 'la bamba']
+              },
+              listPlace: {
+                type: Array,
+                value: ['en un avión', 'en el camión', 'en su cantón', 'con su mamá', 'en la iglesia', 'en los pinos', 'en Revolución']
+              },
+              typeCard: {
+                type: String,
+                value: ''
+              },
+              word: {
+                type: String,
+                value: 'Word'
+              },
+              startRandom: {
+                type: Boolean,
+                value: false,
+                observer: '_startRandom'
+              }
+            }
+          }
+
+          _sendEvent() {
+            this.dispatchEvent(new CustomEvent('send-word', {
+              detail: {
+                word: this.word,
+                type: this.typeCard
+              }
+            }))
+          }
+
+          _getRandomNumber() {
+            let randomNumber = Math.floor(Math.random() * 7);
+            return randomNumber
+          }
+
+          _startRandom(newValue, oldValue) {
+            if (oldValue !== undefined) {
+              let positionList = this._getRandomNumber();
+              if (this.typeCard === 'subject') {
+                this.word = this.listSubject[positionList];
+              } else if (this.typeCard === 'verb') {
+                this.word = this.listVerb[positionList];
+              } else if (this.typeCard === 'adjective') {
+                this.word = this.listAdjective[positionList];
+              } else if (this.typeCard === 'place') {
+                this.word = this.listPlace[positionList];
+              }
+              this._sendEvent();
+            }
+          }
+        }
+        customElements.define(CardComponent.is, CardComponent);
+      })(window.customElements);
+    </script>
+  </dom-module>
