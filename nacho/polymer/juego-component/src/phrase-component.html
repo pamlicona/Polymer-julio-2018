@@ -1,0 +1,81 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+
+<dom-module id="phrase-component">
+  <template>
+    <style>
+      :host{
+        border: 1px solid #e3eaf1;
+        padding: 25px;
+        box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.04);
+        align-self: center;
+        justify-self: center;
+        width: 50%;
+        height: 50%;
+      }
+      .article{
+        position: relative;
+      }
+      .article__title{
+        color: gray;
+        text-align: center;
+        font-size: 1.5rem;
+        margin-top: 10px
+      }
+
+      .article__subtitle{
+        color: #1162ac;
+        text-align: center;
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+      }
+    </style>
+    <article class="article">
+      <h1 class="article__subtitle">
+        [[fullPhrase]]
+      </h1>
+    </article>
+  </template>
+  <script>
+    (function phraseComponent(customElements){
+      'use strict';
+
+      class PhraseComponent extends Polymer.Element {
+        static get is() { return 'phrase-component'; }
+        static get properties() {
+          return {
+            sujeto: {
+              type: String,
+              value: 'Vamos'
+            },
+            verbo: {
+              type:String,
+              value: 'a jugar'
+            },
+            adjetivo: {
+              type: String,
+              value: 'pulsa el boton'
+            },
+            lugar:{
+              type: String,
+              value:'!!!'
+            },
+            fullPhrase:{
+              type: String,
+              computed: '_getAllPhrase(sujeto,verbo,adjetivo,lugar)'
+            }
+          }
+        }
+
+        connectedCallback() {
+          super.connectedCallback();
+          // things to do
+        }
+        _getAllPhrase(sujeto,verbo,adjetivo,lugar){
+          return `${sujeto} ${verbo} ${adjetivo} ${lugar}`;
+        }
+
+      }
+      customElements.define(PhraseComponent.is, PhraseComponent);
+    })(window.customElements);
+  </script>
+</dom-module>
