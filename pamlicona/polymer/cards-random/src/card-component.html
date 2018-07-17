@@ -3,9 +3,28 @@
   <dom-module id="card-component">
     <template>
       <style>
+        :host {
+          --color-text: gray;
+        }
+
+        .card-container {
+          border: 3px solid;
+          min-width: 120px;
+          text-align: center;
+          min-height: 89px;
+          box-shadow: 0 0 0 6px hsl(0, 0%, 80%);
+          border-color: orange;
+        }
+
+        .card-container__text {
+          margin-top: 34px;
+          color: var(--color-text);
+        }
       </style>
 
-      <div class="card-container">[[word]]</div>
+      <div class="card-container">
+        <p class="card-container__text">[[word]]</p>
+      </div>
     </template>
     <script>
       (function cardComponent(customElements){
@@ -37,7 +56,7 @@
               },
               word: {
                 type: String,
-                value: 'Word'
+                value: '?'
               },
               startRandom: {
                 type: Boolean,

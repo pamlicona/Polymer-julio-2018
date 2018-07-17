@@ -3,9 +3,27 @@
   <dom-module id="sentence-component">
     <template>
       <style>
+        :host {
+          --color-text: gray;
+          --color-border: orange;
+        }
+
+        .sentence {
+          display: flex;
+          justify-content: center;
+          margin-top: 40px;
+          font-size: 20px;
+          text-decoration: underline;
+          text-underline-position: under;
+          text-decoration-color: var(--color-border);
+          color: var(--color-text);
+          text-decoration-style: double;
+        }
       </style>
 
-      <p class="sentence">[[sentence]]</p>
+      <div class="sentence">
+        <p class="sentence__text">[[sentence]]</p>
+      </div>
     </template>
     <script>
       (function sentenceComponent(customElements){
