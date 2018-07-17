@@ -1,0 +1,81 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+
+<dom-module id="slider-component">
+  <template>
+    <style>
+      section {
+        display: flex;
+        justify-content:center;
+      }
+      picture {
+        height: 200px;
+        width: 400px;
+        overflow: hidden;
+      }
+      img {
+        max-height: 100%;
+        width: 100%;
+      }
+    </style>
+    <section>
+      <button on-click="_changeLeft"><</button>
+      <picture>
+        <img src="[[activeImage]]" alt="[[activeImage]]">
+      </picture>
+      <button on-click="_changeRight">></button>
+    </section>
+  </template>
+  <script>
+    (function appShell(customElements){
+      'use strict';
+
+      class SliderComponent extends Polymer.Element {
+        static get is() { return 'slider-component'; }
+        static get properties() {
+          return {
+            activeImage: {
+              type: String,
+              value: 'https://vignette.wikia.nocookie.net/avatar/images/f/fa/Aang_en_el_Drag%C3%B3n_del_Jazm%C3%ADn.png/revision/latest?cb=20150414231706&path-prefix=es'
+            },
+            imagePosition: {
+              type: Number,
+              value: 0
+            },
+            imageList: {
+              type: Array
+            }
+          }
+        }
+
+        connectedCallback() {
+          super.connectedCallback();
+          // things to do
+        }
+
+        _changeLeft() {
+          let prevImage = this.imagePosition - 1;
+          this.activeImage = this.imageList[prevImage];
+          this.imagePosition--;
+        }
+
+        _changeRight() {
+          const nextImage = this.imagePosition + 1;
+          this.imagePosition++;
+          this.activeImage = this.imageList[nextImage];
+        }
+
+        // Complex observers
+        static get observers() {
+          return [
+            '_newImageAdded(imageList.length)'
+          ]
+        }
+
+        _newImageAdded(length) {
+          console.log(`Ahora tienes ${length} objetos`);
+        }
+      }
+      customElements.define(SliderComponent.is, SliderComponent);
+    })(window.customElements);
+  </script>
+</dom-module>
