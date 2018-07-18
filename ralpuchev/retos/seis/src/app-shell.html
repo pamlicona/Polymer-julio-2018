@@ -1,0 +1,112 @@
+<!--por defecto-->
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="item-list.html">
+<link rel="import" href="statement-block.html">
+
+<dom-module id="app-shell">
+    <template>
+        <style>
+            .lists_container{
+                display: flex;
+                align-items: center;
+                justify-content: space-around;
+                height: 300px;
+            }
+            
+            .item_list {
+                width: 100%;
+                height: 100%;
+                text-align: center;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .button_container {
+                text-align: center;
+                height: 60px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        </style>
+        <section class="lists_container">
+            <item-list class="item_list" items="[[itemsUno]]" index="[[index]]"></item-list>
+            <item-list class="item_list" items="[[itemsDos]]" index="[[index]]"></item-list>
+            <item-list class="item_list" items="[[itemsTres]]" index="[[index]]"></item-list>
+            <item-list class="item_list" items="[[itemsCuatro]]" index="[[index]]"></item-list>
+        </section>
+        <section class="button_container">
+            <button on-click='_generateStatementButtonClicked'>Generar Enunciado</button>
+        </section>
+        <section class="button_container">
+            <statement-block items='[[finalItems]]'></statement-block>
+        </section>
+    </template>
+    <script>
+        (function appShell(customElements){
+            'use strict';
+
+            class AppShell extends Polymer.Element {
+                static get is() { return 'app-shell'; }
+                
+                static get properties() {
+                    return {
+                        itemsUno : {
+                            type : Array,
+                            value : ['Anita', 'Pepito', 'El pollito Pio', 'Putin', 'EPN']
+                        },
+                        itemsDos : {
+                            type : Array,
+                            value : ['viaja', 'conoce', 'ignora', 'celebra', 'brinca', 'lava']
+                        },
+                        itemsTres : {
+                            type : Array,
+                            value : ['la tina', 'el breading', 'a EPN', 'a Tlaxcala', 'la cuerda', 'las vocales']
+                        },
+                        itemsCuatro : {
+                            type : Array,
+                            value : ['en la mañana', 'y le parece genial', 'pero a nadie le importa', 'yo ya la brinqué', 'y Bob Sponja lo saluda', 'y el mundial ha terminado :c']
+                        },
+                        finalItems : {
+                            type : Array,
+                            value : []
+                        },
+                        selectedItems : {
+                            type : Array,
+                            value : []
+                        },
+                        index : {
+                            type : Number,
+                            value : 0
+                        }
+                    }
+                }
+          
+                connectedCallback() {
+                    super.connectedCallback();   
+                    
+                    this.addEventListener('random-item-selected', this._randomItemSelected);
+                    console.log("escuchando eventos random-item-selected");
+                }
+                
+                _randomItemSelected(event){
+                    console.log("random item seleccionado: "+event.detail.randomSelectedItem);
+                    this.selectedItems.push(event.detail.randomSelectedItem);   
+                    
+                    if(this.selectedItems.length == 4) this.finalItems = this.selectedItems;
+                }
+                
+                _generateStatementButtonClicked(){
+                    console.log("boton generar enunciado presionado");
+                    this.answers = 0;
+                    this.selectedItems = [];
+                    this.index++;
+                    
+                    console.log("index: "+this.index);
+                }
+            }
+        customElements.define(AppShell.is, AppShell);
+        })(window.customElements);
+  </script>
+</dom-module>
