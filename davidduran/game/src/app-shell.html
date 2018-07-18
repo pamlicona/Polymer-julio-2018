@@ -1,0 +1,105 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="word-component.html">
+
+<dom-module id="app-shell">
+  
+  <template>
+    <style>
+      :host {
+        text-align: center;
+      }
+      slider-component {
+        display: block;
+      }
+      form {
+        margin-top: 40px;
+      }
+    </style>
+    <h1>Juego de Palabras Random</h1>
+
+    <word-component word="[[word0]]"></word-component>
+    <word-component word="[[word1]]"></word-component>
+    <word-component word="[[word2]]"></word-component>
+    <word-component word="[[word3]]"></word-component>
+
+    <form action="">
+      <button type="button" on-click="_addWords">Palabras Nuevas</button>
+    </form>
+
+    <h1>[[frase]]</h1>
+  </template>
+
+
+  <script>
+    (function appShell(customElements) {
+      'use strict';
+
+      class AppShell extends Polymer.Element {
+        static get is() { return 'app-shell'; }
+        static get properties() {
+          return {
+            wordsArray: {
+              type: Array,
+              value: [
+                  "Flor","Helicóptero","Dados","Tarta","León","Carne","Feo","Maceta","Tío","Escalera",
+                  "Castillo","Cebolla","Pelo","Plátano","Pared","Lagartija","Tazón","Cuna","Moto",
+                  "Nube","Hermano","Alimentos","Servilleta","Frío","Rojo","Viejo","Tía","Cine","Sí",
+                  "Lavadora","Fantasma","BrazO","Bosque","Nuevo","Hoja","Primavera","Elefante","Suelo",
+                  "Flores","Lupa","Delgado","Pantalón","Pelota","Espaguetis","Mantel","Mosca","Barba",
+                  "Pintar","peluche","Plato","Feo","Lazo","Calcetines","Golosina","Piedra","Martillo",
+                  "Sol","Familia","Caracol","lluvia","Buscar","Cabra","Dedo","Pez","Agua","Río","Castillo",
+                  "Lata","Fuente","Montaña"
+              ]
+            },
+
+            //Computed property
+            word0: {
+              type: String,
+              value: 'Casa'
+            },
+            word1: {
+              type: String,
+              value: 'Roja'
+            },
+            word2: {
+              type: String,
+              value: 'Roja'
+            },
+            word3: {
+              type: String,
+              value: 'Roja'
+            },
+
+            frase: {
+              type: String,
+              computed: 'getFull(word0, word1, word2, word3 )'
+            }
+
+          }
+        }
+
+        getFull(word1, word2, word3, word4) {
+          return ` ${word1} ${word2} ${word3} ${word4} `;
+        }
+
+        //add new image Method
+        _addWords() {
+          let num = Math.floor((Math.random() * 40) + 1);
+          this.word0 = this.wordsArray[num]; 
+
+           num = Math.floor((Math.random() * 40) + 1);
+          this.word1 = this.wordsArray[num]; 
+
+           num = Math.floor((Math.random() * 40) + 1);
+          this.word2 = this.wordsArray[num]; 
+
+           num = Math.floor((Math.random() * 40) + 1);
+          this.word3 = this.wordsArray[num]; 
+        }
+      }
+    customElements.define(AppShell.is, AppShell);
+    })(window.customElements);
+  </script>
+
+
+</dom-module>
