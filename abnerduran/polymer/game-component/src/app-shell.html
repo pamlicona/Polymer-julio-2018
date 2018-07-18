@@ -1,0 +1,152 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="game-card.html">
+
+<dom-module id="app-shell">
+  <template>
+    <style>
+      :host {
+        text-align: center;
+      }
+
+      .cards {
+        display: flex;
+        justify-content: space-evenly;
+        margin-top: 5rem;
+      }
+
+      .phrase {
+        display: flex;
+        justify-content: center;
+        font-size: 3rem;
+        padding: 5rem 4rem 3rem;
+        font-style: italic;
+      }
+    </style>
+    <h1>Random Cards</h1>
+    <div class="cards">
+      <game-card subject-type element-list="[[subjectArray]]"></game-card>
+      <game-card action-type element-list="[[actionArray]]"></game-card>
+      <game-card adjective-type element-list="[[adjectiveArray]]"></game-card>
+      <game-card object-type element-list="[[objectArray]]"></game-card>
+      <game-card place-type element-list="[[placeArray]]"></game-card>
+    </div>
+    <div class="phrase">
+      [[fullPhrase]]
+    </div>
+  </template>
+  <script>
+    (function appShell(customElements) {
+      'use strict';
+
+      class AppShell extends Polymer.Element {
+        static get is() { return 'app-shell'; }
+        static get properties() {
+          return {
+            subjectArray: {
+              type: Array,
+              value: [
+                "El perro",
+                "El taquero",
+                "El chofer",
+                "El estudiante",
+                "La abuela",
+              ]
+            },
+            actionArray: {
+              type: Array,
+              value: [
+                "corrió",
+                "gritó",
+                "aventó",
+                "siguió",
+                "regañó"
+              ]
+            },
+            adjectiveArray: {
+              type: Array,
+              value: [
+                "descaradamente",
+                "sigilosamente",
+                "furiosamente",
+                "inocentemente"
+              ]
+            },
+            objectArray: {
+              type: Array,
+              value: [
+                "una pizza",
+                "el café",
+                "la bicicleta"
+              ]
+            },
+            placeArray: {
+              type: Array,
+              value: [
+                "en el metro",
+                "en el oxxo",
+                "en el trabajo"
+              ]
+            },
+            //Computed property
+            subject: {
+              type: String,
+              value: null
+            },
+            action: {
+              type: String,
+              value: null
+            },
+            adjective: {
+              type: String,
+              value: null
+            },
+            object: {
+              type: String,
+              value: null
+            },
+            place: {
+              type: String,
+              value: null
+            },
+            fullPhrase: {
+              type: String,
+              computed: '_getRandomPhrase(subject, action, adjective, object, place)'
+            }
+          }
+        }
+
+        connectedCallback() {
+          super.connectedCallback();
+          this.addEventListener('random-subject', this._getSubject);
+          this.addEventListener('random-action', this._getAction);
+          this.addEventListener('random-adjective', this._getAdjective);
+          this.addEventListener('random-object', this._getObject);
+          this.addEventListener('random-place', this._getPlace);
+        }
+
+        _getSubject() {
+          this.subject = event.detail;
+        }
+        _getAction() {
+          this.action = event.detail;
+        }
+        _getAdjective() {
+          this.adjective = event.detail;
+        }
+        _getObject() {
+          this.object = event.detail;
+        }
+        _getPlace() {
+          this.place = event.detail;
+        }
+
+        _getRandomPhrase(subject, action, adjective, object, place) {
+          let fullPhrase = (subject && action && adjective && object && place) ? `${subject} ${action} ${adjective} ${object} ${place}` : '';
+          return fullPhrase;
+        }
+
+      }
+      customElements.define(AppShell.is, AppShell);
+    })(window.customElements);
+  </script>
+</dom-module>

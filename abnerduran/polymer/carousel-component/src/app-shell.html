@@ -1,0 +1,79 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+
+<dom-module id="app-shell">
+  <template>
+    <style>
+      .image {
+        display: flex;
+        justify-content: center;
+      }
+      .buttons {
+        display: flex;
+        justify-content: space-around
+      }
+      button {
+        padding: 10px;
+        background: blue;
+        color: white;
+      }
+    </style>
+    <div>
+      <div class="image">
+          <img src="[[source]]" alt="">
+      </div>
+      <div class="buttons">
+        <button on-click="_changeImgBack">Atrás</button>
+          <button on-click="_changeImgNext">Adelante</button>
+      </div>
+      
+    </div>
+
+  </template>
+  <script>
+    (function appShell(customElements){
+      'use strict';
+
+      class AppShell extends Polymer.Element {
+        static get is() { return 'app-shell'; }
+        static get properties() {
+          return {
+            param: {
+              type: Number,
+              value: 1,
+              observer: "_newParam"
+            },
+            source: {
+              type: String,
+              value:`assets/img/1.jpg`,
+              observer: "_newImg"
+            }
+          }
+        }
+        connectedCallback() {
+          super.connectedCallback();
+        }
+
+        _changeImgBack() {
+          this.param -= 1;
+          this.param = (this.param < 1) ? 3 : this.param;
+          this.source = `assets/img/${this.param}.jpg`;
+        }
+
+        _changeImgNext() {
+          this.param += 1;
+          this.param = (this.param > 3) ? 1 : this.param;
+          this.source = `assets/img/${this.param}.jpg`;
+        }
+
+        _newImg() {
+          console.log('la propiedad cambió');
+        }
+
+        _newParam() {
+          console.log('la propiedad param cambió', this.source);
+        }
+      }
+      customElements.define(AppShell.is, AppShell);
+    })(window.customElements);
+  </script>
+</dom-module>
