@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>First Component</title>
+  <script src="bower_components/webcomponentsjs/webcomponents-loader.js"></script>
+  <link rel="import" href="src/app-shell.html">
+</head>
+<body onload="">
+  <app-shell img-list='["https://randomuser.me/api/portraits/women/25.jpg","https://randomuser.me/api/portraits/men/69.jpg"]'></app-shell>
+  <script type="text/javascript">
+
+    let setAttributes = people => {
+      let imgs = [];
+      const appShell = document.querySelector('app-shell');
+      for(let person of people){
+        imgs.push(person.picture.large);
+      }
+      appShell.setAttribute('imgs',JSON.stringify(imgs));
+    }
+  let setImgs = ()=> {
+    const API_USER = 'https://randomuser.me/api/?results=3';
+      fetch(API_USER)
+        .then(data => data.json())
+        .then(contacts => setAttributes(contacts.results));
+  }
+
+  </script>
+</body>
+</html>
