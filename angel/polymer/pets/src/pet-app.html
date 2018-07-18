@@ -1,0 +1,66 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="pets-card.html">
+<link rel="import" href="form-component.html">
+<dom-module id="pet-app">
+  <template>
+    <style>
+     h1 {
+       color: red;
+     }
+     .wrapper-flex{
+       display: flex;
+       flex-wrap: wrap;
+     }
+     .wrapper-flex * {
+       flex: 1 0 50%;
+     }
+    </style>
+    <article class="wrapper-flex">
+      <form-component></form-component>
+      <pets-card pets="[[pets]]"></pets-card>
+    </article>
+  </template>
+  <script>
+    (function petApp(customElements){
+      'use strict';
+
+      class PetApp extends Polymer.Element {
+        static get is() { return 'pet-app'; }
+        static get properties() {
+          return {
+            pets :{
+              type: Array,
+              value: [
+                {
+                  name: 'firulais',
+                  race: 'chihuahua',
+                  owner: 'angel',
+                  kind: 'dog',
+                },
+                {
+                  name: 'sam',
+                  race: 'labrador',
+                  owner: 'alex',
+                  kind: 'dog',
+                },
+                {
+                  name: 'tom',
+                  race: 'mestizo',
+                  owner: 'jorge',
+                  kind: 'cat',
+                },
+                {
+                  name: 'simba',
+                  race: 'white',
+                  owner: 'jorge',
+                  kind: 'lion',
+                }
+              ]
+            }
+          }
+        }
+      }
+      customElements.define(PetApp.is, PetApp);
+    })(window.customElements);
+  </script>
+</dom-module>
