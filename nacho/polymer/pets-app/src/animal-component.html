@@ -1,0 +1,69 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="/bower_components/polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="/bower_components/polymer/lib/elements/dom-if.html">
+
+<dom-module id="animal-component">
+  <template>
+    <style>
+      .animal__content{
+        display: flex;
+        margin: 15px 0 15px 0;
+        border: 2px solid #1c87f3;
+        padding: 10px;
+      }
+      .animal__info{
+        margin-top: 5px;
+        flex: 1;
+      }
+      .animal__info h1{
+        font-size: 17px;
+        color: #8da2b7;
+        font-weight: 600;
+        margin: 0;
+        transition: .5s;
+      }
+
+      .animal__info span{
+        margin: 0;
+        padding: 0;
+        color: #363636;
+        letter-spacing: 1.4px;
+        font-size: .9em;
+        transition: .5s;
+      }
+    </style>
+    <div class="animal__content">
+        <div class="animal__info">
+          <h1>Nombre: <span>[[animal.nombre]]</span></h1>
+          <h1>Animal: <span>[[animal.animal]]</span></h1>
+          <h1>Raza: <span>[[animal.raza]]</span></h1>
+          <h1>Dueño: <span>[[animal.duenio]]</span></h1>
+        </div>
+    </div>
+  </template>
+  <script>
+    (function animalComponent(customElements){
+      'use strict';
+
+      class AnimalComponent extends Polymer.Element {
+        static get is() { return 'animal-component'; }
+        static get properties() {
+          return {
+            animal: {
+              type: Object,
+              value: {}
+            }
+          }
+        }
+
+        connectedCallback() {
+          super.connectedCallback();
+          console.log(this.animal);
+          // things to do
+        }
+
+      }
+      customElements.define(AnimalComponent.is, AnimalComponent);
+    })(window.customElements);
+  </script>
+</dom-module>
