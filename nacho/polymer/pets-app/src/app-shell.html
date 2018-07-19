@@ -1,0 +1,213 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="/bower_components/polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="/bower_components/polymer/lib/elements/dom-if.html">
+
+<dom-module id="app-shell">
+  <template>
+    <style>
+      .header{
+        height: 91px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-image: -webkit-radial-gradient(center center, circle, black, #1162ac);
+      }
+      .header__title{
+        text-transform: uppercase;
+        color: #fff
+      }
+
+      .container__pets{
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-gap: 60px;
+        margin: 30px;
+      }
+      .hidden{
+        display: none
+      }
+      .dogs, .cats, .others{
+        border: 1px solid #e3eaf1;
+        padding: 25px;
+        box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.04);
+        align-self: flex-start;
+        justify-self: center;
+        max-width: 80%;
+        min-width: 50%;
+      }
+      .dogs h1, .cats h1, .others h1{
+        text-align: center;
+      }
+      .container__text{
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-gap: 60px;
+        margin: 30px;
+      }
+
+      form{
+        margin: auto; /* 15% from the top and centered */
+        border: 1px solid #888;
+        width: 40vw; /* Could be more or less, depending on screen size */
+        border-radius: 5px;
+        background-color: #f2f2f2;
+        padding: 20px;
+      }
+
+      input[type=text], select{
+        width: 100%;
+        padding: 14px 10px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+
+      input[type=submit]:hover {
+        background-color: #45a049;
+      }
+
+      .container__button{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 50px;
+      }
+
+      .btn{
+        background-color: #1162ac;
+        color: white;
+        font-size: 1.5rem;
+        padding: 15px;
+        border-radius: 14px;
+        font-weight: bold;
+        outline: none;
+        border-width: 0px;
+      }
+    </style>
+    <header class="header">
+      <h1 class="header__title">Medicina Veterinaria</h1>
+    </header>
+    <template class="hidden" is="dom-if" if="[[userActive.isAdmin]]" >
+      <form-component></form-component>
+    </template>
+    <template class="hidden" is="dom-if" if="[[userActive.user]]">
+      <section class="container__button">
+        <button on-click="_exit" class="btn">Cerrar Sesion</button>
+      </section>
+      <section class="container__pets">
+          <div class="dogs">
+            <h1>Perros</h1>
+            <template class="hidden" is="dom-repeat" items="[[pets]]" as="pet" filter="[[_computeFilter('dog')]]">
+              <animal-component animal="[[pet]]"></animal-component>
+            </template>
+          </div>
+          <div class="cats">
+            <h1>Gatos</h1>
+            <template class="hidden" is="dom-repeat" items="[[pets]]" as="pet" filter="[[_computeFilter('cat')]]">
+              <animal-component animal="[[pet]]"></animal-component>
+            </template>
+          </div>
+          <div class="others">
+            <h1>Otro animal</h1>
+            <template class="hidden" is="dom-repeat" items="[[pets]]" as="pet" filter="[[_computeFilter('other')]]">
+              <animal-component animal="[[pet]]"></animal-component>
+            </template>
+          </div>
+      </section>
+    </template>
+    <template class="hidden" is="dom-if" if="[[!userActive.user]]">
+      <section class="container__text">
+        <form>
+          <label for="name">User:</label>
+          <input type="text" value="{{user::input}}"><br>
+          <label for="address">Password:</label>
+          <input type="text" value="{{password::input}}"><br>
+        </form>
+      </section>
+      <section class="container__button">
+        <button on-click="_login" class="btn">Entrar</button>
+      </section>
+    </template>
+  </template>
+  <script>
+    (function appShell(customElements,getEventListeners){
+      'use strict';
+
+      class AppShell extends Polymer.Element {
+        static get is() { return 'app-shell'; }
+        static get properties() {
+          return {
+            pets: {
+              type: Array,
+              value: []
+            },
+            users:{
+              type:Array,
+              value:[{user:"nacho",password:"123456",isAdmin:false},{user:"ivillarreal",password:"123456",isAdmin:true}]
+            },
+            userActive:{
+              type:Object,
+              value:{}
+            },
+            user:{
+              type:String,
+              value:''
+            },
+            password:{
+              type:String,
+              value:''
+            },
+            firtsEvent:{
+              type:Boolean,
+              value:true
+            }
+          }
+        }
+
+        connectedCallback() {
+          super.connectedCallback();
+        }
+
+        _addPet(data){
+          console.log(data);
+          this.push('pets',data);
+        }
+
+        _computeFilter(type) {
+          return function(animal) {
+            if (!type) return true;
+            if (!animal) return false;
+            return (animal.animal == type);
+          };
+        }
+        _login(){
+          let login = this.users.filter((user)=>(user.user == this.user && user.password == this.password));
+          if(login.length > 0){
+            this.userActive = login[0];
+            this._setAddEventListener();
+          }else{
+            alert('Usuario y/o Password incorrectos');
+          }
+        }
+        _setAddEventListener(){
+          setTimeout(()=>{
+            this.formElement = this.shadowRoot.querySelector('form-component');
+            if(this.formElement && this.firtsEvent){
+              this.formElement.addEventListener('add-pet',(data)=> this._addPet(data.detail.message));
+              this.firtsEvent = false;
+            }
+          }, 1000);
+        }
+        _exit(){
+          this.userActive = {};
+        }
+      }
+      customElements.define(AppShell.is, AppShell);
+      //dudas: Solucionar lo del timeout al asignar el evento
+      //el estilo no lo agarro
+      //solucionar remove Listener por q se agregaba 3 veces
+    })(window.customElements);
+  </script>
+</dom-module>
