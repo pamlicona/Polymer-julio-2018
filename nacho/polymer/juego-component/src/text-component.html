@@ -1,0 +1,81 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+
+<dom-module id="text-component">
+  <template>
+    <style>
+      :host{
+        border: 1px solid #e3eaf1;
+        padding: 25px;
+        box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.04);
+      }
+     .cards__article{
+        position: relative;
+      }
+      .article__title{
+        color: gray;
+        text-align: center;
+        font-size: 1.5rem;
+        margin-top: 10px
+      }
+
+      .article__subtitle{
+        color: #1162ac;
+        text-align: center;
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+      }
+    </style>
+    <article class="article">    
+      <h1 class="article__title">
+        [[listWords.key]]
+      </h1>
+      <h2 class="article__subtitle">
+        [[wordActive]]
+      </h2>
+    </article>
+  </template>
+  <script>
+    (function textComponent(customElements){
+      'use strict';
+
+      class TextComponent extends Polymer.Element {
+        static get is() { return 'text-component'; }
+        static get properties() {
+          return {
+            wordActive: {
+              type: String,
+              value: ''
+            },
+            start:{
+              type: Boolean,
+              value:false,
+              observer:'_getRandomWord'
+            }
+          }
+        }
+
+        connectedCallback() {
+          super.connectedCallback();
+        }
+
+        _getRandomWord(newValue,oldValue,){
+          if(newValue){
+            this.wordActive = this.listWords.values[Math.floor(Math.random() * this.listWords.values.length)];
+            this._executeDispatchEvent('resultado',{key:this.listWords.key, word:this.wordActive});
+          }
+        }
+        
+        _executeDispatchEvent(event,message,bubbles = true){
+          this.dispatchEvent(new CustomEvent(event,{
+            bubbles: bubbles,
+            detail:{
+              message: message
+            }
+          }));
+        }
+
+      }
+      customElements.define(TextComponent.is, TextComponent);
+    })(window.customElements);
+  </script>
+</dom-module>

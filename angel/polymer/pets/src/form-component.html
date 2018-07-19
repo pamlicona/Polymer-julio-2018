@@ -1,0 +1,40 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<dom-module id="form-component">
+  <template>
+    <style>
+     h1 {
+       color: red;
+     }
+    </style>
+    <p>form</p>
+    <form style="display:flex;">
+      <label for="name">Nombre</label>
+      <input type="text" id="name">
+      <label for="name">animal</label>
+      <input type="text" id="animal">
+      <label for="name">raza</label>
+      <input type="text" id="raza">
+      <label for="name">dueño</label>
+      <input type="text" id="dueño">
+    </form>
+  </template>
+  <script>
+    (function formComponent(customElements){
+      'use strict';
+
+      class FormComponent extends Polymer.Element {
+        static get is() { return 'form-component'; }
+        static get properties() {
+          return {
+            isAdmin :{
+              type: Boolean,
+              value: false
+
+            }
+          }
+        }
+      }
+      customElements.define(FormComponent.is, FormComponent);
+    })(window.customElements);
+  </script>
+</dom-module>

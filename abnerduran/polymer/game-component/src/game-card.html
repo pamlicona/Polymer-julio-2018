@@ -1,0 +1,143 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/lib/elements/dom-if.html">
+
+<dom-module id="game-card">
+  <template>
+    <style>
+      button{
+        border-radius: 1rem;
+        border: none;
+        box-shadow: 2px 2px 8px 1px #525252;
+        cursor: pointer;
+        height: 14vh;
+        width: 16vw;
+        font-size: 1.3rem;
+        font-weight: bold;
+      }
+      button:active {
+        transform: translateY(10px);
+      }
+      button:focus {
+        outline: none;
+      }
+    </style>
+    <template is="dom-if" if="[[subject-type]]">
+        <button on-click="_getRandomSubject">[[subject]]</button>
+    </template>
+    <template is="dom-if" if="[[action-type]]">
+      <button on-click="_getRandomAction">[[action]]</button>
+    </template>
+    <template is="dom-if" if="[[adjective-type]]">
+      <button on-click="_getRandomAdjective">[[adjective]]</button>
+    </template>
+    <template is="dom-if" if="[[object-type]]">
+      <button on-click="_getRandomObject">[[object]]</button>
+    </template>
+    <template is="dom-if" if="[[place-type]]">
+      <button on-click="_getRandomPlace">[[place]]</button>
+    </template>
+  </template>
+
+  <script>
+    (function gameCard(customElements){
+      'use strict';
+
+      class GameCard extends Polymer.Element {
+        static get is() { return 'game-card'; }
+        static get properties() {
+          return {
+            "subject-type": {
+              type: Boolean
+            },
+            "action-type": {
+              type: Boolean
+            },
+            "adjective-type": {
+              type: Boolean
+            },
+            "place-type": {
+              type: Boolean
+            },
+            "object-type": {
+              type: Boolean
+            },
+            subject: {
+              type: String,
+              value: 'Sujeto'
+            },
+            action: {
+              type: String,
+              value: 'Acción'
+            },
+            adjective: {
+              type: String,
+              value: 'Adjetivo'
+            },
+            object: {
+              type: String,
+              value: 'Objeto'
+            },
+            place: {
+              type: String,
+              value: 'Lugar'
+            },
+            elementList: {
+              type: Array
+            }
+          }
+        }
+
+        connectedCallback() {
+          super.connectedCallback();
+          // things to do
+        }
+
+        _getRandomSubject() {
+          this.subject = this._getRandomElement();
+          this._dispatchEvent('random-subject', this.subject);
+          console.log(this.subject);
+        }
+
+        _getRandomAction() {
+          this.action = this._getRandomElement();
+          this._dispatchEvent('random-action', this.action);
+          console.log(this.action);
+        }
+
+        _getRandomAdjective() {
+          this.adjective = this._getRandomElement();
+          this._dispatchEvent('random-adjective', this.adjective);
+          console.log(this.adjective);
+        }
+
+        _getRandomObject() {
+          this.object = this._getRandomElement();
+          this._dispatchEvent('random-object', this.object);
+          console.log(this.object);
+        }
+
+        _getRandomPlace() {
+          this.place = this._getRandomElement();
+          this._dispatchEvent('random-place', this.place);
+          console.log(this.place);
+        }
+
+        _getRandomElement() {
+          const length = this.elementList.length - 1;
+          const random = Math.round(Math.random() * length );
+          return this.elementList[random];
+        }
+
+        _dispatchEvent(event, detail, bubbles = true) {
+          this.dispatchEvent(new CustomEvent(event, {
+              bubbles: bubbles,
+              composed: true,
+              detail: detail
+          }));
+        }
+
+      }
+      customElements.define(GameCard.is, GameCard);
+    })(window.customElements);
+  </script>
+</dom-module>

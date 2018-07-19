@@ -1,0 +1,70 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+
+<dom-module id="app-shell">
+  <template>
+    <style>
+      h1 {
+        color: red;
+      }
+    </style>
+    <div class="container">
+        <img src="[[imgActive]]" alt="[[imgActive]]">
+    </div>
+    <button id="button" on-click="_changeNext">Siguiente</button>
+    <button id="button" on-click="_changeAnt">Anterior</button>
+  </template>
+  <script>
+    (function appShell(customElements){
+      'use strict';
+
+      class AppShell extends Polymer.Element {
+        static get is() { return 'app-shell'; }
+        static get properties() {
+          return {
+            imgActive: {
+              type: String,
+              value: "https://randomuser.me/api/portraits/men/7.jpg"
+            },
+            imgList: {
+              type:Array
+            },
+            imgActiveIndex:{
+              value:0,
+              type:Number
+            }
+          }
+        }
+        connectedCallback() {
+          super.connectedCallback();
+          console.log(this.imgList);
+          console.log(this.imgActiveIndex);
+          this.imgList.unshift(this.imgActive);
+        }
+
+        _changeAnt(){
+          let imgAnt = this.imgActiveIndex - 1
+          if(imgAnt < 0){
+            imgAnt = this.imgList.length - 1;
+            this.imgActiveIndex = this.imgList.length - 1;
+          }else{
+            this.imgActiveIndex--;
+          }
+          this.imgActive = this.imgList[imgAnt];
+        }
+
+        _changeNext() {
+          let imgNext = this.imgActiveIndex + 1;
+
+          if(imgNext >= this.imgList.length){
+            imgNext = 0;
+            this.imgActiveIndex = 0;
+          }else{
+            this.imgActiveIndex++;
+          }
+          this.imgActive = this.imgList[imgNext];
+        }
+      }
+      customElements.define(AppShell.is, AppShell);
+    })(window.customElements);
+  </script>
+</dom-module>

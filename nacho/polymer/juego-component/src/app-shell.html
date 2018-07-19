@@ -1,0 +1,120 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+
+<dom-module id="app-shell">
+  <template>
+    <style>
+      .header{
+        height: 91px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-image: -webkit-radial-gradient(center center, circle, black, #1162ac);
+      }
+      .header__title{
+        text-transform: uppercase;
+        color: #fff
+      }
+      .container__text{
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-gap: 60px;
+        margin: 30px;
+      }
+      .start__game{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 70px;
+      }
+      .start__game__button{
+        background-color: #1162ac;
+        color: white;
+        font-size: 1.5rem;
+        padding: 15px;
+        border-radius: 14px;
+        font-weight: bold;
+        outline: none;
+        border-width: 0px;
+      }
+      .container__last__text{
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        margin: 30px;
+      }
+    </style>
+    <header class="header">
+      <h1 class="header__title">Juega!!!</h1>
+    </header>
+    <section class="container__text">
+        <text-component list-words="[[subjects]]"></text-component>
+        <text-component list-words="[[verbs]]"></text-component>
+        <text-component list-words="[[adjectives]]"></text-component>
+        <text-component list-words="[[places]]"></text-component>
+    </section>
+    <section class="start__game">
+      <button on-click="__startGame" class="start__game__button">Empezar Juego</button>
+    </section>
+    <section class="container__last__text">
+        <phrase-component></phrase-component>
+    </section>
+  </template>
+  <script>
+    (function appShell(customElements){
+      'use strict';
+
+      class AppShell extends Polymer.Element {
+        static get is() { return 'app-shell'; }
+        static get properties() {
+          return {
+            subjects: {
+              type: Object,
+              value: {  key:"Sujeto",
+                        values:['El león','El gato','Mi perro','Miguel','Mariana']
+                     }
+            },
+            verbs:{
+              type: Object,
+              value:  {  key:"Verbo",
+                         values:['comió','partió','murio','gano','mordio']
+                      }   
+            },
+            adjectives:{
+              type: Object,
+              value: {  key:"Adjetivo",
+                        values:['gordas','duro','rapido','dinero','lento']
+                     }
+            },
+            places:{
+              type: Object,
+              value: {  key:"Lugar",
+                        values:['en el mercado','de este mundo','en el metro','en el casino','en el parque']
+                     }
+            }
+          }
+        }
+        connectedCallback() {
+          super.connectedCallback();
+          this.elements = this.shadowRoot.querySelectorAll('text-component');
+          this.elementsPhrase = this.shadowRoot.querySelector('phrase-component');
+
+          this.elements.forEach((element)=>{
+            element.addEventListener('resultado',(message)=>{
+              this._sendDataAllText(message.detail);
+            });
+          });
+        }
+        __startGame(){
+          this.elements.forEach((element)=>{
+            element.setAttribute('start',true);
+          });
+        }
+        _sendDataAllText(data){
+          this.elementsPhrase.setAttribute(`${data.message.key.toLowerCase()}`,data.message.word);
+        }
+
+      }
+      customElements.define(AppShell.is, AppShell);
+    })(window.customElements);
+  </script>
+</dom-module>
