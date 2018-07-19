@@ -1,6 +1,7 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="vet-form.html">
 <link rel="import" href="vet-card.html">
+<link rel="import" href="vet-login.html">
 
 <dom-module id="app-shell">
   <template>
@@ -11,8 +12,13 @@
     </style>
     <h1>Vet & pets</h1>
     <div class="cards">
-      <vet-form></vet-form>
-      <vet-card pets="{{petList}}"></vet-card>
+        <template is="dom-if" if="[[!isLoggedIn]]">
+          <vet-login></vet-login>
+        </template>
+        <template is="dom-if" if="[[isLoggedIn]]">
+          <vet-form></vet-form>
+          <vet-card pets="{{petList}}"></vet-card>
+        </template>
     </div>
   </template>
   <script>
@@ -26,6 +32,10 @@
             petList: {
               type: Array,
               value: []
+            },
+            isLoggedIn:{
+              type: Boolean,
+              value: false
             }
           }
         }
@@ -33,6 +43,7 @@
         connectedCallback() {
           super.connectedCallback();
           this.addEventListener('pet-added', this.petAdded)
+          this.addEventListener('is-logged', this._isLoggedin)
         }
 
         petAdded(event) {
@@ -40,6 +51,12 @@
           const petList = this.shadowRoot.querySelector('vet-card');
           petList.setAttribute('pets', JSON.stringify(this.petList));
           console.log(this.petList);
+        }
+
+        _isLoggedin(event) {
+          this.isLoggedIn = event.detail;
+          console.log(this.isLoggedIn);
+          
         }
 
       }

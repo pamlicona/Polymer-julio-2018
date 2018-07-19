@@ -1,0 +1,130 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/lib/elements/dom-if.html">
+<link rel="import" href="../bower_components/polymer/lib/elements/dom-repeat.html">
+
+<dom-module id="vet-login">
+    <template>
+        <style>
+            form {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-rows: repeat(2, 1fr);
+                max-width: 600px;
+                margin: auto;
+            }
+
+            .input-group {
+                text-align: left;
+                margin-bottom: 10px;
+            }
+
+            .input-group label {
+                display: block;
+                font-weight: bold;
+            }
+
+            .input-group input,
+            .input-group select {
+                border-radius: 15px;
+                padding: 10px 15px;
+                width: 60%;
+                border: 1px solid;
+            }
+
+            .input-group select {
+                width: 71%;
+            }
+
+            button {
+                background: blue;
+                border-radius: 20px;
+                color: white;
+                width: 150px;
+                padding: 10px 15px;
+                border: solid;
+                cursor: pointer;
+            }
+
+            button: hover {
+                filter: brightness(1.1);
+            }
+        </style>
+        <!-- <template is="dom-if" if="[[subject-type]]">
+        <button on-click="_getRandomSubject">[[subject]]</button>
+    </template> -->
+        <!-- <template is="dom-if" if="[[subject-type]]"> -->
+        <form>
+            <div class="input-group">
+                <label for="name">Usuario</label>
+                <input type="text" name="name" id="name">
+            </div>
+            <div class="input-group">
+                <label for="pass">Contraseña</label>
+                <input type="text" name="pass" id="pass">
+            </div>
+            <div class="input-group">
+                <button type="button" on-click="_loginSubmit">Entrar</button>
+            </div>
+        </form>
+        <!-- </template> -->
+    </template>
+
+    <script>
+        (function vetLogin(customElements) {
+            'use strict';
+
+            class VetLogin extends Polymer.Element {
+                static get is() { return 'vet-login'; }
+                static get properties() {
+                    return {
+                        usersList: {
+                            type: Array,
+                            value: [
+                                { name: "admin", pass: "admin", type: "admin" },
+                                { name: "other", value: "other", other: "other" }
+                            ]
+                        }
+                    }
+                }
+
+                connectedCallback() {
+                    super.connectedCallback();
+                    // things to do
+                }
+
+                _loginSubmit() {
+                    if (this.$.name.value === '' || this.$.pass.value === '') {
+                        return;
+                    }
+                    const user = {
+                        name: this.$.name.value,
+                        pass: this.$.pass.value
+                    };
+                    let obj = this.usersList.find(o => o.name === this.$.name.value);
+
+                    if(obj) {
+                        if(obj.pass === this.$.pass.value) {
+                            this._dispatchEvent('is-logged', obj.type);
+                            console.log('correcto!');
+                        } else  {
+                            alert('No se reconoce usuario y contraseña');
+                        }
+                    } else {
+                        alert('No se reconoce usuario y contraseña');
+                    }
+                    //   this._dispatchEvent('pet-added', this.petList);
+                    console.log(obj);
+                }
+
+                _dispatchEvent(event, detail, bubbles = true) {
+                    this.dispatchEvent(new CustomEvent(event, {
+                        bubbles: bubbles,
+                        composed: true,
+                        detail: detail
+                    }));
+                }
+            }
+            customElements.define(VetLogin.is, VetLogin);
+        })(window.customElements);
+    </script>
+</dom-module>
