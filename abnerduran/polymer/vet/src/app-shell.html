@@ -16,7 +16,7 @@
           <vet-login></vet-login>
         </template>
         <template is="dom-if" if="[[isLoggedIn]]">
-          <vet-form></vet-form>
+          <vet-form is-admin="{{isAdmin}}"></vet-form>
           <vet-card pets="{{petList}}"></vet-card>
         </template>
     </div>
@@ -34,6 +34,10 @@
               value: []
             },
             isLoggedIn:{
+              type: Boolean,
+              value: false
+            },
+            isAdmin: {
               type: Boolean,
               value: false
             }
@@ -54,8 +58,11 @@
         }
 
         _isLoggedin(event) {
-          this.isLoggedIn = event.detail;
-          console.log(this.isLoggedIn);
+          this.isLoggedIn = true;
+          this.isAdmin = (event.detail === 'admin') ? true:false;
+          // const petList = this.shadowRoot.querySelector('vet-card');
+          // petList.setAttribute('user', event.detail);
+          console.log(this.isLoggedIn, this.isAdmin);
           
         }
 

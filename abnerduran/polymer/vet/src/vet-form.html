@@ -1,9 +1,8 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/polymer/lib/elements/dom-if.html">
-<link rel="import" href="../bower_components/polymer/lib/elements/dom-repeat.html">
 
 <dom-module id="vet-form">
-  <template>
+  <template is="dom-if" if="[[isAdmin]]">
     <style>
       form {
         display: grid;
@@ -34,6 +33,7 @@
       .input-group select {
         width: 71%;
       }
+
       button {
         background: blue;
         border-radius: 20px;
@@ -43,41 +43,38 @@
         border: solid;
         cursor: pointer;
       }
+
       button: hover {
         filter: brightness(1.1);
       }
     </style>
-    <!-- <template is="dom-if" if="[[subject-type]]">
-        <button on-click="_getRandomSubject">[[subject]]</button>
-    </template> -->
-    <!-- <template is="dom-if" if="[[subject-type]]"> -->
-    <form>
-      <div class="input-group">
-        <label for="name">Nombre</label>
-        <input type="text" name="name" id="name">
-      </div>
-      <div class="input-group">
-        <label for="animal">Animal</label>
-        <select name="animal" id="animal">
-          <option value="">Selecciona</option>
-          <option value="dog">Perro</option>
-          <option value="cat">Gato</option>
-          <option value="other">Otro</option>
-        </select>
-      </div>
-      <div class="input-group">
-        <label for="breed">Raza</label>
-        <input type="text" name="breed" id="breed">
-      </div>
-      <div class="input-group">
-        <label for="owner">Dueño</label>
-        <input type="text" name="owner" id="owner">
-      </div>
-      <div class="input-group">
-        <button type="button" on-click="_addPet">Agregar</button>
-      </div>
-    </form>
-    <!-- </template> -->
+
+      <form>
+        <div class="input-group">
+          <label for="name">Nombre</label>
+          <input type="text" name="name" id="name">
+        </div>
+        <div class="input-group">
+          <label for="animal">Animal</label>
+          <select name="animal" id="animal">
+            <option value="">Selecciona</option>
+            <option value="dog">Perro</option>
+            <option value="cat">Gato</option>
+            <option value="other">Otro</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label for="breed">Raza</label>
+          <input type="text" name="breed" id="breed">
+        </div>
+        <div class="input-group">
+          <label for="owner">Dueño</label>
+          <input type="text" name="owner" id="owner">
+        </div>
+        <div class="input-group">
+          <button type="button" on-click="_addPet">Agregar</button>
+        </div>
+      </form>
   </template>
 
   <script>
@@ -91,9 +88,17 @@
             petList: {
               type: Array,
               value: []
+            },
+            isAdmin: {
+              type: Boolean,
+              observer: '_userChanged'
             }
           }
         }
+
+        _userChanged(newValue, oldValue) {
+          console.log('Admin: ', this.isAdmin);
+        };
 
         connectedCallback() {
           super.connectedCallback();
@@ -115,42 +120,6 @@
           this._dispatchEvent('pet-added', this.petList);
           console.log(this.petList);
         }
-
-        // _getRandomSubject() {
-        //   this.subject = this._getRandomElement();
-        //   this._dispatchEvent('random-subject', this.subject);
-        //   console.log(this.subject);
-        // }
-
-        // _getRandomAction() {
-        //   this.action = this._getRandomElement();
-        //   this._dispatchEvent('random-action', this.action);
-        //   console.log(this.action);
-        // }
-
-        // _getRandomAdjective() {
-        //   this.adjective = this._getRandomElement();
-        //   this._dispatchEvent('random-adjective', this.adjective);
-        //   console.log(this.adjective);
-        // }
-
-        // _getRandomObject() {
-        //   this.object = this._getRandomElement();
-        //   this._dispatchEvent('random-object', this.object);
-        //   console.log(this.object);
-        // }
-
-        // _getRandomPlace() {
-        //   this.place = this._getRandomElement();
-        //   this._dispatchEvent('random-place', this.place);
-        //   console.log(this.place);
-        // }
-
-        // _getRandomElement() {
-        //   const length = this.elementList.length - 1;
-        //   const random = Math.round(Math.random() * length );
-        //   return this.elementList[random];
-        // }
 
         _dispatchEvent(event, detail, bubbles = true) {
           this.dispatchEvent(new CustomEvent(event, {
