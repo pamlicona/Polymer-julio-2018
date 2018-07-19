@@ -1,0 +1,36 @@
+<!--por defecto-->
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<dom-module id="element-list">
+    <template>
+        <style>
+        </style>
+        <section class="element_active">
+        </section>
+    </template>
+    <script>
+        (function appShell(customElements){
+            'use strict';
+
+            class AppShell extends Polymer.Element {
+                static get is() { return 'app-shell'; }
+                static get properties() {
+                    return {
+                        activeImage: {
+                            type: String,
+                            value: "",
+                            observer: "_showActiveImage"
+                        }
+                    }
+                }
+          
+                connectedCallback() {
+                    super.connectedCallback();
+                }
+
+                _showActiveImage(){    
+                }
+            }
+            customElements.define(AppShell.is, AppShell);
+        })(window.customElements);
+    </script>
+</dom-module>
