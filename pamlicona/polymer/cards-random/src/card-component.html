@@ -34,21 +34,9 @@
           static get is() { return 'card-component'; }
           static get properties() {
             return {
-              listSubject: {
+              list: {
                 type: Array,
-                value: ['El perro', 'El tucan', 'Juan', 'María', 'Dios', 'La vecina', 'Mi profe']
-              },
-              listVerb: {
-                type: Array,
-                value: ['come', 'baila', 'corre', 'juega', 'fuma', 'ladra', 'muerde']
-              },
-              listAdjective: {
-                type: Array,
-                value: ['con superman ', 'un ladrillo', 'un nopal', 'con el Peje', 'Dios', 'marihuana', 'la bamba']
-              },
-              listPlace: {
-                type: Array,
-                value: ['en un avión', 'en el camión', 'en su cantón', 'con su mamá', 'en la iglesia', 'en los pinos', 'en Revolución']
+                value: []
               },
               typeCard: {
                 type: String,
@@ -83,15 +71,7 @@
           _startRandom(newValue, oldValue) {
             if (oldValue !== undefined) {
               let positionList = this._getRandomNumber();
-              if (this.typeCard === 'subject') {
-                this.word = this.listSubject[positionList];
-              } else if (this.typeCard === 'verb') {
-                this.word = this.listVerb[positionList];
-              } else if (this.typeCard === 'adjective') {
-                this.word = this.listAdjective[positionList];
-              } else if (this.typeCard === 'place') {
-                this.word = this.listPlace[positionList];
-              }
+              this.word = this.list[positionList];
               this._sendEvent();
             }
           }

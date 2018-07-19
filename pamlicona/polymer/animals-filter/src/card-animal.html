@@ -1,0 +1,91 @@
+  <link rel="import" href="/bower_components/polymer/polymer-element.html">
+  <link rel="import" href="/bower_components/polymer/lib/elements/dom-if.html">
+
+  <dom-module id="card-animal">
+    <template>
+      <style>
+        :host {
+          --color-border: darkgrey;
+        }
+
+        .container {
+          display: grid;
+          grid-template-columns: 1fr 5fr 1fr;
+          margin-top: 15px;
+        }
+
+        .card {
+          border: 3px solid var(--color-border);
+          grid-column: 2;
+          padding-left: 40px;
+        }
+      </style>
+
+      <article class="container">
+        <template is="dom-if" if="[[isCat()]]">
+          <div class="card">
+            <p>Nombre: [[itemCard.name]]</p>
+            <p>Dueño: [[itemCard.owner]]</p>
+          </div>
+        </template>
+
+        <template is="dom-if" if="[[isDog()]]">
+          <div class="card">
+            <p>Nombre: [[itemCard.name]]</p>
+            <p>Raza: [[itemCard.breed]]</p>
+          </div>
+        </template>
+
+        <template is="dom-if" if="[[isOther()]]">
+          <div class="card">
+            <p>Nombre: [[itemCard.name]]</p>
+            <p>Animal: [[itemCard.animal]]</p>
+          </div>
+        </template>
+      </article>
+
+    </template>
+    <script>
+      (function cardAnimal(customElements){
+        'use strict';
+
+        class CardAnimal extends Polymer.Element {
+          static get is() { return 'card-animal'; }
+          static get properties() {
+            return {
+              itemCard: {
+                type: Object,
+                value: {}
+              },
+              typeAnimal: {
+                type: String,
+                value: ''
+              }
+            }
+          }
+
+          isCat() {
+            if (this.typeAnimal === 'cat') {
+              return true;
+            }
+            return false;
+          }
+
+          isDog() {
+            if (this.typeAnimal === 'dog') {
+              return true;
+            }
+            return false;
+          }
+
+          isOther() {
+            if (this.typeAnimal === 'other') {
+              return true;
+            }
+            return false;
+          }
+        }
+        customElements.define(CardAnimal.is, CardAnimal);
+      })(window.customElements);
+    </script>
+  </dom-module>
