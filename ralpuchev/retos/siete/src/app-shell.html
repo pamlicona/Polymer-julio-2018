@@ -1,0 +1,43 @@
+<!--por defecto-->
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="pet-item.html">
+
+<dom-module id="app-shell">
+    <template>
+        <style>
+        </style>
+        <section class="lists_container">
+            <section class="pet_list">
+                <template is="dom-repeat" items="[[pets]]" as="pet">
+                    
+                </template>
+            </section>
+            <section class="pet_list">
+            </section>
+            <section class="pet_list">
+            </section>
+        </section>
+    </template>
+    <script>
+        (function appShell(customElements){
+            'use strict';
+
+            class AppShell extends Polymer.Element {
+                static get is() { return 'app-shell'; }
+                
+                static get properties() {
+                    return {
+                        pets : {
+                            type : Array,
+                            value : [{name:"Rudi", type:"Dog", breed:"Criollo", owner:"Rafa"}, {name:"Pelusa", type:"Dog", breed:"Criollo", owner:"Rafa"}, {name:"Yego", type:"Dog", breed:"Pug", owner:"Rafa"}, {name:"Copito", type:"Dog", breed:"Pug", owner:"Rafa"}]
+                        }
+                    }
+                }
+                connectedCallback() {
+                    super.connectedCallback();   
+                }
+            }
+        customElements.define(AppShell.is, AppShell);
+        })(window.customElements);
+  </script>
+</dom-module>
