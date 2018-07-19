@@ -4,22 +4,43 @@
   <dom-module id="card-animal">
     <template>
       <style>
+        :host {
+          --color-border: darkgrey;
+        }
+
+        .container {
+          display: grid;
+          grid-template-columns: 1fr 5fr 1fr;
+          margin-top: 15px;
+        }
+
+        .card {
+          border: 3px solid var(--color-border);
+          grid-column: 2;
+          padding-left: 40px;
+        }
       </style>
 
-      <article>
+      <article class="container">
         <template is="dom-if" if="[[isCat()]]">
-          <p>Nombre: [[itemCard.name]]</p>
-          <p>Dueño: [[itemCard.owner]]</p>
+          <div class="card">
+            <p>Nombre: [[itemCard.name]]</p>
+            <p>Dueño: [[itemCard.owner]]</p>
+          </div>
         </template>
 
         <template is="dom-if" if="[[isDog()]]">
-          <p>Nombre: [[itemCard.name]]</p>
-          <p>Raza: [[itemCard.breed]]</p>
+          <div class="card">
+            <p>Nombre: [[itemCard.name]]</p>
+            <p>Raza: [[itemCard.breed]]</p>
+          </div>
         </template>
 
         <template is="dom-if" if="[[isOther()]]">
-          <p>Nombre: [[itemCard.name]]</p>
-          <p>Animal: [[itemCard.animal]]</p>
+          <div class="card">
+            <p>Nombre: [[itemCard.name]]</p>
+            <p>Animal: [[itemCard.animal]]</p>
+          </div>
         </template>
       </article>
 

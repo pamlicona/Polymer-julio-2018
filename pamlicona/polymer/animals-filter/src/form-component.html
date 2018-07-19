@@ -3,17 +3,50 @@
   <dom-module id="form-component">
     <template>
       <style>
+        :host {
+          display: grid;
+          grid-template-columns: 1fr 2fr 1fr;
+          background: lightgrey;
+          padding-bottom: 30px;
+        }
+
+        .form {
+          margin-top: 50px;
+          padding: 10px;
+          grid-column: 2;
+        }
+
+        .form__inputs {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          margin-bottom: 25px;
+        }
+
+        input {
+          margin-bottom: 15px;
+        }
+
+        h1 {
+          text-align: center;
+        }
       </style>
 
       <div class="form">
-        <label for="name">Name:</label>
-        <input id="name" type="text">
-        <label for="animal">Animal:</label>
-        <input id="animal" type="text">
-        <label for="breed">Breed:</label>
-        <input id="breed" type="text">
-        <label for="owner">Owner:</label>
-        <input id="owner" type="text">
+        <h1>Crear nuevo animal</h1>
+        <div class="form__inputs">
+          <div>
+            <label for="name">Name:</label>
+            <input id="name" type="text">
+            <label for="animal">Animal:</label>
+            <input id="animal" type="text">
+          </div>
+          <div>
+            <label for="breed">Breed:</label>
+            <input id="breed" type="text">
+            <label for="owner">Owner:</label>
+            <input id="owner" type="text">
+          </div>
+        </div>
         <button class="form__submit" on-click="_createNew">Crear Nuevo</button>
       </div>
 
@@ -48,19 +81,20 @@
           _updateListAnimals() {
             this.dispatchEvent(new CustomEvent('send-new-list-animals', {
               detail: {
-                list: this.newItem
+                list: this.listAnimals
               }
             }))
           }
 
           _serializerData() {
-            this.newItem = this._getData();
-            this._updateListAnimals();
+            let newItem = this._getData();
+            return newItem;
           }
 
           _createNew() {
-            this._serializerData();
-            this.push('listAnimals', )
+            this.newItem = this._serializerData();
+            this.push('listAnimals', this.newItem);
+            this._updateListAnimals();
           }
         }
         customElements.define(FormComponent.is, FormComponent);
