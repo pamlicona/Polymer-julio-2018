@@ -1,0 +1,136 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="/bower_components/polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="/bower_components/polymer/lib/elements/dom-if.html">
+
+<dom-module id="form-component">
+  <template>
+    <style>
+    .container__text{
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-gap: 60px;
+      margin: 30px;
+    }
+
+    form{
+      margin: auto; /* 15% from the top and centered */
+      border: 1px solid #888;
+      width: 40vw; /* Could be more or less, depending on screen size */
+      border-radius: 5px;
+      background-color: #f2f2f2;
+      padding: 20px;
+    }
+
+    input[type=text], select{
+      width: 100%;
+      padding: 14px 10px;
+      margin: 8px 0;
+      display: inline-block;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    input[type=submit]:hover {
+      background-color: #45a049;
+    }
+
+    .container__button{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 50px;
+    }
+
+    .btn{
+      background-color: #1162ac;
+      color: white;
+      font-size: 1.5rem;
+      padding: 15px;
+      border-radius: 14px;
+      font-weight: bold;
+      outline: none;
+      border-width: 0px;
+    }
+    </style>
+    <section class="container__text">
+      <form>
+        <label for="name">Nombre:</label>
+        <input type="text" value="{{nombre::input}}"><br>
+        <label for="address">Raza:</label>
+        <input type="text" value="{{raza::input}}"><br>
+        <label for="address">Dueño:</label>
+        <input type="text" value="{{duenio::input}}"><br>
+        <label for="animal">Dueño:</label><br>
+        <select id="animal" value="{{animal::change}}">
+          <option value="dog">Perro</option>
+          <option value="cat">Gato</option>
+          <option value="other">Otro</option>
+        </select>
+      </form>
+    </section>
+    <section class="container__button">
+      <button on-click="_addPet" class="btn">Agregar animal</button>
+    </section>
+  </template>
+  <script>
+    (function formComponent(customElements){
+      'use strict';
+
+      class FormComponent extends Polymer.Element {
+        static get is() { return 'form-component'; }
+        static get properties() {
+          return {
+            nombre:{
+              type:String,
+              value:''
+            },
+            animal:{
+              type:String,
+              value:''
+            },
+            raza:{
+              type:String,
+              value:''
+            },
+            duenio:{
+              type:String,
+              value:''
+            }
+          }
+        }
+
+        connectedCallback() {
+          super.connectedCallback();
+          // things to do
+        }
+
+        _addPet(){
+          this._executeDispatchEvent('add-pet',{
+                  nombre:this.nombre,
+                  animal:this.animal,
+                  raza:this.raza,
+                  duenio:this.duenio
+                });
+          this._resetProperties();
+        }
+        _resetProperties(){
+          this.nombre = '';
+          this.animal = '';
+          this.raza = '';
+          this.duenio = '';
+        }
+        _executeDispatchEvent(event,message,bubbles = true){
+          this.dispatchEvent(new CustomEvent(event,{
+            bubbles: bubbles,
+            detail:{
+              message: message
+            }
+          }));
+        }
+
+      }
+      customElements.define(FormComponent.is, FormComponent);
+    })(window.customElements);
+  </script>
+</dom-module>
