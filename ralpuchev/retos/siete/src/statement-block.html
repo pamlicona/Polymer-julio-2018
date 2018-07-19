@@ -1,0 +1,56 @@
+<!--por defecto-->
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<dom-module id="statement-block">
+    <template>
+        <style>
+        </style>
+        <section class="statement">
+            [[completeStatement]]
+        </section>
+    </template>
+    <script>
+        (function statementBlock(customElements){
+            'use strict';
+
+            class StatementBlock extends Polymer.Element {
+                static get is() { return 'statement-block'; }
+                
+                static get properties() {
+                    return {
+                        items: {
+                            type: Array,
+                            value: ['uno', 'dos']
+                        },
+                        
+                        completeStatement: {
+                            type: String,
+                            value: '',
+                            computed: '_getCompleteStatement(items)'
+                        }
+                    }
+                }
+
+                connectedCallback() {
+                    super.connectedCallback();
+                }
+                
+                _getCompleteStatement(){
+                    let statement = '';
+                    for(let part of this.items){
+                        statement += `${part} `;
+                    }
+                    
+                    console.log("complete statement: "+statement);
+                    
+                    return statement;
+                }
+                
+                _itemsChanged(){
+                    console.log("cambiaron los items");
+                    console.log(this.items);
+                }
+            }
+        customElements.define(StatementBlock.is, StatementBlock);
+        })(window.customElements);
+    </script>
+</dom-module>
