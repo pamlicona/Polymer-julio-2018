@@ -1,29 +1,30 @@
 <!--por defecto-->
 <link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/lib/elements/dom-if.html">
 <dom-module id="pet-item">
     <template>
         <style>
         </style>
         <section class="pet-card">
-            <template id="dog" is="dom-if" if="[[isDog]]">
-                <div class="pet_name">Nombre: ${name}</div>
-                <div class="pet_breed">Raza: ${breed}</div>
+            <template id="dog" is="dom-if" if="[[isDog()]]">
+                <div class="pet_name">Nombre: [[name]]</div>
+                <div class="pet_breed">Raza: [[breed]]</div>
             </template>
-            <template id="cat" is="dom-if" if="[[isCat]]">
-                <div class="pet_name">Nombre: ${name}</div>
-                <div class="pet_owner">Dueño: ${owner}</div>
+            <template id="cat" is="dom-if" if="[[isCat()]]">
+                <div class="pet_name">Nombre: [[name]]</div>
+                <div class="pet_owner">Dueño: [[owner]]</div>
             </template>
-            <template id="another" is="dom-if" if="[[isAnother]]">
-                <div class="pet_name">Nombre: ${name}</div>
-                <div class="pet_type">Animal: ${type}</div>
+            <template id="another" is="dom-if" if="[[isAnother()]]">
+                <div class="pet_name">Nombre: [[name]]</div>
+                <div class="pet_type">Animal: [[type]]</div>
             </template>
         </section>
     </template>
     <script>
-        (function appShell(customElements){
+        (function petItem(customElements){
             'use strict';
 
-            class AppShell extends Polymer.Element {
+            class PetItem extends Polymer.Element {
                 static get is() { return 'pet-item'; }
                 static get properties() {
                     return {
@@ -51,6 +52,7 @@
                 }
 
                 isDog(){
+                    console.log(this.type);
                     if(this.type == 'Dog') return true;
                     return false;
                 }
@@ -65,7 +67,7 @@
                     return false;
                 }
             }
-            customElements.define(AppShell.is, AppShell);
+            customElements.define(PetItem.is, PetItem);
         })(window.customElements);
     </script>
 </dom-module>
