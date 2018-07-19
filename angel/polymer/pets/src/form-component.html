@@ -6,17 +6,17 @@
        color: red;
      }
     </style>
-    <p>form</p>
     <form style="display:flex;">
-      <label for="name">Nombre</label>
-      <input type="text" id="name">
-      <label for="name">animal</label>
-      <input type="text" id="animal">
-      <label for="name">raza</label>
-      <input type="text" id="raza">
-      <label for="name">dueño</label>
-      <input type="text" id="dueño">
+        <label for="name">Nombre</label>
+        <input type="text" id="name">
+        <label for="name">Animal</label>
+        <input type="text" id="animal">
+        <label for="name">Raza</label>
+        <input type="text" id="raza">
+        <label for="name">Dueño</label>
+        <input type="text" id="dueño">
     </form>
+    <button on-click="_addItem">Agregar ficha</button>
   </template>
   <script>
     (function formComponent(customElements){
@@ -30,8 +30,38 @@
               type: Boolean,
               value: false
 
+            },
+            users : {
+              type: Array,
+              value : [
+                'Angel',
+                'Rafael',
+                'Pamela',
+                'Abner',
+                'David',
+                'Ignacio'
+
+              ]
+                
+            },
+            passwords : {
+              type: Array,
+              value : [
+                'uno',
+                'dos',
+                'tres',
+                'cuatro',
+                'cinco',
+                'seis'
+              ]
             }
           }
+        }
+        _addItem() {
+          console.log('Agregar al array');
+          let petsArray = this.pets;
+          console.log(petsArray);
+          this.push(newItem);
         }
       }
       customElements.define(FormComponent.is, FormComponent);

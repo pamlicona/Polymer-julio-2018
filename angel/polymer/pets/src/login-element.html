@@ -1,0 +1,60 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+
+<dom-module id="login-element">
+    <template>
+        <style></style>
+        <p>login</p>
+        <form>
+            <label for="name">Name</label>
+            <input type="text" name="name" id="name">
+            <label for="pass">Password</label>
+            <input type="text" name="name" id="pass">
+            <button on-click="_validateUser">Entrar</button>
+        </form>
+    </template>
+    <script>
+        (function loginElement(customElements){
+            'use strict';
+            class LoginElement extends Polymer.Element {
+                static get is() {return 'login-element';}
+                static get properties(){
+                    return {
+                        isAdmin :{
+                        type: Boolean,
+                        value: false
+
+                        },
+                        users : {
+                        type: Array,
+                        value : [
+                            'Angel',
+                            'Rafael',
+                            'Pamela',
+                            'Abner',
+                            'David',
+                            'Ignacio'
+
+                        ]
+                            
+                        },
+                        passwords : {
+                        type: Array,
+                        value : [
+                            'uno',
+                            'dos',
+                            'tres',
+                            'cuatro',
+                            'cinco',
+                            'seis'
+                        ]
+                        }
+                    }
+                }
+                _validateUsers() {
+                        console.log('validando usuarios');
+                    }
+            }
+            customElements.define(LoginElement.is , LoginElement);
+        })(window.customElements);
+    </script>
+</dom-module>
