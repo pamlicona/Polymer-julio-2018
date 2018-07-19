@@ -1,0 +1,89 @@
+  <link rel="import" href="/bower_components/polymer/polymer-element.html">
+  <link rel="import" href="/bower_components/polymer/lib/elements/dom-if.html">
+  <link rel="import" href="cards-container.html">
+  <link rel="import" href="login-component.html">
+  <link rel="import" href="form-component.html">
+
+  <dom-module id="app-shell">
+    <template>
+      <style>
+      </style>
+
+      <template is="dom-if" if="[[showLogin]]">
+        <login-component list-users="[[listUsers]]" on-send-user-login="redirectCards"></login-component>
+      </template>
+
+      <template is="dom-if" if="[[showCards]]">
+        <cards-container list-animals="[[listAnimals]]"></cards-container>
+      </template>
+
+      <template is="dom-if" if="[[showForm]]">
+        <form-component list-animals="[[listAnimals]]" on-send-new-list-animals="updateList"></form-component>
+      </template>
+    </template>
+    <script>
+      (function appShell(customElements){
+        'use strict';
+
+        class AppShell extends Polymer.Element {
+          static get is() { return 'app-shell'; }
+          static get properties() {
+            return {
+              listAnimals: {
+                type: Array,
+                value: [
+                  { name: 'Dog 1', animal: 'Dog', breed: 'Pastor Alemán', owner: 'Owner 1' },
+                  { name: 'Cat 1', animal: 'Cat', breed: '', owner: 'Owner 1' },
+                  { name: 'Horse 1', animal: 'Horse', breed: '', owner: 'Owner 1' },
+                  { name: 'Dog 2', animal: 'Dog', breed: 'Boxer', owner: 'Owner 2' },
+                  { name: 'Cat 2', animal: 'Cat', breed: '', owner: 'Owner 2' },
+                  { name: 'Bird 1', animal: 'Bird', breed: '', owner: 'Owner 2' },
+                  { name: 'Dog 3', animal: 'Dog', breed: 'Coquer', owner: 'Owner 3' },
+                  { name: 'Cat 3', animal: 'Cat', breed: '', owner: 'Owner 3' },
+                  { name: 'Fox 1', animal: 'Fox', breed: '', owner: 'Owner 3' },
+                  { name: 'Dog 4', animal: 'Dog', breed: 'Labrador', owner: 'Owner 4' },
+                  { name: 'Cat 4', animal: 'Cat', breed: '', owner: 'Owner 4' },
+                  { name: 'Snake 1', animal: 'Snake', breed: '', owner: 'Owner 4' }
+                ]
+              },
+              listUsers: {
+                type: Array,
+                value: [
+                  { user: 'admin', password: 'admin123', typeUser: 'admin' },
+                  { user: 'pamela', password: 'pamela123', typeUser: 'user' }
+                ]
+              },
+              showForm: {
+                type: Boolean,
+                value: false
+              },
+              showCards: {
+                type: Boolean,
+                value: false
+              },
+              showLogin: {
+                type: Boolean,
+                value: true
+              }
+            }
+          }
+
+          updateList(event) {
+            let listAnimals = event.detail.list;
+            this.set('listAnimals', listAnimals);
+            console.log(listAnimals);
+          }
+
+          redirectCards(event) {
+            this.set('showLogin', false);
+            this.set('showCards', true);
+            if (event.detail.type === 'admin') {
+              this.set('showForm', true);
+              console.log(this.showForm)
+            }
+          }
+        }
+        customElements.define(AppShell.is, AppShell);
+      })(window.customElements);
+    </script>
+  </dom-module>

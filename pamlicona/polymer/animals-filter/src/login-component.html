@@ -1,0 +1,76 @@
+  <link rel="import" href="/bower_components/polymer/polymer-element.html">
+
+  <dom-module id="login-component">
+    <template>
+      <style>
+        :host {
+          --color-error: red;
+        }
+
+        .login__error {
+          display: none;
+        }
+
+        .show-error {
+          display: block;
+          color: var(--color-error);
+        }
+      </style>
+
+      <div class="login">
+        <input type="text" class="login__user" id="user" placeholder="User">
+        <input type="password" class="login__password" id="password" placeholder="Password">
+        <p class="login__error" id="error">Tu usuario o contraseña son incorrectos</p>
+        <button class="login__button" on-click="_checkUser">Login</button>
+      </div>
+
+    </template>
+    <script>
+      (function loginComponent(customElements){
+        'use strict';
+
+        class LoginComponent extends Polymer.Element {
+          static get is() { return 'login-component'; }
+          static get properties() {
+            return {
+              listUsers: {
+                type: Array,
+                value: []
+              },
+              currentUser: {
+                type: Object,
+                value: {}
+              }
+            }
+          }
+
+          _sendEvent() {
+            this.dispatchEvent(new CustomEvent('send-user-login', {
+              detail: {
+                type: this.currentUser[0].typeUser
+              }
+            }))
+          }
+
+          _validUser() {
+            if (this.currentUser.length > 0) {
+              this._sendEvent();
+              this.$.error.classList.remove('show-error');
+            } else {
+              this.$.error.classList.add('show-error');
+            }
+          }
+
+          _checkUser() {
+            let userName = this.$.user.value;
+            let password = this.$.password.value;
+            this.currentUser = this.listUsers.filter(user => {
+              return (userName === user.user && password === user.password)
+            });
+            this._validUser();
+          }
+        }
+        customElements.define(LoginComponent.is, LoginComponent);
+      })(window.customElements);
+    </script>
+  </dom-module>

@@ -1,0 +1,69 @@
+  <link rel="import" href="/bower_components/polymer/polymer-element.html">
+
+  <dom-module id="form-component">
+    <template>
+      <style>
+      </style>
+
+      <div class="form">
+        <label for="name">Name:</label>
+        <input id="name" type="text">
+        <label for="animal">Animal:</label>
+        <input id="animal" type="text">
+        <label for="breed">Breed:</label>
+        <input id="breed" type="text">
+        <label for="owner">Owner:</label>
+        <input id="owner" type="text">
+        <button class="form__submit" on-click="_createNew">Crear Nuevo</button>
+      </div>
+
+    </template>
+    <script>
+      (function formComponent(customElements){
+        'use strict';
+
+        class FormComponent extends Polymer.Element {
+          static get is() { return 'form-component'; }
+          static get properties() {
+            return {
+              listAnimals: {
+                type: Array,
+                value: []
+              },
+              newItem: {
+                type: Object,
+                value: { name: '', animal: '', breed: '', owner: '' }
+              }
+            }
+          }
+
+          _getData() {
+            let name = this.$.name.value;
+            let animal = this.$.animal.value;
+            let breed = this.$.breed.value;
+            let owner = this.$.owner.value;
+            return {name, animal, breed, owner};
+          }
+
+          _updateListAnimals() {
+            this.dispatchEvent(new CustomEvent('send-new-list-animals', {
+              detail: {
+                list: this.newItem
+              }
+            }))
+          }
+
+          _serializerData() {
+            this.newItem = this._getData();
+            this._updateListAnimals();
+          }
+
+          _createNew() {
+            this._serializerData();
+            this.push('listAnimals', )
+          }
+        }
+        customElements.define(FormComponent.is, FormComponent);
+      })(window.customElements);
+    </script>
+  </dom-module>

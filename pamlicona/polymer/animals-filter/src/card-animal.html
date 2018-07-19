@@ -1,0 +1,70 @@
+  <link rel="import" href="/bower_components/polymer/polymer-element.html">
+  <link rel="import" href="/bower_components/polymer/lib/elements/dom-if.html">
+
+  <dom-module id="card-animal">
+    <template>
+      <style>
+      </style>
+
+      <article>
+        <template is="dom-if" if="[[isCat()]]">
+          <p>Nombre: [[itemCard.name]]</p>
+          <p>Dueño: [[itemCard.owner]]</p>
+        </template>
+
+        <template is="dom-if" if="[[isDog()]]">
+          <p>Nombre: [[itemCard.name]]</p>
+          <p>Raza: [[itemCard.breed]]</p>
+        </template>
+
+        <template is="dom-if" if="[[isOther()]]">
+          <p>Nombre: [[itemCard.name]]</p>
+          <p>Animal: [[itemCard.animal]]</p>
+        </template>
+      </article>
+
+    </template>
+    <script>
+      (function cardAnimal(customElements){
+        'use strict';
+
+        class CardAnimal extends Polymer.Element {
+          static get is() { return 'card-animal'; }
+          static get properties() {
+            return {
+              itemCard: {
+                type: Object,
+                value: {}
+              },
+              typeAnimal: {
+                type: String,
+                value: ''
+              }
+            }
+          }
+
+          isCat() {
+            if (this.typeAnimal === 'cat') {
+              return true;
+            }
+            return false;
+          }
+
+          isDog() {
+            if (this.typeAnimal === 'dog') {
+              return true;
+            }
+            return false;
+          }
+
+          isOther() {
+            if (this.typeAnimal === 'other') {
+              return true;
+            }
+            return false;
+          }
+        }
+        customElements.define(CardAnimal.is, CardAnimal);
+      })(window.customElements);
+    </script>
+  </dom-module>
