@@ -4,6 +4,10 @@
 <dom-module id="pet-item">
     <template>
         <style>
+            .pet-card{
+                border: 2px solid black;
+                padding: 6px;
+            }
         </style>
         <section class="pet-card">
             <template id="dog" is="dom-if" if="[[isDog()]]">
