@@ -1,0 +1,76 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="pets-component.html">
+
+
+<dom-module id="app-shell">
+  
+  <template>
+    <style>
+      :host {
+        text-align: center;
+      }
+      slider-component {
+        display: block;
+      }
+      form {
+        margin-top: 40px;
+      }
+    </style>
+    <h1>Registro de Mascotas</h1>
+
+    <form action="">
+      <h2>Agregar Mascota Nueva</h2>
+      <label for="nombre">Nombre: </label> <input type="text" name="">
+      <label for="dueño">Dueño:   </label> <input type="text" name="">
+      <label for="animal">Animal: </label> <input type="text" name="">
+      <label for="raza">Raza:     </label> <input type="text" name="">
+
+
+      <button type="button" on-click="_addPet()">Agregar</button>
+
+    </form>
+
+    <pets-component type="dog"  pets="[[petsArray]]"></pets-component>
+    <pets-component type="cat"  pets="[[petsArray]]"></pets-component>
+    <pets-component type="other"  pets="[[petsArray]]"></pets-component>
+
+
+    <h1>[[frase]]</h1>
+  </template>
+
+
+  <script>
+    (function appShell(customElements) {
+      'use strict';
+
+      class AppShell extends Polymer.Element {
+        static get is() { return 'app-shell'; }
+        static get properties() {
+          return {
+            petsArray: {
+              type: Array,
+              value: [
+                      {
+                        type:"dog",
+                        name: "firulais",
+                        raza: "coker",
+                        owner: "David"
+                      }, 
+              ]
+            }
+
+            name : {},
+          }
+        }
+
+       //add new image Method
+        _addPet() {
+          return 0;
+        }
+      }
+    customElements.define(AppShell.is, AppShell);
+    })(window.customElements);
+  </script>
+
+
+</dom-module>

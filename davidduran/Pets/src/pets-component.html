@@ -1,0 +1,62 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="pet-card-component.html">
+
+
+<dom-module id="pets-component">
+  
+
+  <template>
+    <style>
+      section {
+        display: flex;
+        justify-content:center;
+      }
+      picture {
+        height: 200px;
+        width: 400px;
+        overflow: hidden;
+      }
+      img {
+        max-height: 100%;
+        width: 100%;
+      }
+      .petsContainer{
+        border: 5px solid gray;
+        border-radius: 10px;
+      }
+    </style>
+    <section class="petsContainer" >
+        <template>
+          <pet-card-component pet=[[pet]]></pet-card-component>
+        </template>
+    </section>
+  </template>
+
+
+
+  <script>
+    (function appShell(customElements){
+      'use strict';
+
+      class PetsComponent extends Polymer.Element {
+        static get is() { return 'pets-component'; }
+        static get properties() {
+          return {
+            type: {
+              type: String,
+              value: 'other'
+            }
+          }
+        }
+
+        connectedCallback() {
+          super.connectedCallback();
+          // things to do
+        }
+
+      
+      }
+      customElements.define(PetsComponent.is, PetsComponent);
+    })(window.customElements);
+  </script>
+</dom-module>
