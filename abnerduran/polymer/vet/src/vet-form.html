@@ -1,0 +1,167 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/lib/elements/dom-if.html">
+<link rel="import" href="../bower_components/polymer/lib/elements/dom-repeat.html">
+
+<dom-module id="vet-form">
+  <template>
+    <style>
+      form {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(2, 1fr);
+        max-width: 600px;
+        margin: auto;
+      }
+
+      .input-group {
+        text-align: left;
+        margin-bottom: 10px;
+      }
+
+      .input-group label {
+        display: block;
+        font-weight: bold;
+      }
+
+      .input-group input,
+      .input-group select {
+        border-radius: 15px;
+        padding: 10px 15px;
+        width: 60%;
+        border: 1px solid;
+      }
+
+      .input-group select {
+        width: 71%;
+      }
+      button {
+        background: blue;
+        border-radius: 20px;
+        color: white;
+        width: 150px;
+        padding: 10px 15px;
+        border: solid;
+        cursor: pointer;
+      }
+      button: hover {
+        filter: brightness(1.1);
+      }
+    </style>
+    <!-- <template is="dom-if" if="[[subject-type]]">
+        <button on-click="_getRandomSubject">[[subject]]</button>
+    </template> -->
+    <!-- <template is="dom-if" if="[[subject-type]]"> -->
+    <form>
+      <div class="input-group">
+        <label for="name">Nombre</label>
+        <input type="text" name="name" id="name">
+      </div>
+      <div class="input-group">
+        <label for="animal">Animal</label>
+        <select name="animal" id="animal">
+          <option value="">Selecciona</option>
+          <option value="dog">Perro</option>
+          <option value="cat">Gato</option>
+          <option value="other">Otro</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label for="breed">Raza</label>
+        <input type="text" name="breed" id="breed">
+      </div>
+      <div class="input-group">
+        <label for="owner">Dueño</label>
+        <input type="text" name="owner" id="owner">
+      </div>
+      <div class="input-group">
+        <button type="button" on-click="_addPet">Agregar</button>
+      </div>
+    </form>
+    <!-- </template> -->
+  </template>
+
+  <script>
+    (function vetForm(customElements) {
+      'use strict';
+
+      class VetForm extends Polymer.Element {
+        static get is() { return 'vet-form'; }
+        static get properties() {
+          return {
+            petList: {
+              type: Array,
+              value: []
+            }
+          }
+        }
+
+        connectedCallback() {
+          super.connectedCallback();
+          // things to do
+        }
+
+        _addPet() {
+          if (this.$.name.value === '' || this.$.animal.value === ''
+            || this.$.breed.value === '' || this.$.owner.value === '') {
+            return;
+          }
+          const pet = {
+            name: this.$.name.value,
+            animal: this.$.animal.value,
+            breed: this.$.breed.value,
+            owner: this.$.owner.value,
+          };
+          this.push('petList', pet)
+          this._dispatchEvent('pet-added', this.petList);
+          console.log(this.petList);
+        }
+
+        // _getRandomSubject() {
+        //   this.subject = this._getRandomElement();
+        //   this._dispatchEvent('random-subject', this.subject);
+        //   console.log(this.subject);
+        // }
+
+        // _getRandomAction() {
+        //   this.action = this._getRandomElement();
+        //   this._dispatchEvent('random-action', this.action);
+        //   console.log(this.action);
+        // }
+
+        // _getRandomAdjective() {
+        //   this.adjective = this._getRandomElement();
+        //   this._dispatchEvent('random-adjective', this.adjective);
+        //   console.log(this.adjective);
+        // }
+
+        // _getRandomObject() {
+        //   this.object = this._getRandomElement();
+        //   this._dispatchEvent('random-object', this.object);
+        //   console.log(this.object);
+        // }
+
+        // _getRandomPlace() {
+        //   this.place = this._getRandomElement();
+        //   this._dispatchEvent('random-place', this.place);
+        //   console.log(this.place);
+        // }
+
+        // _getRandomElement() {
+        //   const length = this.elementList.length - 1;
+        //   const random = Math.round(Math.random() * length );
+        //   return this.elementList[random];
+        // }
+
+        _dispatchEvent(event, detail, bubbles = true) {
+          this.dispatchEvent(new CustomEvent(event, {
+            bubbles: bubbles,
+            composed: true,
+            detail: detail
+          }));
+        }
+
+      }
+      customElements.define(VetForm.is, VetForm);
+    })(window.customElements);
+  </script>
+</dom-module>

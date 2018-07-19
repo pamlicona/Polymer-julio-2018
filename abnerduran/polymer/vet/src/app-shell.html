@@ -1,0 +1,49 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="vet-form.html">
+<link rel="import" href="vet-card.html">
+
+<dom-module id="app-shell">
+  <template>
+    <style>
+      :host {
+        text-align: center;
+      }
+    </style>
+    <h1>Vet & pets</h1>
+    <div class="cards">
+      <vet-form></vet-form>
+      <vet-card pets="{{petList}}"></vet-card>
+    </div>
+  </template>
+  <script>
+    (function appShell(customElements) {
+      'use strict';
+
+      class AppShell extends Polymer.Element {
+        static get is() { return 'app-shell'; }
+        static get properties() {
+          return {
+            petList: {
+              type: Array,
+              value: []
+            }
+          }
+        }
+
+        connectedCallback() {
+          super.connectedCallback();
+          this.addEventListener('pet-added', this.petAdded)
+        }
+
+        petAdded(event) {
+          this.set('petList', event.detail)
+          const petList = this.shadowRoot.querySelector('vet-card');
+          petList.setAttribute('pets', JSON.stringify(this.petList));
+          console.log(this.petList);
+        }
+
+      }
+      customElements.define(AppShell.is, AppShell);
+    })(window.customElements);
+  </script>
+</dom-module>
