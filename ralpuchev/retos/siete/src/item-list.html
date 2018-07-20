@@ -1,0 +1,69 @@
+<!--por defecto-->
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+
+<dom-module id="item-list">
+    <template>
+        <style>
+        </style>
+        <section class="item_active">
+            [[itemSelected]]
+        </section>
+    </template>
+    <script>
+        (function itemList(customElements){
+            'use strict';
+
+            class ItemList extends Polymer.Element {
+                static get is() { return 'item-list'; }
+                
+                static get properties() {
+                    return {
+                        items: {
+                            type: Array,
+                            value: ['uno', 'dos', 'tres', 'cuatro']
+                        },
+                        
+                        itemSelected: {
+                            type: String,
+                            value: 'Item de Prueba'
+                        },
+                        
+                        index: {
+                            type: Number,
+                            value: 0,
+                            observer: '_selectRandomItem'
+                        }
+                    }
+                }
+
+                connectedCallback() {
+                    super.connectedCallback();
+                    
+                    console.log("lista de items: "+this.items.length);
+                }
+                
+                _selectRandomItem(){
+                    console.log("seleccionando item aleatorio");
+                    if(this.items.length == 0) return;
+                    
+                    this.itemSelected = this.items[this._getRandomNumber(0, this.items.length)];
+                    
+                    this.dispatchEvent(new CustomEvent('random-item-selected', {
+                        bubbles: true,
+                        composed: true,
+                        detail: {
+                            randomSelectedItem : this.itemSelected
+                        }
+                    }));
+                    
+                    console.log("enviado el evento de item aleatorio seleccionado");
+                }
+                
+                _getRandomNumber(numeroInferior, numeroSuperior){
+                    return Math.floor((Math.random() * numeroSuperior) + numeroInferior);
+                }
+            }
+        customElements.define(ItemList.is, ItemList);
+        })(window.customElements);
+    </script>
+</dom-module>

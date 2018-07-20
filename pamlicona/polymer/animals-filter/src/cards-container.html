@@ -1,0 +1,74 @@
+  <link rel="import" href="/bower_components/polymer/polymer-element.html">
+  <link rel="import" href="/bower_components/polymer/lib/elements/dom-repeat.html">
+  <link rel="import" href="card-animal.html">
+
+  <dom-module id="cards-container">
+    <template>
+      <style>
+        .container {
+          display: grid;
+          grid-template-columns: 1fr 1fr 1fr;
+          margin-top: 15px;
+          padding-bottom: 30px;
+        }
+
+        .container h1 {
+          text-align: center;
+        }
+      </style>
+
+      <div class="container">
+        <div class="container__cats">
+          <h1>Gatos</h1>
+          <template is="dom-repeat" items="[[listAnimals]]" filter="isCat">
+            <card-animal type-animal="cat" item-card="[[item]]"></card-animal>
+          </template>
+        </div>
+
+        <div class="container__dogs">
+          <h1>Perros</h1>
+          <template is="dom-repeat" items="[[listAnimals]]" filter="isDog">
+            <card-animal type-animal="dog" item-card="[[item]]"></card-animal>
+          </template>
+        </div>
+
+        <div class="container__others">
+          <h1>Otros</h1>
+          <template is="dom-repeat" items="[[listAnimals]]" filter="isOther">
+            <card-animal type-animal="other" item-card="[[item]]"></card-animal>
+          </template>
+        </div>
+      </div>
+
+    </template>
+    <script>
+      (function cardsContainer(customElements){
+        'use strict';
+
+        class CardsContainer extends Polymer.Element {
+          static get is() { return 'cards-container'; }
+          static get properties() {
+            return {
+              listAnimals: {
+                type: Array,
+                value: []
+              }
+            }
+          }
+
+          isCat(item) {
+            return item.animal === 'Cat';
+          }
+
+          isDog(item) {
+            return item.animal === 'Dog';
+          }
+
+          isOther(item) {
+            return item.animal !== 'Dog' && item.animal !== 'Cat';
+          }
+        }
+        customElements.define(CardsContainer.is, CardsContainer);
+      })(window.customElements);
+    </script>
+  </dom-module>

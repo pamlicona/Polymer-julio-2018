@@ -1,0 +1,127 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/game-card/game-card.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/app-route/app-location.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+
+<link rel="import" href="custom-styles.html">
+
+<dom-module id="app-shell">
+  <template>
+    <style include="custom-styles">
+      :host {
+        --title-color: red;
+      }
+      .green {
+        background-color: green;
+      }
+      h2 {
+        @apply --my-mixin;
+      }
+      paper-button {
+        --paper-button-ink-color: red;
+      }
+      div {
+        font-size: 20px;
+        text-align: center;
+      }
+    </style>
+    <paper-button class="pink">link</paper-button>
+    <paper-button raised class="indigo">raised</paper-button>
+    <paper-button toggles raised class="green">toggles</paper-button>
+    <paper-button disabled class="disabled">disabled</paper-button>
+    <game-card symbol="♠" rank="a" flippable></game-card>
+
+    <template id="domRepeat" is="dom-repeat" items="[[names]]">
+      <h2 id="nameTitle">[[item]]</h2>
+    </template>
+
+    <template id="domIf" is="dom-if" if="[[isName]]">
+      <h2 id="nameTitle2">Soy un dom IF</h2>
+    </template>
+
+    <app-location route="{{route}}" use-hash-as-path></app-location>
+    <app-route
+      route={{route}}
+      pattern="/:page"
+      data={{data}}
+      tail={{subroute}}
+    ></app-route>
+
+    <iron-pages selected="{{data.page}}" attr-for-selected="page" fallback-selection="otros">
+      <div page="gatitos">gatitos</div>
+      <div page="otros">otros</div>
+    </iron-pages>
+
+    <a href="perritos/puppy">perritos</a>
+    <a href="/#/gatitos">gatitos</a>
+
+    <iron-ajax id="ironAjax"
+      auto
+      url="https://rickandmortyapi.com/api/character"
+      params='{"page": "1"}'
+      handle-as="json"
+      on-response="handleResponse"
+      last-response="{{characters}}">
+    </iron-ajax>
+
+  </template>
+  <script>
+    (function appShell(customElements) {
+      'use strict';
+
+      class AppShell extends Polymer.Element {
+        static get is() { return 'app-shell'; }
+        static get properties() {
+          return {
+            names: {
+              type: Array,
+              value: ['Anuar', 'David', 'Nacho', 'Pam', 'Angel', 'Abner', 'Rafa']
+            },
+            isName: {
+              type: Boolean,
+              value: false
+            },
+            characters: {
+              type: Array,
+              value: ['uno']
+            }
+          }
+        }
+
+        constructor() {
+          super();
+          // console.log('constructor', this.name);
+
+        }
+
+        ready() {
+          super.ready();
+          this.$.domIf.render();
+          // console.log('ready', this.name);
+        }
+
+        connectedCallback() {
+          super.connectedCallback();
+          this.$.domRepeat.render();
+          console.log(this.route);
+          console.log(this.data);
+          console.log(this.subroute);
+          // this.$.ironAjax.generateRequest();
+          // console.log('connectedCallback', this.name, this.$.nameTitle, this.shadowRoot.querySelector('#nameTitle'));
+          // console.log(this.shadowRoot.querySelector('#nameTitle2'));
+          ;
+
+        }
+
+        handleResponse() {
+          console.log('recibi respuesta');
+          console.log(this.characters);
+        }
+      }
+      customElements.define(AppShell.is, AppShell);
+    })(window.customElements)
+  </script>
+</dom-module>

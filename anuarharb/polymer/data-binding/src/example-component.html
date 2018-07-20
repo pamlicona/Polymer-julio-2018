@@ -1,0 +1,94 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/lib/elements/dom-if.html">
+<link rel="import" href="../bower_components/polymer/lib/elements/dom-repeat.html">
+
+<dom-module id="example-component">
+  <template>
+    <style>
+      article {
+        border: 1px solid black;
+        display: inline-block;
+        width: 100px;
+        padding: 20px;
+        margin: 10px;
+      }
+    </style>
+    <template id="if" is="dom-if" if="[[!_isTrue(myName)]]">
+      <h1 id="name">[[myName]]</h1>
+    </template>
+
+    <template is="dom-if" if="[[_isTrue(myName)]]">
+      <h1>Soy true!! ;D</h1>
+    </template>
+
+    <template is="dom-repeat" items="[[pets]]" as="pet" filter="[[isDog]]">
+      <article>
+        <h4><span>[[pet.index]] </span>[[pet.name]]</h4>
+        <p>[[pet.type]]</p>
+        <ul>
+          <template is="dom-repeat" items=[[pet.toys]] as="toy">
+            <li>[[toy]]</li>
+          </template>
+        </ul>
+      </article>
+    </template>
+
+    <button on-click="showName">name</button>
+
+  </template>
+  <script>
+    (function exampleComponent(customElements) {
+      'use strict';
+
+      class ExampleComponent extends Polymer.Element {
+        static get is() { return 'example-component'; }
+        static get properties() {
+          return {
+            myName: {
+              type: String,
+              value: 'Juan',
+              // observer: "_nameChange",
+              // notify: true,
+              // reflectToAttribute: true,
+              // readOnly: true
+              // computed: ""
+            },
+            index: {
+              type: String,
+              value: 'random'
+            },
+            pets: {
+              type: String
+            }
+          }
+        }
+
+        connectedCallback() {
+          super.connectedCallback();
+        }
+
+        isDog(pet, index) {
+          if(pet.type == 'cat') {
+            return true;
+          }
+        }
+
+        showName() {
+        }
+
+        _changeName() {
+          return 'Oscar';
+        }
+
+        _isTrue(name) {
+          if(name == 'Oscar') {
+            return false;
+          } else {
+            return true
+          }
+        }
+      }
+      customElements.define(ExampleComponent.is, ExampleComponent);
+    })(window.customElements);
+  </script>
+</dom-module>

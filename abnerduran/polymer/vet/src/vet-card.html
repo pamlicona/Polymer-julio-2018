@@ -1,0 +1,104 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/lib/elements/dom-if.html">
+<link rel="import" href="../bower_components/polymer/lib/elements/dom-repeat.html">
+
+<dom-module id="vet-card">
+    <template>
+        <style>
+            .container {
+                display: flex;
+                justify-content: space-evenly;
+            }
+            .card {
+                border: 1px solid #c5c5c5;
+                margin: 8px;
+                padding: 1rem;
+                min-width: 280px;
+            }
+            .item {
+                margin-top: 10px;
+            }
+            .item p {
+                margin: 0;
+            }
+            .item p.last {
+                border-bottom: 1px solid #c5c5c5; 
+                padding-bottom: 10px;
+            }
+        </style>
+        <!-- <template is="dom-if" if="[[subject-type]]">
+        <button on-click="_getRandomSubject">[[subject]]</button>
+    </template> -->
+        <!-- <div># [[index]]</div> -->
+        <div class="container">
+            <div class="card">
+                <h2>Perros</h2>
+                <template class="item" is="dom-repeat" items="{{pets}}" as="pet" filter="isDog">
+                    <div class="item">
+                        <p>Nombre: [[pet.name]]</p>
+                        <p class="last">Raza: [[pet.breed]]</p>
+                    </div>
+                </template>
+            </div>
+            <div class="card">
+                <h2>Gatos</h2>
+                <template class="item" is="dom-repeat" items="{{pets}}" as="pet" filter="isCat">
+                    <div class="item">
+                        <p>Nombre: [[pet.name]]</p>
+                        <p class="last">Dueño: [[pet.owner]]</p>
+                    </div>
+                </template>
+            </div>
+            <div class="card">
+                <h2>Animales</h2>
+                <template class="item" is="dom-repeat" items="{{pets}}" as="pet" filter="noIsCatOrDog">
+                    <div class="item">
+                        <p>Nombre: [[pet.name]]</p>
+                        <p class="last">Dueño: [[pet.animal]]</p>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </template>
+
+    <script>
+        (function vetCard(customElements) {
+            'use strict';
+
+            class VetCard extends Polymer.Element {
+                static get is() { return 'vet-card'; }
+                static get properties() {
+                    return {
+                        pets: {
+                            type: Array,
+                            value: [],
+                            reflectToAttribute: true,
+                            observer: '_petsChanged'
+                        }
+                    }
+                }
+
+                _petsChanged(newValue, oldValue) {
+                    console.log(this.pets);
+                };
+
+                connectedCallback() {
+                    super.connectedCallback();
+                    // things to do
+                }
+
+                isDog(item) {
+                    return item.animal == 'dog';
+                }
+                isCat(item) {
+                    return item.animal == 'cat';
+                }
+                noIsCatOrDog(item) {
+                    return item.animal != 'dog' && item.animal != 'cat';
+                }
+
+            }
+            customElements.define(VetCard.is, VetCard);
+        })(window.customElements);
+    </script>
+</dom-module>
