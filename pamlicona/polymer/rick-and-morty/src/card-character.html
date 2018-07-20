@@ -1,0 +1,77 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="/bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="/bower_components/app-route/app-route.html">
+<link rel="import" href="/bower_components/app-route/app-location.html">
+<link rel="import" href="/bower_components/paper-card/paper-card.html">
+<link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="card-detail.html">
+
+<dom-module id="card-character">
+  <template>
+    <style>
+      .dead {
+        opacity: 0.5;
+        background: #cccccc;
+      }
+    </style>
+
+    <app-location route="{{route}}"></app-location>
+    <app-route
+      route="{{route}}"
+      pattern="/:id"
+      data="{{data}}">
+    </app-route>
+
+    <paper-card
+      image="[[character.image]]"
+      class$="[[_classDead(character.status)]]"
+      on-click="_changeId"
+      data-args="[[character.id]]">
+      <div class="card-content">
+        <div>[[character.name]]</div>
+      </div>
+      <div class="card-actions">
+        <div>
+          <p>[[character.status]]</p>
+          <p>[[character.species]]</p>
+        </div>
+      </div>
+    </paper-card>
+
+    <iron-pages selected="detail" attr-for-selected="character-detail">
+      <div character-detail="detail">
+        <card-detail detail="[[character]]"></card-detail>
+      </div>
+    </iron-pages>
+
+  </template>
+  <script>
+    (function cardCharacter(customElements){
+      'use strict';
+
+      class CardCharacter extends Polymer.Element {
+        static get is() { return 'card-character'; }
+        static get properties() {
+          return {
+            character: {
+              type: Object,
+              value: {}
+            }
+          }
+        }
+
+        _changeId(event) {
+          let route = event.target.getAttribute('data-args');
+          let newRoute = `${this.route.path}/${route}`
+          this.set('route.path', newRoute);
+          console.log(route)
+        }
+
+        _classDead(status) {
+          return status === 'Dead' ? 'dead' : 'live';
+        }
+      }
+      customElements.define(CardCharacter.is, CardCharacter);
+    })(window.customElements);
+  </script>
+</dom-module>

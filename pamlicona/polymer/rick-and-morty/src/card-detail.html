@@ -1,0 +1,33 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="/bower_components/paper-card/paper-card.html">
+
+<dom-module id="card-detail">
+  <template>
+    <style>
+    </style>
+
+  </template>
+  <script>
+    (function cardDetail(customElements){
+      'use strict';
+
+      class CardDetail extends Polymer.Element {
+        static get is() { return 'card-detail'; }
+        static get properties() {
+          return {
+            detail: {
+              type: Object,
+              value: {}
+            }
+          }
+        }
+
+        connectedCallback() {
+          super.connectedCallback();
+          console.log(this.detail)
+        }
+      }
+      customElements.define(CardDetail.is, CardDetail);
+    })(window.customElements);
+  </script>
+</dom-module>
