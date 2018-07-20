@@ -3,11 +3,8 @@
 <link rel="import" href="../bower_components/app-route/app-route.html">
 <link rel="import" href="../bower_components/app-route/app-location.html">
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
-<link rel="import" href="alive-component.html">
-<link rel="import" href="dead-component.html">
-<link rel="import" href="unknown-component.html">
 
-<dom-module id="app-shell">
+<dom-module id="alive-component">
   <template>
       <style>
         section {
@@ -46,12 +43,6 @@
           contrast(120%);
           }
         </style>
-        <section class="button-wrapper">
-            <a href="/#/vivos">vivos</a>
-            <a href="/#/muertos">muertos</a>
-            <a href="/#/desconocido">desconocido</a>
-        </section>
-
     <app-location route="{{route}}" use-hash-as-path></app-location>
     <app-route
       route={{route}}
@@ -60,31 +51,37 @@
       tail={{subroute}}
     ></app-route>
 
-    <iron-pages selected="{{data.page}}" attr-for-selected="page" fallback-selection="otros">
-      <div page="vivos">
-          <section>
-             <alive-component></alive-component>
-            </section>
-      </div>
-      <div page="muertos">
-          <section>
-            <dead-component></dead-component>
-          </section>
-      </div>
-      <div page="desconocido">
-        <section>
-          <unknown-component></unknown-component>
-        </section>
-    </div>
-    </iron-pages>
+
+ 
+              <template id="domRepeat" is="dom-repeat" items="{{charactersAlive.results}}">
+                <article class="name-container">
+                  <h2 id="nameTitle">[[item.name]]</h2>
+                  <p>[[item.status]]</p>
+                  <img src="[[item.image]]" alt="[[item.image]]"/>
+                  <span>[[item.id]]]</span>
+                  <a href="vivos/[[item.id]]">STUFF</a>
+                  <button on-click="_seeDetail">More</button>
+                </article>
+              </template>
+
+    
+
+    <iron-ajax id="aliveCharacters"
+      auto
+      url="https://rickandmortyapi.com/api/character"
+      params='{"page": "1" , "status" :"alive"}'
+      handle-as="json"
+      on-response="handleResponse"
+      last-response="{{charactersAlive}}">
+    </iron-ajax>
 
   </template>
   <script>
-    (function appShell(customElements) {
+    (function aliveComponent(customElements) {
       'use strict';
 
-      class AppShell extends Polymer.Element {
-        static get is() { return 'app-shell'; }
+      class AliveComponent extends Polymer.Element {
+        static get is() { return 'alive-component'; }
         static get properties() {
           return {
             names: {
@@ -132,7 +129,7 @@
           console.log( 'your character is:' , e.model.item.name);
         }
       }
-      customElements.define(AppShell.is, AppShell);
+      customElements.define(AliveComponent.is, AliveComponent);
     })(window.customElements)
   </script>
 </dom-module>
