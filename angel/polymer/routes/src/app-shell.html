@@ -1,0 +1,160 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/app-route/app-location.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+
+<dom-module id="app-shell">
+  <template>
+      <style>
+        section {
+          display: flex;
+          flex-grow: 1;
+          flex-wrap: wrap;
+          flex: 1;
+          background: #cfcfcf;
+        }
+          article {
+            border: 1px solid #b9b9b9;
+            background: #fafafa;
+            border-radius: 5px;
+            display: flex;
+            width: 175px;
+            padding: 20px;
+            margin: 10px;
+            flex-direction: column;
+          }
+
+          .button-wrapper a{
+            background: #fafafa;
+            color: blue;
+            width: 250px;
+            height: 40px;
+            border: none;
+            border-radius: 5px;
+            margin: 10px auto;
+          }
+        </style>
+        <section class="button-wrapper">
+            <a href="/#/vivos">vivos</a>
+            <a href="/#/muertos">muertos</a>
+            <a href="/#/desconocido">desconocido</a>
+        </section>
+
+    <app-location route="{{route}}" use-hash-as-path></app-location>
+    <app-route
+      route={{route}}
+      pattern="/:page"
+      data={{data}}
+      tail={{subroute}}
+    ></app-route>
+
+    <iron-pages selected="{{data.page}}" attr-for-selected="page" fallback-selection="otros">
+      <div page="vivos">
+          <section>
+              <template id="domRepeat" is="dom-repeat" items="[[charactersAlive.results]]">
+                <article class="name-container">
+                  <h2 id="nameTitle">[[item.name]]</h2>
+                  <p>[[item.status]]</p>
+                  <img src="[[item.image]]" alt="[[item.image]]"/>
+                </article>
+              </template>
+            </section>
+      </div>
+      <div page="muertos">
+          <section>
+              <template id="domRepeat" is="dom-repeat" items="[[charactersDead.results]]">
+                  <article class="name-container">
+                    <h2 id="nameTitle">[[item.name]]</h2>
+                    <p>[[item.status]]</p>
+                  </article>
+              </template>
+            </section>
+      </div>
+      <div page="desconocido"><section>
+          <template id="domRepeat" is="dom-repeat" items="[[charactersUnknown.results]]">
+              <article class="name-container">
+                <h2 id="nameTitle">[[item.name]]</h2>
+                <p>[[item.status]]</p>
+              </article>
+          </template>
+        </section>
+    </div>
+    </iron-pages>
+
+    <iron-ajax id="aliveCharacters"
+      auto
+      url="https://rickandmortyapi.com/api/character"
+      params='{"page": "1" , "status" :"alive"}'
+      handle-as="json"
+      on-response="handleResponse"
+      last-response="{{charactersAlive}}">
+    </iron-ajax>
+    <iron-ajax id="deadCharacters"
+    auto
+    url="https://rickandmortyapi.com/api/character"
+    params='{"page": "1" , "status" :"dead"}'
+    handle-as="json"
+    on-response="handleResponse"
+    last-response="{{charactersDead}}">
+  </iron-ajax>
+  <iron-ajax id="deadCharacters"
+    auto
+    url="https://rickandmortyapi.com/api/character"
+    params='{"page": "1" , "status" :"unknown"}'
+    handle-as="json"
+    on-response="handleResponse"
+    last-response="{{charactersUnknown}}">
+  </iron-ajax>
+
+  </template>
+  <script>
+    (function appShell(customElements) {
+      'use strict';
+
+      class AppShell extends Polymer.Element {
+        static get is() { return 'app-shell'; }
+        static get properties() {
+          return {
+            names: {
+              type: Array,
+              value: ['Anuar', 'David', 'Nacho', 'Pam', 'Angel', 'Abner', 'Rafa']
+            },
+            chars: {
+              type:Array,
+              value : []
+            },
+            isName: {
+              type: Boolean,
+              value: false
+            },
+            characters: {
+              type: Array,
+              value: ['uno']
+            }
+          }
+        }
+
+        constructor() {
+          super();
+        }
+
+        ready() {
+          super.ready();
+        }
+
+        connectedCallback() {
+          super.connectedCallback();
+          this.$.domRepeat.render();
+
+        }
+
+        handleResponse() {
+          console.log('recibi respuesta');
+          console.log(this.characters);
+        }
+      }
+      customElements.define(AppShell.is, AppShell);
+    })(window.customElements)
+  </script>
+</dom-module>
