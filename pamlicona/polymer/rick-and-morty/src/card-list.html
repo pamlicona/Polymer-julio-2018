@@ -1,0 +1,148 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="/bower_components/app-route/app-route.html">
+<link rel="import" href="/bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="card-character.html">
+
+<dom-module id="card-list">
+  <template>
+    <style include="card-styles">
+      .cover {
+        height: 430px;
+        background-position-y: bottom;
+        background-image: url('styles/img/cover.jpg');
+        display: flex;
+        align-items: center;
+      }
+
+      .cover-error {
+        background-image: url('styles/img/error.jpg');
+        height: 600px;
+        background-size: cover;
+        background-position: bottom;
+      }
+
+      .cover__text {
+        color: white;
+        font-family: fantasy;
+        font-size: 60px;
+        padding-left: 200px;
+        letter-spacing: 3px;
+      }
+
+      .container-characters {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        padding-left: 20px;
+        padding-right: 20px;
+        grid-column-gap: 15px;
+      }
+
+      .title {
+        font-size: 30px;
+        display: flex;
+        justify-content: center;
+        font-family: sans-serif;
+        letter-spacing: 2px;
+        font-weight: 400;
+      }
+    </style>
+
+    <app-route
+      route="[[route]]"
+      pattern="/:category"
+      data="{{data}}">
+    </app-route>
+
+    <iron-ajax
+      id="ironAjax"
+      auto
+      url="https://rickandmortyapi.com/api/character"
+      handle-as="json"
+      last-response={{response}}
+      on-response="handleResponse"
+      on-iron-ajax-error="_showError">
+    </iron-ajax>
+
+    <div class="cover">
+      <p class="cover__text">Rick and Morty</p>
+    </div>
+
+    <template is="dom-if" if="[[error]]">
+      <div class="cover-error"></div>
+    </template>
+
+    <template is="dom-if" if="[[!error]]">
+      <h3 class="title">Character</h3>
+      <div class="container-characters">
+        <template is="dom-repeat" items="[[newList]]">
+          <a href$="[[_getlinkItem(item)]]">
+            <card-character character="[[item]]"></card-character>
+          </a>
+        </template>
+      </div>
+    </template>
+
+  </template>
+  <script>
+    (function cardList(customElements){
+      'use strict';
+
+      class CardList extends Polymer.Element {
+        static get is() { return 'card-list'; }
+        static get properties() {
+          return {
+            route: Object,
+            list: Array,
+            newList: Array,
+            error: {
+              type: Boolean,
+              value: false
+            }
+          }
+        }
+
+        _categoryChange(category) {
+          if (category === undefined || category === 'all') {
+            this.newList = this.list;
+          } else if (category === 'alive') {
+            this.filterList('Alive');
+          } else if (category === 'dead') {
+            this.filterList('Dead');
+          } else if (category === 'unknown') {
+            this.filterList('unknown');
+          }
+        }
+
+        handleResponse() {
+          this.set('list', this.response.results)
+          this._categoryChange(this.data.category)
+        }
+
+        static get observers() {
+          return [
+            '_categoryChange(data.category)'
+          ]
+        }
+
+        _getlinkItem(item) {
+          let category = this.data.category;
+          if (category === undefined) {
+            category = 'all';
+          }
+          return `/detail/${category}/${item.id}`;
+        }
+
+        filterList(filter) {
+          this.newList = this.list.filter(item => {
+            return item.status === filter
+          });
+        }
+
+        _showError() {
+          this.set('error', true);
+        }
+      }
+      customElements.define(CardList.is, CardList);
+    })(window.customElements);
+  </script>
+</dom-module>

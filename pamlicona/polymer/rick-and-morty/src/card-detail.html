@@ -1,10 +1,101 @@
 <link rel="import" href="/bower_components/polymer/polymer-element.html">
-<link rel="import" href="/bower_components/paper-card/paper-card.html">
+<link rel="import" href="/bower_components/app-route/app-route.html">
 
 <dom-module id="card-detail">
   <template>
     <style>
+      .cover {
+        height: 350px;
+        background-position-y: bottom;
+        background-image: url('styles/img/cover-detail.jpg');
+        display: flex;
+        align-items: center;
+        background-position: center;
+        background-size: cover;
+        justify-content: center;
+      }
+
+      .cover-error {
+        background-image: url('styles/img/error.jpg');
+        height: 600px;
+        background-size: cover;
+        background-position: bottom;
+      }
+
+      .cover__text {
+        color: white;
+        font-family: fantasy;
+        font-size: 60px;
+        letter-spacing: 3px;
+      }
+
+      .detail {
+        display: grid;
+        grid-template-columns: 1fr 0.3fr 1fr;
+        padding-bottom: 30px;
+        padding-top: 30px;
+        align-items: center;
+      }
+
+      img {
+        width: 100%;
+      }
+
+      .detail__data {
+        grid-column: 3;
+      }
+
+      h3 {
+        font-size: 45px;
+        font-family: fantasy;
+        font-weight: bold;
+        letter-spacing: 2px;
+      }
+
+      .detail__data__points {
+        display: grid;
+      }
     </style>
+
+    <app-route
+      route="[[route]]"
+      pattern="/:catgory/:item"
+      data="{{data}}">
+    </app-route>
+
+    <iron-ajax
+      id="ironAjax"
+      auto
+      url="https://rickandmortyapi.com/api/character/[[idItem]]"
+      handle-as="json"
+      last-response={{response}}
+      on-iron-ajax-error="_showError">
+    </iron-ajax>
+
+    <template is="dom-if" if="[[error]]">
+      <div class="cover-error"></div>
+    </template>
+
+    <template is="dom-if" if="[[!error]]">
+      <div class="cover">
+        <p class="cover__text">[[response.name]]</p>
+      </div>
+
+      <div class="detail">
+        <div>
+          <img src="[[response.image]]">
+        </div>
+        <div class="detail__data">
+          <h3>[[response.name]]</h3>
+          <div class="detail__data__points">
+            <span>Species: [[response.species]]</span>
+            <span>Status: [[response.status]]</span>
+            <span>Gender: [[response.gender]]</span>
+            <span>Origin: [[response.origin.name]]</span>
+          </div>
+        </div>
+      </div>
+    </template>
 
   </template>
   <script>
@@ -15,16 +106,28 @@
         static get is() { return 'card-detail'; }
         static get properties() {
           return {
-            detail: {
-              type: Object,
-              value: {}
+            route: Object,
+            idItem: String,
+            error: {
+              type: Boolean,
+              value: false
             }
           }
         }
 
-        connectedCallback() {
-          super.connectedCallback();
-          console.log(this.detail)
+        static get observers() {
+          return [
+            '_idChange(data.item)'
+          ]
+        }
+
+        _idChange(item) {
+          this.set('idItem', item);
+          this.$.ironAjax.generateRequest();
+        }
+
+        _showError() {
+          this.set('error', true);
         }
       }
       customElements.define(CardDetail.is, CardDetail);
