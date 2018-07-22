@@ -1,0 +1,77 @@
+<!--por defecto-->
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/lib/elements/dom-if.html">
+<dom-module id="pet-item">
+    <template>
+        <style>
+            .pet-card{
+                border: 2px solid black;
+                padding: 6px;
+            }
+        </style>
+        <section class="pet-card">
+            <template id="dog" is="dom-if" if="[[isDog()]]">
+                <div class="pet_name">Nombre: [[name]]</div>
+                <div class="pet_breed">Raza: [[breed]]</div>
+            </template>
+            <template id="cat" is="dom-if" if="[[isCat()]]">
+                <div class="pet_name">Nombre: [[name]]</div>
+                <div class="pet_owner">Dueño: [[owner]]</div>
+            </template>
+            <template id="another" is="dom-if" if="[[isAnother()]]">
+                <div class="pet_name">Nombre: [[name]]</div>
+                <div class="pet_type">Animal: [[type]]</div>
+            </template>
+        </section>
+    </template>
+    <script>
+        (function petItem(customElements){
+            'use strict';
+
+            class PetItem extends Polymer.Element {
+                static get is() { return 'pet-item'; }
+                static get properties() {
+                    return {
+                        name : {
+                            type: String,
+                            value: ''
+                        },
+                        type : {
+                            type: String,
+                            value: ''
+                        },
+                        breed : {
+                            type: String,
+                            value: ''
+                        },
+                        owner : {
+                            type: String,
+                            value: ''
+                        }
+                    }
+                }
+          
+                connectedCallback() {
+                    super.connectedCallback();
+                }
+
+                isDog(){
+                    console.log(this.type);
+                    if(this.type == 'Dog') return true;
+                    return false;
+                }
+                
+                isCat(){
+                    if(this.type == 'Cat') return true;
+                    return false;
+                }
+                
+                isAnother(){
+                    if(!this.isDog() && !this.isCat()) return true;
+                    return false;
+                }
+            }
+            customElements.define(PetItem.is, PetItem);
+        })(window.customElements);
+    </script>
+</dom-module>
