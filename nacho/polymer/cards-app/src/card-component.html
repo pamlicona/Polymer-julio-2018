@@ -1,0 +1,122 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="/bower_components/polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="/bower_components/polymer/lib/elements/dom-if.html">
+
+<dom-module id="card-component">
+  <template>
+    <style>
+      .card {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        max-width: 300px;
+        margin: auto;
+        text-align: center;
+        font-family: arial;
+      }
+
+      .title {
+        color: grey;
+        font-size: 1em;
+        margin-left: 15px;
+        margin-right: 15px;
+      }
+
+      h1{
+        color: #3c4856;
+        font-size: 1.4em;
+        margin-left: 15px;
+        margin-right: 15px;
+      }
+
+      button {
+        border: none;
+        outline: 0;
+        display: inline-block;
+        padding: 8px;
+        color: white;
+        background-color: #000;
+        text-align: center;
+        cursor: pointer;
+        width: 100%;
+        font-size: 18px;
+      }
+
+      a {
+        text-decoration: none;
+        font-size: 22px;
+        color: black;
+      }
+
+      button:hover, a:hover {
+        opacity: 0.7;
+      }
+      .Card, .Yarn{
+        opacity: .6
+      }
+      .animated {
+        -webkit-animation-duration: 1s;
+        animation-duration: 1s;
+        -webkit-animation-fill-mode: both;
+        animation-fill-mode: both;
+      }
+      .fast {
+        -webkit-animation-duration: 0.4s;
+        animation-duration: 0.4s;
+        -webkit-animation-fill-mode: both;
+        animation-fill-mode: both;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+      }
+      .fadeIn {
+        animation-name: fadeIn;
+      }
+      .card img{
+        width: 244px;
+        height: 377px;
+      }
+    </style>
+    <div class$="card animated fadeIn fast [[amiibo.type]]">
+      <img src="[[amiibo.image]]" alt="[[amiibo.image]]">
+      <h1>[[amiibo.name]]</h1>
+      <p class="title">Serie: [[amiibo.gameSeries]]</p>
+     <p><button on-click="__sendAmiibo">Ver mas...</button></p>
+    </div>
+  </template>
+  <script>
+    (function cardComponent(customElements){
+      'use strict';
+
+      class CardComponent extends Polymer.Element {
+        static get is() { return 'card-component'; }
+        static get properties() {
+          return {
+            amiibo:{
+              type:Object,
+              value:{}
+            }
+          }
+        }
+
+        connectedCallback() {
+          super.connectedCallback();
+        }
+
+        __sendAmiibo(){
+          this._executeDispatchEvent('amiibo-selected' ,this.amiibo.head + this.amiibo.tail);
+        }
+        _executeDispatchEvent(event,message,bubbles = true){
+          this.dispatchEvent(new CustomEvent(event,{
+            bubbles: bubbles,
+            detail:{
+              id: message
+            }
+          }));
+        }
+
+      }
+      customElements.define(CardComponent.is, CardComponent);
+    })(window.customElements);
+  </script>
+</dom-module>
