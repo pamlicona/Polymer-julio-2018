@@ -1,11 +1,17 @@
 <link rel="import" href="/bower_components/polymer/polymer-element.html">
-<link rel="import" href="pets-component.html">
+<link rel="import" href="pet-card-component.html">
+<link rel="import" href="pets-form-component.html">
+<link rel="import" href="login-component.html">
+<link rel="import" href="/bower_components/polymer/lib/elements/dom-if.html">
 
 
 <dom-module id="app-shell">
   
   <template>
     <style>
+      .userLoged {  
+        font-family: sans-serif;
+      }
       :host {
         text-align: center;
       }
@@ -16,26 +22,22 @@
         margin-top: 40px;
       }
     </style>
-    <h1>Registro de Mascotas</h1>
 
-    <form action="">
-      <h2>Agregar Mascota Nueva</h2>
-      <label for="nombre">Nombre: </label> <input type="text" name="">
-      <label for="dueño">Dueño:   </label> <input type="text" name="">
-      <label for="animal">Animal: </label> <input type="text" name="">
-      <label for="raza">Raza:     </label> <input type="text" name="">
+    <template is="dom-if" if="[[showLogin]]">
+      <login-component list-users="[[listUsers]]"> </login-component>
+    </template>
 
+    <template is="dom-if" if="[[showPetForm]]">
+      <pets-form-component></pets-form-component>
+    </template>
 
-      <button type="button" on-click="_addPet()">Agregar</button>
-
-    </form>
-
-    <pets-component type="dog"  pets="[[petsArray]]"></pets-component>
-    <pets-component type="cat"  pets="[[petsArray]]"></pets-component>
-    <pets-component type="other"  pets="[[petsArray]]"></pets-component>
+    <template is="dom-if" if="[[showPets]]">
+      <pet-card-component type="dog"  pets="[[petsArray]]"></pet-card-component>
+      <pet-card-component type="cat"  pets="[[petsArray]]"></pet-card-component>
+      <pet-card-component type="other"  pets="[[petsArray]]"></pet-card-component>
+    </template>
 
 
-    <h1>[[frase]]</h1>
   </template>
 
 
@@ -50,16 +52,47 @@
             petsArray: {
               type: Array,
               value: [
-                      {
-                        type:"dog",
-                        name: "firulais",
-                        raza: "coker",
-                        owner: "David"
-                      }, 
+                  { name: 'Dog 1', animal: 'Dog', breed: 'Pastor Alemán', owner: 'Owner 1' },
+                  { name: 'Cat 1', animal: 'Cat', breed: '', owner: 'Owner 1' },
+                  { name: 'Horse 1', animal: 'Horse', breed: '', owner: 'Owner 1' },
+                  { name: 'Dog 2', animal: 'Dog', breed: 'Boxer', owner: 'Owner 2' },
+                  { name: 'Cat 2', animal: 'Cat', breed: '', owner: 'Owner 2' },
+                  { name: 'Bird 1', animal: 'Bird', breed: '', owner: 'Owner 2' },
+                  { name: 'Dog 3', animal: 'Dog', breed: 'Coquer', owner: 'Owner 3' },
+                  { name: 'Cat 3', animal: 'Cat', breed: '', owner: 'Owner 3' },
+                  { name: 'Fox 1', animal: 'Fox', breed: '', owner: 'Owner 3' },
+                  { name: 'Dog 4', animal: 'Dog', breed: 'Labrador', owner: 'Owner 4' },
+                  { name: 'Cat 4', animal: 'Cat', breed: '', owner: 'Owner 4' },
+                  { name: 'Snake 1', animal: 'Snake', breed: '', owner: 'Owner 4' }
               ]
+            },
+
+            usersArray: {
+              type: Array,
+              value: [
+                      { user: 'admin', password: 'admin123', typeUser: 'admin' },
+                      { user: 'david', password: 'david1234', typeUser: 'user' }
+              ]
+            },
+
+
+            logged : {
+              type: Boolean,
+              value: false
+            },
+            showLogin:{
+              type: Boolean,
+              value: true 
+            },
+            showPets:{
+              type: Boolean,
+              value: false 
+            },
+            showPetForm:{
+              type: Boolean,
+              value: false 
             }
 
-            name : {},
           }
         }
 

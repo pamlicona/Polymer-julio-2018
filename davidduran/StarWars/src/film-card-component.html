@@ -1,0 +1,86 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="/bower_components/polymer/lib/elements/dom-if.html">
+<link rel="import" href="/bower_components/polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="card-component.html">
+
+<dom-module id="film-card-component">
+  
+
+  <template>
+    <style>
+      .cards{
+        display: flex;
+        justify-content: start;
+        flex-wrap: wrap;
+        box-sizing: border-box;
+      }
+      .card_item{
+        width: 30%;
+        height: 100%;
+        background-color: rgb(51,51,51);
+        border-radius: 10px;
+        margin: 10px 20px 0px 0px;
+      }
+      .name{
+        position: relative;
+        margin-top: -50px;
+        margin-bottom: 50px;
+        color: white;
+        font-size: 21px;
+        text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+      }
+      .row{
+        margin: 1px 0px 0px 0px;
+        display: flex;
+        justify-content: space-between;
+      }
+      .dataL{
+        margin-left: 22px; 
+        color: rgb(184,184,184);
+      }
+      .dataR{
+        margin-right: 22px;
+        color: yellow;
+      }
+      .alignR{
+        text-align: right;
+      }
+    </style>
+
+    <section class="filmCardContainer" >
+      
+      <ul class="cards">
+        <template is="dom-repeat" >
+          <card-component></card-component>
+        </template>
+        
+      </ul>
+
+    </section>
+  </template>
+
+
+
+  <script>
+    (function appShell(customElements){
+      'use strict';
+
+      class FilmCardComponent extends Polymer.Element {
+        static get is() { return 'film-card-component'; }
+        static get properties() {
+          return {
+                  
+          }
+        }
+
+        connectedCallback() {
+          super.connectedCallback();
+          // things to do
+        }
+
+      
+      }
+      customElements.define(FilmCardComponent.is, FilmCardComponent);
+    })(window.customElements);
+  </script>
+</dom-module>

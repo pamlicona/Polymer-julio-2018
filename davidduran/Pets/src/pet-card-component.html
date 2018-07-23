@@ -1,4 +1,5 @@
 <link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="/bower_components/polymer/lib/elements/dom-if.html">
 
 <dom-module id="pet-card-component">
   
@@ -24,10 +25,12 @@
       }
     </style>
     <section class="petCardContainer" >
+
         <template> <p>Nombre : [[pet.name]]</p>  </template>
-        <template> Animal: </template>
-        <template> Raza:   </template>
-        <template> Dueño:  </template>
+
+        <template is="dom-if" if="{{isDog()}}"> Animal: [[pet.type]] </template>
+        <template is="dom-if" if="{{isCat()}}"> Dueño:  [[pet.raza]] </template>
+        <template is="dom-if" if="{{isOther()}}"> Raza:  [[pet.owner]] </template>
 
     </section>
   </template>
@@ -56,7 +59,7 @@
 
       
       }
-      customElements.define(PetsComponent.is, PetsComponent);
+      customElements.define(PetCardComponent.is, PetCardComponent);
     })(window.customElements);
   </script>
 </dom-module>
