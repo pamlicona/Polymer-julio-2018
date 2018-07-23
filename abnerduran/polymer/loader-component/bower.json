@@ -1,0 +1,9 @@
+{
+  "name": "loader-component",
+  "description": "this is a loader component",
+  "version": "1.0.0",
+  "dependencies": {
+    "polymer": "Polymer/polymer#2.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0"
+  }
+}
