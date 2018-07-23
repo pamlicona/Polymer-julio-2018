@@ -2,68 +2,105 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/polymer/lib/elements/dom-if.html">
 <link rel="import" href="../bower_components/polymer/lib/elements/dom-repeat.html">
-<link rel="import" href="pet-item.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/app-route/app-location.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="character-card.html">
+<link rel="import" href="character-detail.html">
+
+paper-tabs.html
 
 <dom-module id="app-shell">
     <template>
         <style>
-            .lists_container{
+            a {
+                text-align: center;
+                text-decoration: none;
+                color: darkslateblue;
+                font-size: 21px;
+                font-weight: bold;
+                margin-top: 30px;
+            }
+            
+            iron-pages {
                 display: flex;
                 align-items: center;
                 justify-content: space-around;
-                height: 600px;
             }
             
-            .pet_list{
-                display: block;
-                vertical-align: middle;
-            }
-            
-            .form-container {
-                text-align: center;
+            .page {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: row;
+                flex-wrap: wrap;
+                flex-flow: row wrap;
+                align-content: flex-end;
             }
         </style>
-        <template is="dom-if" if="[[!login]]">
-            <section class="form-container">
-                <div class="label">Usuario</div>
-                <input type="text" id="user_field"/>
-                <div class="label">Contraseña</div>
-                <input type="password" id="password_field"/>
-                <br/><br/>
-                <button on-click="loginMethod">Login</button>
-            </section>
-        </template>
-        <template id='animal_form' is="dom-if" if="[[login]]">
-            <section class="form-container">
-                <div class="label">Nombre</div>
-                <input type="text" id="name_field"/>
-                <div class="label">Tipo</div>
-                <input type="text" id="type_field"/>
-                <div class="label">Raza</div>
-                <input type="text" id="breed_field"/>
-                <div class="label">Dueño</div>
-                <input type="text" id="owner_field"/>
-                <br/><br/>
-                <button on-click="addPetButton">Agregar Mascota</button>
-            </section>
-            <section class="lists_container">
-                <section class="pet_list" id="dog_list">
-                    <template is="dom-repeat" items="[[pets]]" as="pet" filter="justDogs">
-                        <pet-item name="[[pet.name]]" type="[[pet.type]]" breed="[[pet.breed]]" owner="[[pet.owner]]"></pet-item>
+        <iron-ajax id="charactersRequest"
+          auto
+          url="https://rickandmortyapi.com/api/character"
+          params='{"page": "1"}'
+          handle-as="json"
+          on-response="handleResponse"
+          last-response="{{characters}}">
+        </iron-ajax>
+        <paper-tabs selected="0">
+            <paper-tab>
+                <a href="All">All</a>
+            </paper-tab>
+            <paper-tab>
+                <a href="Alive">Alive</a>
+            </paper-tab>
+            <paper-tab>
+                <a href="Dead">Dead</a>
+            </paper-tab>
+            <paper-tab>
+                <a href="Unknown">Unknown</a>
+            </paper-tab>
+        </paper-tabs>    
+        
+        <app-location route="{{route}}"></app-location>
+        <app-route
+            route={{route}}
+            pattern="/:page"
+            data={{data}}
+            tail={{subroute}}
+        ></app-route>
+
+        <iron-pages selected="{{data.page}}" attr-for-selected="page" fallback-selection="All">
+            <div page='All'>
+                <section class="page">
+                    <template is="dom-repeat" items="[[characters.results]]" as="character">
+                        <a href="[[character.id]]"><character-card character-id="[[character.id]]" name="[[character.name]]" status="[[character.status]]" species="[[character.species]]" image="[[character.image]]" on-character-selected="characterSelected"></character-card></a>
                     </template>
                 </section>
-                <section class="pet_list" id="cat_list">
-                    <template is="dom-repeat" items="[[pets]]" as="pet" filter="justCats">
-                        <pet-item name="[[pet.name]]" type="[[pet.type]]" breed="[[pet.breed]]" owner="[[pet.owner]]"></pet-item>
+            </div>
+            <div page='Alive'>
+                <section class="page">
+                    <template is="dom-repeat" items="[[characters.results]]" as="character" filter="isAlive">
+                        <a href="[[character.id]]"><character-card character-id="[[character.id]]" name="[[character.name]]" status="[[character.status]]" species="[[character.species]]" image="[[character.image]]"></character-card></a>
                     </template>
                 </section>
-                <section class="pet_list" id="another_list">
-                    <template is="dom-repeat" items="[[pets]]" as="pet" filter="justAnother">
-                        <pet-item name="[[pet.name]]" type="[[pet.type]]" breed="[[pet.breed]]" owner="[[pet.owner]]"></pet-item>
+            </div>
+            <div page='Dead'>
+                <section class="page">
+                    <template is="dom-repeat" items="[[characters.results]]" as="character" filter="isDead">
+                        <a href="[[character.id]]"><character-card character-id="[[character.id]]" name="[[character.name]]" status="[[character.status]]" species="[[character.species]]" image="[[character.image]]"></character-card></a>
                     </template>
                 </section>
-            </section>
-        </template>
+            </div>
+            <div page='Unknown'>
+                <section class="page">
+                    <template is="dom-repeat" items="[[characters.results]]" as="character" filter="isUnknow">
+                        <a href="[[character.id]]"><character-card character-id="[[character.id]]" name="[[character.name]]" status="[[character.status]]" species="[[character.species]]" image="[[character.image]]"></character-card></a>
+                    </template>
+                </section>
+            </div>
+        </iron-pages>
     </template>
     <script>
         (function appShell(customElements){
@@ -74,17 +111,9 @@
                 
                 static get properties() {
                     return {
-                        pets : {
-                            type : Array,
-                            value : [{name:"Rudi", type:"Dog", breed:"Criollo", owner:"Rafa"}, {name:"Pelusa", type:"Cat", breed:"Criollo", owner:"Rafa"}, {name:"Yego", type:"Dog", breed:"Pug", owner:"Rafa"}, {name:"Copito", type:"Bird", breed:"Pug", owner:"Rafa"}]
-                        },
-                        login : {
-                            type : Boolean,
-                            value : true
-                        },
-                        users : {
-                            type : Array,
-                            value : [{user:'rafa', password:'123456'}]
+                        characters : {
+                            type: Array,
+                            values: []
                         }
                     }
                 }
@@ -93,51 +122,36 @@
                     super.connectedCallback();   
                 }
                 
-                loginMethod() {
-                    const userField = this.$.user_field;
-                    const passwordField = this.$.password_field;
-                    console.log(userField);
+                characterSelected(event){
+                    console.log(event.detail.characterId);
+                }
+                
+                handleResponse(){
+                    console.log("caracteres descargados");
+                    console.log(this.characters.results);
                     
-                    for(let user of this.users){
-                        if(user.user == userField.value && user.password == passwordField.value){
-                            console.log("usuario logueado!");
-                            this.login = true;
-                        }else{
-                            alert("usuario o contraseña incorrecto");
-                            this.login = false;
-                            passwordField.value = "";
-                        }
+                    const ironPage = this.shadowRoot.querySelector("iron-pages");
+                    for(let character of this.characters.results){
+                        let newDiv = document.createElement('div');
+                        newDiv.innerHTML = `<character-detail info='${JSON.stringify(character)}'></character-detail>`;
+                        newDiv.setAttribute("page", character.id);
+                        
+                        Polymer.dom(ironPage).appendChild(newDiv);
                     }
                 }
                 
-                addPetButton(){
-                    const nameField = this.$.name_field;
-                    const typeField = this.$.type_field;
-                    const breedField = this.$.breed_field;
-                    const ownerField = this.$.owner_field;
-                    
-                    let newPet = `<pet-item name="${nameField.value}" type="${typeField.value}" breed="${breedField.value}" owner="${ownerField.value}"></pet-item>`;
-                    
-                    if(typeField.value.toUpperCase() == this.TYPE_DOG) this.$.dog_list.innerHTML += newPet;
-                    else if(typeField.value.toUpperCase() == this.TYPE_CAT) this.$.cat_list.appendChild(newPet);
-                    else{
-                        let newChildElement = this.$.another_list.appendChild("pet-item");// += newPet;  
-                        console.log(newChildElement);
-                    } 
-                }
-                
-                justDogs(pet, index){
-                    if(pet.type == this.TYPE_DOG) return true;
+                isAlive(character, status){
+                    if(character.status.toUpperCase() == "ALIVE") return true;
                     return false;
                 }
                 
-                justCats(pet, index){
-                    if(pet.type == this.TYPE_CAT) return true;
+                isDead(character, status){
+                    if(character.status.toUpperCase() == "DEAD") return true;
                     return false;
                 }
                 
-                justAnother(pet, index){
-                    if(!this.justDogs(pet, index) && !this.justCats(pet, index)) return true;
+                isUnknow(character, status){
+                    if(character.status.toUpperCase() == "UNKNOWN") return true;
                     return false;
                 }
             }
