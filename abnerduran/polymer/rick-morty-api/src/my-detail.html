@@ -1,0 +1,171 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="../bower_components/app-storage/app-localstorage/app-localstorage-document.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="my-detail">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+        padding: 10px;
+      }
+
+      h2 {
+        text-align: center;
+      }
+
+      label {
+        color: var(--app-secondary-color);
+        display: block;
+      }
+
+      button {
+        background: var(--app-primary-color);
+        color: var(--app-secondary-color);
+        padding: .5rem 1rem;
+        border-radius: 50%;
+        font-size: 1.5rem;
+        font-weight: 600;
+        border: 1px solid;
+        display: block;
+        margin: auto;
+        font-family: 'schwifty', 'Roboto', 'Noto', sans-serif;
+      }
+
+      button:hover .card {
+        transform:rotate(0);
+      }
+      .card:hover {
+        transform:rotate(0);
+      }
+
+      .container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .data {
+        display: flex;
+        justify-content: space-evenly;
+      }
+
+      .left {
+        grid-column: 1 / 2;
+        grid-row: 1 / 3;
+        align-items: center
+      }
+
+      .left img {
+        display: block;
+        margin: 3.5rem auto 2.5rem;
+        border-radius: 40%;
+        transform: rotate(180deg);
+        transition: transform 1s;
+        max-height: 100%;
+      }
+
+      .left img:hover {
+        transform: rotate(0deg);
+      }
+
+      .right {
+        grid-column: 2 / 3;
+        grid-row: 1 / 2;
+      }
+
+      .bottom {
+        margin-top: 1rem;
+        max-height: 150px;
+        grid-column: 2 / 3;
+        grid-row: 2 / 3;
+        overflow-y: scroll;
+      }
+    </style>
+
+    <div class="container">
+      <div class="left">
+        <img src="[[character.image]]">
+        <button on-click="_goHistoryBack">Back</button>
+      </div>
+      <div class="right">
+        <div class="card">
+          <h2>[[character.name]]</h2>
+          <div class="data">
+            <div>
+              <p>
+                <label>Gender:</label> [[character.gender]]</p>
+              <p>
+                <label>Specie:</label> [[character.species]]</p>
+              <p>
+                <label>Status:</label> [[character.status]]</p>
+            </div>
+            <div>
+              <p>
+                <label>Location:</label> [[character.location.name]]</p>
+              <p>
+                <label>Origin:</label> [[character.origin.name]]</p>
+              <p>
+                <label>Created:</label> [[character.created]]</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="card bottom">
+        <h2>Episode</h2>
+        <ul>
+          <template is="dom-repeat" items="[[character.episode]]" as="episode">
+            <li>[[episode]]</li>
+          </template>
+        </ul>
+      </div>
+    </div>
+
+    <app-localstorage-document key="characters" data="{{characters}}">
+    </app-localstorage-document>
+  </template>
+
+  <script>
+    class myDetail extends Polymer.Element {
+      static get is() { return 'my-detail'; }
+      static get properties() {
+        return {
+          id: {
+            type: Number,
+            observer: '_idChanged',
+          },
+          characters: {
+            type: Array,
+            value: [],
+            observer: '_charactersChanged',
+
+          },
+          character: {
+            type: Object
+          }
+        };
+      }
+
+      _charactersChanged(id) {
+        this._getCharacter(this.id);
+      }
+
+      _idChanged(id) {
+        this._getCharacter(this.id);
+      }
+
+      _getCharacter(id) {
+        if (this.characters.results) {
+          this.character = this.characters.results[id];
+        }
+      }
+
+      _goHistoryBack() {
+        window.history.back();
+      }
+    }
+
+    window.customElements.define(myDetail.is, myDetail);
+  </script>
+</dom-module>
