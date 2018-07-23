@@ -63,15 +63,14 @@
       on-iron-ajax-error="_showError">
     </iron-ajax>
 
-    <div class="cover">
-      <p class="cover__text">Rick and Morty</p>
-    </div>
-
     <template is="dom-if" if="[[error]]">
       <div class="cover-error"></div>
     </template>
 
     <template is="dom-if" if="[[!error]]">
+      <div class="cover">
+        <p class="cover__text">Rick and Morty</p>
+      </div>
       <h3 class="title">Character</h3>
       <div class="container-characters">
         <template is="dom-repeat" items="[[newList]]">
@@ -109,7 +108,7 @@
           } else if (category === 'dead') {
             this.filterList('Dead');
           } else if (category === 'unknown') {
-            this.filterList('unknown');
+            this.filterList(category);
           }
         }
 

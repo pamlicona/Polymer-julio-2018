@@ -1,5 +1,7 @@
 <link rel="import" href="/bower_components/polymer/polymer-element.html">
 <link rel="import" href="/bower_components/app-route/app-route.html">
+<link rel="import" href="detail-info.html">
+<link rel="import" href="detail-image.html">
 
 <dom-module id="card-detail">
   <template>
@@ -37,23 +39,8 @@
         align-items: center;
       }
 
-      img {
-        width: 100%;
-      }
-
-      .detail__data {
+      detail-info {
         grid-column: 3;
-      }
-
-      h3 {
-        font-size: 45px;
-        font-family: fantasy;
-        font-weight: bold;
-        letter-spacing: 2px;
-      }
-
-      .detail__data__points {
-        display: grid;
       }
     </style>
 
@@ -82,18 +69,8 @@
       </div>
 
       <div class="detail">
-        <div>
-          <img src="[[response.image]]">
-        </div>
-        <div class="detail__data">
-          <h3>[[response.name]]</h3>
-          <div class="detail__data__points">
-            <span>Species: [[response.species]]</span>
-            <span>Status: [[response.status]]</span>
-            <span>Gender: [[response.gender]]</span>
-            <span>Origin: [[response.origin.name]]</span>
-          </div>
-        </div>
+        <detail-image image="[[response.image]]"></detail-image>
+        <detail-info item="[[response]]"></detail-info>
       </div>
     </template>
 
