@@ -1,0 +1,269 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="/bower_components/polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="/bower_components/polymer/lib/elements/dom-if.html">
+
+<link rel="import" href="/bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="/bower_components/app-route/app-route.html">
+<link rel="import" href="/bower_components/app-route/app-location.html">
+<link rel="import" href="/bower_components/iron-pages/iron-pages.html">
+
+<dom-module id="app-shell">
+  <template>
+    <style>
+      header{
+        position: relative;
+        display: block;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 100;
+        background: #27313b;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, .4);
+        height: 60px;
+        left: inherit;
+      }
+      .container{
+        width: 100%;
+      }
+      .block{
+        margin: 0 auto;
+        display: block;
+      }
+      .left{
+        float: left;
+        max-width: 75%;
+        overflow: hidden;
+      }
+      a{
+        color: #444;
+        text-decoration: none;
+      }
+      .brand{
+        float: left;
+        background: white;
+        display: inline-block;
+        padding: 17px 18px 0 !important;
+        height: 43px;
+      }
+      img{
+        vertical-align: middle;
+        border: 0;
+        height: 28px !important;
+        max-height: 28px !important;
+      }
+      .menu{
+        padding-left: 0px;
+        float: left;
+        margin: 0px;
+      }
+      .menu li{
+        float: left;
+        list-style: none;
+      }
+      .menu li a{
+        text-decoration: none;
+        padding: 0 12px;
+        line-height: 59px;
+        color: white;
+        font-weight: bold;
+        font-size: 14px;
+        text-transform: uppercase;
+        position: relative;
+        display: block;
+        transition: all 0.5s ease;
+      }
+      .wrapper{
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 980px;
+        min-width: 960px;
+        width: 980px;
+        margin-top: 60px;
+        margin-bottom: 60px;
+      }
+      .wrapper h2{
+        font-family: 'LatoLight';
+        font-size: 44px;
+        margin: 0 0 10px;
+        font-weight: 400;
+        line-height: normal;
+      }
+      .center {
+        text-align: center;
+      }
+      .title-cat {
+        font-family: ProximaNova-Bold, Helvetica, sans-serif;
+        font-weight: 400;
+        font-size: 1.5em;
+        line-height: 1;
+        color: #3c4856;
+        padding: 0;
+        margin: 0 10px 10px;
+        overflow: hidden;
+        letter-spacing: -.6px;
+      }
+      .initial{
+        margin-left: 100px;
+        margin-right: 100px;
+      }
+      .container__amiibos{
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-gap: 20px;
+        margin-top: 30px;
+        margin-bottom: 30px;
+        margin-left: 100px;
+        margin-right: 100px;
+      }
+      .hidden{
+        display:none;
+      }
+      .container__detail{
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-gap: 20px;
+        margin-top: 30px;
+        margin-bottom: 30px;
+        margin-left: 100px;
+        margin-right: 100px;
+      }
+    </style>
+    <header class="container">
+      <div class="container block">
+        <div class="left">
+          <a class="brand" href="/#/home"><img alt="Amiibo" src="https://vignette.wikia.nocookie.net/fireemblem/images/3/35/Logo_amiibo.png/revision/latest?cb=20160811104435&path-prefix=es"></a>
+          <ul class="menu">
+            <li><a href="/#/cards" title="Tarjetas">Tarjetas</a></li>
+            <li><a href="/#/figures" title="Figuras">Figuras</a></li>
+            <li><a href="/#/yarns" title="Tejido">Tejido</a></li>
+          </ul>
+        </div>
+      </div>
+    </header>
+    <template class="hidden" is="dom-if" if="[[!subrouteData.id]]">
+      <div class="wrapper">
+  			<h2 class="center">
+          "Un amiibo puede ser compatible con diferentes juegos.
+          Puedes conseguir trajes nuevos, equipamiento, habilidades y otro
+          contenido divertido."
+        </h2>
+  		</div>
+    </template>
+
+    <template class="hidden" is="dom-if" if="[[!subrouteData.id]]">
+      <div class="initial">
+        <hr>
+        <h2 class="title-cat"><strong>Amiibos</strong> Activos</h2>
+      </div>
+    </template>
+
+    <iron-pages selected="{{routeData.view}}" attr-for-selected="view" fallback-selection="home">
+    <section class="container__amiibos"  view="home">
+      <template class="hidden" is="dom-repeat" items="[[amiibos]]" as="amiibo">
+        <card-component on-amiibo-selected="__selectAmiibo" amiibo="[[amiibo]]"></card-component>
+      </template>
+    </section>
+
+    <section class="container__amiibos"  view="cards">
+      <template class="hidden" is="dom-repeat" items="[[amiibos]]" as="amiibo" filter="[[_computeFilter('card')]]">
+        <card-component on-amiibo-selected="__selectAmiibo" amiibo="[[amiibo]]"></card-component>
+      </template>
+    </section>
+
+    <section class="container__amiibos"  view="yarns">
+      <template class="hidden" is="dom-repeat" items="[[amiibos]]" as="amiibo" filter="[[_computeFilter('yarn')]]">
+        <card-component on-amiibo-selected="__selectAmiibo" amiibo="[[amiibo]]"></card-component>
+      </template>
+    </section>
+
+    <section class="container__amiibos"  view="figures">
+      <template class="hidden" is="dom-repeat" items="[[amiibos]]" as="amiibo" filter="[[_computeFilter('figure')]]">
+        <card-component on-amiibo-selected="__selectAmiibo" amiibo="[[amiibo]]"></card-component>
+      </template>
+    </section>
+
+    <section class="container__detail"  view="detail">
+      <detail-component id="{{subrouteData.id}}"><detail-component>
+    </section>
+
+    </iron-pages>
+
+    <app-location route="{{route}}" use-hash-as-path></app-location>
+
+    <app-route
+       route = "{{route}}"
+       pattern = "/:view"
+       data = "{{routeData}}"
+       tail = "{{subroute}}">
+    </app-route>
+
+    <app-route
+       route = "{{subroute}}"
+       pattern = "/:id"
+       data = "{{subrouteData}}">
+    </app-route>
+
+
+    <iron-ajax id="ironAjax"
+      auto
+      url="{{appUrl}}"
+      handle-as="json"
+      on-response="_handleResponse">
+    </iron-ajax>
+
+  </template>
+  <script>
+    (function appShell(customElements,getEventListeners){
+      'use strict';
+
+      class AppShell extends Polymer.Element {
+        static get is() { return 'app-shell'; }
+        static get properties() {
+          return {
+            appUrl:{
+              type: String,
+              value: 'http://www.amiiboapi.com/api/amiibo/'
+            },
+            amiibos:{
+              type:Array,
+              value:[]
+            }
+          }
+        }
+        static get observers() {
+          return [
+            '_viewChanged(routeData.view)'
+          ]
+        }
+
+        connectedCallback() {
+          super.connectedCallback();
+        }
+
+        _handleResponse(response){
+          this.amiibos = response.detail.response.amiibo.slice(1,80);
+        }
+        _computeFilter(type){
+          return function(amiibo) {
+            if (!type) return true;
+            if (!amiibo) return false;
+            return (amiibo.type.toLowerCase() == type);
+          };
+        }
+
+        _viewChanged(view,opt) {
+          // console.log('_viewChanged',view);
+          // console.log(this.route);
+          // console.log(this.routeData);
+          // console.log(this.subroute);
+          // console.log(this.subrouteData);
+        }
+        __selectAmiibo(value){
+          this.set('route.path',`/detail/${value.detail.id}`);
+          //this.set('routeData.user', 'mary');
+        }
+      }
+      customElements.define(AppShell.is, AppShell);
+    })(window.customElements);
+  </script>
+</dom-module>
