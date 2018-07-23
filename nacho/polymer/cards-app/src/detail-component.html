@@ -1,0 +1,123 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="/bower_components/polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="/bower_components/polymer/lib/elements/dom-if.html">
+<link rel="import" href="/bower_components/iron-ajax/iron-ajax.html">
+
+
+<dom-module id="detail-component">
+  <template>
+    <style>
+      .wrapper{
+        display: block;
+        width: 750px;
+        margin: 0 auto;
+        padding-top: 30px;
+        padding-bottom: 45px;
+      }
+      .content{
+        display: block;
+        width: 100%;
+        background: #fff;
+        padding: 25px 20px;
+        padding-bottom: 35px;
+        box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
+      }
+      .userphoto{
+        display: block;
+        float: right;
+        margin-left: 10px;
+        margin-bottom: 8px;
+      }
+      img{
+        display: block;
+        padding: 2px;
+        background: #fff;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+        width: 150px;
+      }
+      h1{
+        font-size: 2.5em;
+        line-height: 1.5em;
+        letter-spacing: -0.05em;
+        margin-bottom: 20px;
+        padding: .1em 0;
+        color: #444;
+        position: relative;
+        overflow: hidden;
+        white-space: nowrap;
+        text-align: center;
+      }
+      p{
+        display: block;
+        font-size: 1.4em;
+        line-height: 1.55em;
+        margin-bottom: 22px;
+        color: #555;
+      }
+      .activity {
+        border-bottom: 1px solid #d6d1af;
+        padding-bottom: 4px;
+      }
+    </style>
+    <div class="wrapper">
+      <div class="content">
+      <div class="userphoto">
+        <img src="[[amiibo.image]]" alt="[[amiibo.name]]">
+      </div>
+      <h1>[[amiibo.name]]</h1>
+
+      <section id="activity" class="">
+        <p>Personaje: [[amiibo.character]]</p>
+        <p class="activity">Ammibo Series: [[amiibo.amiiboSeries]]</p>
+        <p class="activity">Juego: [[amiibo.gameSeries]]</p>
+        <p class="activity">Lanzamiento: [[amiibo.release.eu]]</p>
+        <p class="activity">Tipo: [[amiibo.type]]</p>
+      </section>
+      </div>
+    </div>
+
+    <iron-ajax id="ironAjax"
+      auto
+      url="{{fullApi}}"
+      handle-as="json"
+      on-response="_handleResponse">
+    </iron-ajax>
+
+  </template>
+  <script>
+    (function detailComponent(customElements){
+      'use strict';
+
+      class DetailComponent extends Polymer.Element {
+        static get is() { return 'detail-component'; }
+        static get properties() {
+          return {
+            apiBaseUrl:{
+              type:String,
+              value: 'http://www.amiiboapi.com/api/amiibo/'
+            },
+            fullApi:{
+              type: String,
+              computed: '_getAllUrl(id)'
+            },
+            amiibo:{
+              type:Object,
+              value:{}
+            }
+          }
+        }
+
+        connectedCallback() {
+          super.connectedCallback();
+        }
+        _getAllUrl(id){
+          return this.apiBaseUrl + `?id=${id}`;
+        }
+        _handleResponse(response){
+          this.amiibo = response.detail.response.amiibo;
+        }
+      }
+      customElements.define(DetailComponent.is, DetailComponent);
+    })(window.customElements);
+  </script>
+</dom-module>

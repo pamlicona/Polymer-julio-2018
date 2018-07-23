@@ -1,0 +1,68 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="slider-component.html">
+
+<dom-module id="app-shell">
+  <template>
+    <style>
+      :host {
+        text-align: center;
+      }
+      cards-component {
+        display: flex;
+      }
+      form {
+        margin-top: 40px;
+      }
+    </style>
+    <h1>[[fullTitle]]</h1>
+    <cards-component image-list="[[imageArray]]"></cards-component>
+    <form action="">
+      <button type="button" on-click="_shuffleArray">New Image</button>
+    </form>
+    <print-result-component>[[mixedResult]]</print-result-component>
+  </template>
+  <script>
+    (function appShell(customElements) {
+      'use strict';
+      class AppShell extends Polymer.Element {
+        static get is() { return 'app-shell'; }
+        static get properties() {
+          return {
+            wordArray: {
+              type: Array,
+              value: [
+                "uno",
+                "dos",
+                "tres"
+              ]
+            },
+            //Computed property
+            name: {
+              type: String,
+              value: 'Nombre'
+            },
+            noun: {
+              type: String,
+              value: 'pronombre'
+            },
+            mixedResult: {
+              type: String,
+              computed: 'getFullTitle(name, noun)'
+            }
+          }
+        }
+        getFullRandom(name, noun) {
+          return `${name} ${noun}`;
+        }
+        _shuffleArray(wordArray) {
+          for (let i = wordArray.length - 1; i > 0; i--) {
+              const j = Math.floor(Math.random() * (i + 1));
+              [wordArray[i], wordArray[j]] = [array[j], array[i]]; 
+          }
+        }
+        
+      }
+    customElements.define(AppShell.is, AppShell);
+    })(window.customElements);
+  </script>
+</dom-module>

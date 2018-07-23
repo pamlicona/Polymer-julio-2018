@@ -1,0 +1,60 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+
+<dom-module id="cards-component">
+  <template>
+    <style>
+      :host {
+        text-align: center;
+      }
+      section {
+        display: flex;
+        justify-content:center;
+      }
+      .card {
+        display: flex;
+        background: #fdfdfd;
+        border-radius: 4px;
+      }
+      img {
+        max-height: 100%;
+        width: 100%;
+      }
+    </style>
+    <section>
+      <div class="card" id="card-single">
+        <p>[[word]]</p>
+      </div>
+      <button on-click="_randomizeStrings">Play</button>
+    </section>
+  </template>
+  <script>
+    (function cardsComponent(customElements){
+      'use strict';
+      class CardsComponent extends Polymer.Element {
+        static get is() { return 'cards-component'; }
+        static get properties() {
+          return {
+            wordsList: {
+              type: Array,
+              value: [ ]
+            },
+          }
+        }
+        connectedCallback() {
+          super.connectedCallback();
+        }
+        _randomizeStrings() {
+          // let prevImage = this.imagePosition - 1;
+          // this.activeImage = this.imageList[prevImage];
+          // this.imagePosition--;
+        }
+        _asignStringtoCard() {
+          const nextImage = this.imagePosition + 1;
+          this.imagePosition++;
+          this.activeImage = this.imageList[nextImage];
+        }
+      }
+      customElements.define(CardsComponent.is, CardsComponent);
+    })(window.customElements);
+  </script>
+</dom-module>

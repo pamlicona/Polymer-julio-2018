@@ -1,0 +1,12 @@
+{
+  "name": "fist-component",
+  "description": "this is an example component",
+  "version": "1.0.0",
+  "dependencies": {
+    "polymer": "Polymer/polymer#2.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0",
+    "app-route": "PolymerElements/app-route#^2.1.2",
+    "iron-pages": "PolymerElements/iron-pages#^2.1.1",
+    "iron-ajax": "PolymerElements/iron-ajax#^2.1.3"
+  }
+}

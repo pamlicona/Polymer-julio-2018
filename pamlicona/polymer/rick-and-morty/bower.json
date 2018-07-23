@@ -1,0 +1,15 @@
+{
+  "name": "rick-and-morty",
+  "description": "Rick and Morty App",
+  "version": "1.0.0",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^2.0.0",
+    "webcomponentjs": "webcomponents/webcomponentsjs#^1.0.0",
+    "iron-ajax": "PolymerElements/iron-ajax#^2.1.3",
+    "app-route": "PolymerElements/app-route#^2.1.2",
+    "iron-pages": "PolymerElements/iron-pages#^2.1.1",
+    "paper-card": "PolymerElements/paper-card#^2.1.0",
+    "paper-button": "PolymerElements/paper-button#^2.1.1",
+    "paper-spinner": "PolymerElements/paper-spinner#^2.1.0"
+  }
+}

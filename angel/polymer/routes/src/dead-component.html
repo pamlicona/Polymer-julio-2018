@@ -1,0 +1,131 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/app-route/app-location.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+
+<dom-module id="dead-component">
+  <template>
+      <style>
+        section {
+          display: flex;
+          flex-grow: 1;
+          flex-wrap: wrap;
+          flex: 1;
+          background: #cfcfcf;
+        }
+          article {
+            border: 1px solid #b9b9b9;
+            background: #fafafa;
+            border-radius: 5px;
+            display: flex;
+            width: 175px;
+            padding: 20px;
+            margin: 10px;
+            flex-direction: column;
+          }
+
+          .button-wrapper a{
+            background: #fafafa;
+            color: blue;
+            width: 250px;
+            height: 40px;
+            border: none;
+            border-radius: 5px;
+            margin: 10px auto;
+          }
+          img.filter{
+            -webkit-filter: grayscale(100%) 
+          brightness(135%)
+          contrast(120%);
+  filter: grayscale(100%) 
+          brightness(135%)
+          contrast(120%);
+          }
+        </style>
+    <app-location route="{{route}}" use-hash-as-path></app-location>
+    <app-route
+      route={{route}}
+      pattern="/:page"
+      data={{data}}
+      tail={{subroute}}
+    ></app-route>
+
+
+ 
+    <template id="domRepeat" is="dom-repeat" items="[[charactersDead.results]]">
+        <article class="name-container">
+          <h2 id="nameTitle">[[item.name]]</h2>
+          <p>[[item.status]]</p>
+          <img src="[[item.image]]" alt="[[item.image]]" class="filter"/>
+        </article>
+    </template>
+
+    
+
+              <iron-ajax id="deadCharacters"
+              auto
+              url="https://rickandmortyapi.com/api/character"
+              params='{"page": "1" , "status" :"dead"}'
+              handle-as="json"
+              on-response="handleResponse"
+              last-response="{{charactersDead}}">
+            </iron-ajax>
+
+  </template>
+  <script>
+    (function deadComponent(customElements) {
+      'use strict';
+
+      class DeadComponent extends Polymer.Element {
+        static get is() { return 'dead-component'; }
+        static get properties() {
+          return {
+            names: {
+              type: Array,
+              value: ['Anuar', 'David', 'Nacho', 'Pam', 'Angel', 'Abner', 'Rafa']
+            },
+            chars: {
+              type:Array,
+              value : []
+            },
+            isName: {
+              type: Boolean,
+              value: false
+            },
+            characters: {
+              type: Array,
+              value: ['uno']
+            },
+            identifier :{
+              type: Object,
+              value : {}
+            }
+          }
+        }
+
+        constructor() {
+          super();
+        }
+
+        ready() {
+          super.ready();
+        }
+
+        connectedCallback() {
+          super.connectedCallback();
+          this.$.domRepeat.render();
+
+        }
+
+        handleResponse() {
+          console.log('');
+        }
+        _seeDetail(e) {
+          console.log( 'your character is:' , e.model.item.name);
+        }
+      }
+      customElements.define(DeadComponent.is, DeadComponent);
+    })(window.customElements)
+  </script>
+</dom-module>

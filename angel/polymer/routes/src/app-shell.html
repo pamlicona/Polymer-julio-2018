@@ -1,0 +1,138 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/app-route/app-location.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="alive-component.html">
+<link rel="import" href="dead-component.html">
+<link rel="import" href="unknown-component.html">
+
+<dom-module id="app-shell">
+  <template>
+      <style>
+        section {
+          display: flex;
+          flex-grow: 1;
+          flex-wrap: wrap;
+          flex: 1;
+          background: #cfcfcf;
+        }
+          article {
+            border: 1px solid #b9b9b9;
+            background: #fafafa;
+            border-radius: 5px;
+            display: flex;
+            width: 175px;
+            padding: 20px;
+            margin: 10px;
+            flex-direction: column;
+          }
+
+          .button-wrapper a{
+            background: #fafafa;
+            color: blue;
+            width: 250px;
+            height: 40px;
+            border: none;
+            border-radius: 5px;
+            margin: 10px auto;
+          }
+          img.filter{
+            -webkit-filter: grayscale(100%) 
+          brightness(135%)
+          contrast(120%);
+  filter: grayscale(100%) 
+          brightness(135%)
+          contrast(120%);
+          }
+        </style>
+        <section class="button-wrapper">
+            <a href="/#/vivos">vivos</a>
+            <a href="/#/muertos">muertos</a>
+            <a href="/#/desconocido">desconocido</a>
+        </section>
+
+    <app-location route="{{route}}" use-hash-as-path></app-location>
+    <app-route
+      route={{route}}
+      pattern="/:page"
+      data={{data}}
+      tail={{subroute}}
+    ></app-route>
+
+    <iron-pages selected="{{data.page}}" attr-for-selected="page" fallback-selection="otros">
+      <div page="vivos">
+          <section>
+             <alive-component></alive-component>
+            </section>
+      </div>
+      <div page="muertos">
+          <section>
+            <dead-component></dead-component>
+          </section>
+      </div>
+      <div page="desconocido">
+        <section>
+          <unknown-component></unknown-component>
+        </section>
+    </div>
+    </iron-pages>
+
+  </template>
+  <script>
+    (function appShell(customElements) {
+      'use strict';
+
+      class AppShell extends Polymer.Element {
+        static get is() { return 'app-shell'; }
+        static get properties() {
+          return {
+            names: {
+              type: Array,
+              value: ['Anuar', 'David', 'Nacho', 'Pam', 'Angel', 'Abner', 'Rafa']
+            },
+            chars: {
+              type:Array,
+              value : []
+            },
+            isName: {
+              type: Boolean,
+              value: false
+            },
+            characters: {
+              type: Array,
+              value: ['uno']
+            },
+            identifier :{
+              type: Object,
+              value : {}
+            }
+          }
+        }
+
+        constructor() {
+          super();
+        }
+
+        ready() {
+          super.ready();
+        }
+
+        connectedCallback() {
+          super.connectedCallback();
+          this.$.domRepeat.render();
+
+        }
+
+        handleResponse() {
+          console.log('recibi respuesta');
+          console.log(this.characters);
+        }
+        _seeDetail(e) {
+          console.log( 'your character is:' , e.model.item.name);
+        }
+      }
+      customElements.define(AppShell.is, AppShell);
+    })(window.customElements)
+  </script>
+</dom-module>

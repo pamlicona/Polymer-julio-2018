@@ -1,0 +1,107 @@
+<link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="/bower_components/app-route/app-location.html">
+<link rel="import" href="/bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="/bower_components/app-route/app-route.html">
+<link rel="import" href="card-detail.html">
+<link rel="import" href="card-list.html">
+<link rel="import" href="style.html">
+
+<dom-module id="app-shell">
+  <template>
+    <style include="card-styles">
+      .filters {
+        background: var(--header-background);
+        color: white;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        font-family: sans-serif;
+        font-size: 13px;
+        align-items: center;
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .filters__button {
+        text-align: center;
+        border-left: 1px solid var(--border-color);
+      }
+
+      .filters__button:last-child {
+        border-right: 1px solid var(--border-color); 
+      }
+
+      .footer {
+        background: var(--header-background);
+        height: 100px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .footer__img {
+        width: 200px;
+      }
+    </style>
+
+    <app-location route="{{route}}"></app-location>
+    <app-route
+      route="{{route}}"
+      pattern="/:page"
+      data="{{data}}"
+      tail="{{subroute}}">
+    </app-route>
+
+    <div class="filters">
+      <paper-button class="filters__button" on-tap="_changeCategory" data-args="all">All</paper-button>
+      <paper-button class="filters__button" on-tap="_changeCategory" data-args="alive">Alive</paper-button>
+      <paper-button class="filters__button" on-tap="_changeCategory" data-args="dead">Dead</paper-button>
+      <paper-button class="filters__button" on-tap="_changeCategory" data-args="unknown">Unknown</paper-button>
+    </div>
+
+    <iron-pages selected="[[data.page]]" fallback-selection="list" attr-for-selected="page-name">
+      <card-list page-name="list" route="[[subroute]]"></card-list>
+      <card-detail page-name="detail" route="[[subroute]]"></card-detail>
+    </iron-pages>
+
+    <footer class="footer">
+      <img class="footer__img" src="/src/styles/img/logo.png">
+    </footer>
+
+  </template>
+  <script>
+    (function appShell(customElements){
+      'use strict';
+
+      class AppShell extends Polymer.Element {
+        static get is() { return 'app-shell'; }
+        static get properties() {
+          return {
+            error: {
+              type: Boolean,
+              value: false
+            }
+          }
+        }
+
+        _changeCategory(event) {
+          let path = event.target.getAttribute('data-args');
+          this.set('route.path', `/list/${path}`);
+        }
+
+        static get observers() {
+          return [
+            '_routeChanged(data.page)'
+          ]
+        }
+
+        _routeChanged(page) {
+          if(page) {
+            Polymer.importHref(this.resolveUrl('card-' + page + '.html'), null, null, true);
+          }
+        }
+      }
+      customElements.define(AppShell.is, AppShell);
+    })(window.customElements);
+  </script>
+</dom-module>

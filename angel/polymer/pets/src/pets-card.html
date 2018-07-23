@@ -13,26 +13,24 @@
       flex-direction: column;
     }
   </style>
-
-  <template  is="dom-repeat" items="[[pets]]" as="dog">
-    <article>
-        <p>[[dog.name]]</p>
-        <p>[[dog.race]]</p>
-        <p>[[dog.kind]]</p>
-    </article>
-  </template>
-  <template  is="dom-repeat" items="[[pets]]" as="cat">
-    <article>
-        <p>[[cat.name]]</p>
-        <p>[[cat.owner]]</p>
-        <p>[[cat.kind]]</p>
-    </article>
-  </template>
-  <template  is="dom-repeat" items="[[pets]]" as="animal">
-    <article>
-        <p>[[animal.name]]</p>
-        <p>[[animal.kind]]</p>
-    </article>
+  <template  is="dom-repeat" items="[[pets]]" as="pet">
+    <template is="dom-if" if="isDog">
+        <h2>Dogs</h2>
+        <p>[[pet.name]]</p>
+        <p>[[pet.race]]</p>
+        <p>[[pet.kind]]</p>
+    </template>
+    <template is="dom-if" if="isCat">
+        <h2>Cats</h2>
+        <p>[[pet.name]]</p>
+        <p>[[pet.owner]]</p>
+        <p>[[pet.kind]]</p>
+    </template>
+    <template is="dom-if" if="isAnimal">
+        <h2>Animals</h2>
+        <p>[[pet.name]]</p>
+        <p>[[pet.kind]]</p>
+    </template>
   </template>
   </template>
 
@@ -44,8 +42,18 @@
         static get is() { return 'pets-card'; }
         static get properties() {
           return {
-            isDog(pet, index) {
+            isDog(pets) {
               if(pet.kind == 'dog') {
+                return true;
+              }
+            },
+            isCat(pets) {
+              if(pet.kind == 'cat') {
+                return true;
+              }
+            },
+            isAnimal(pets){
+              if (pet.kind == 'animal') {
                 return true;
               }
             }
