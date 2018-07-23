@@ -1,0 +1,56 @@
+<dom-module id="card-styles">
+  <template>
+    <style>
+    	:host {
+    		--header-background: #22262a;
+    		--border-color: #393939;
+    		--dead-color-background: #cccccc;
+    		--card-text-color: #999999;
+    		--card-background-color: #151515;
+    	};
+
+        @media screen and (max-width: 1024px) {
+            .card-content {
+                font-size: 16px !important;
+                max-height: 31px;
+                min-height: 31px;
+            }
+        }
+
+        @media screen and (max-width: 425px) {
+            .card-content {
+                font-size: 10px !important;
+                max-height: 31px;
+                min-height: 31px;
+            }
+
+            .container-characters {
+                grid-template-columns: 1fr 1fr 1fr !important;
+            }
+
+            .cover__text {
+                padding-left: 100px !important;
+            }
+
+            .detail {
+                grid-template-columns: 1fr !important;
+            }
+
+            .detail__data {
+                grid-column: 1 !important;
+                text-align: center;
+            }
+        }
+
+        @media screen and (max-width: 375px) {
+            .container-characters {
+                grid-template-columns: 1fr 1fr !important;
+            }
+
+            .cover__text {
+                padding-left: 70px !important;
+            }
+        }
+    </style>
+  </template>
+</dom-module>

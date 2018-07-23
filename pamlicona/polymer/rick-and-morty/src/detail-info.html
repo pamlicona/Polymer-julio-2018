@@ -1,0 +1,45 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+
+<dom-module id="detail-info">
+  <template>
+    <style include="card-styles">
+      .detail__data__points {
+        display: grid;
+      }
+
+      h3 {
+        font-size: 45px;
+        font-family: fantasy;
+        font-weight: bold;
+        letter-spacing: 2px;
+      }
+    </style>
+
+    <div class="detail__data">
+      <h3>[[item.name]]</h3>
+      <div class="detail__data__points">
+        <span>Species: [[item.species]]</span>
+        <span>Status: [[item.status]]</span>
+        <span>Gender: [[item.gender]]</span>
+        <span>Origin: [[item.origin.name]]</span>
+        <span>Location: [[item.location.name]]</span>
+      </div>
+    </div>
+
+  </template>
+  <script>
+    (function detailInfo(customElements){
+      'use strict';
+
+      class DetailInfo extends Polymer.Element {
+        static get is() { return 'detail-info'; }
+        static get properties() {
+          return {
+            item: Object
+          }
+        }
+      }
+      customElements.define(DetailInfo.is, DetailInfo);
+    })(window.customElements);
+  </script>
+</dom-module>
