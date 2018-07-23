@@ -1,0 +1,88 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+
+
+<dom-module id="login-component">
+  
+  <template>
+    <style>
+      .userLoged{
+        font-family: sans-serif;
+      }
+      :host {
+        text-align: center;
+      }
+      slider-component {
+        display: block;
+      }
+      form {
+        margin-top: 40px;
+      }
+      .login_error{
+        display: none;
+      }
+    </style>
+
+    <div class="userLoged">
+      <h1>Inicio de Sesión</h1>
+
+      <form action="">
+        <label for="user"> Usuario:</label> <input id="user" type="text" name="">
+        <label for="password"> Password: </label> <input id="password" type="password" name="">
+        <button type="button" on-click="_VerifyUser()">Login</button>
+
+      </form>
+
+      <p class="login_error" id="error">Tu usuario o contraseña son incorrectos</p>
+    </div>
+  </template>
+
+
+  <script>
+    (function appShell(customElements) {
+      'use strict';
+
+      class LoginComponent extends Polymer.Element {
+        static get is() { return 'login-component'; }
+        static get properties() {
+          return {
+            User: {
+              type: Object,
+              value: {}
+            },
+
+            Password : {
+              type: String,
+              value: ""
+            },
+
+            Frase : {
+                type: String,
+                value: ""
+              }
+          }
+        }
+
+        _sendEvent(){
+          this.dispatchEvent(new CustomEvent('send-user-logged', {
+            detail: {
+              type: this.User
+            }
+          }))
+        }
+
+        _VerifyUser() {
+          let userName = this.$.user.value;
+          let pass = this.$.password.value;
+          this.User = this.listUsers.filter(user => {
+            return (user.user == userName && pass == user.password)
+          });
+          if(this.User )
+        }
+
+      }
+    customElements.define(LoginComponent.is, LoginComponent);
+    })(window.customElements);
+  </script>
+
+
+</dom-module>
