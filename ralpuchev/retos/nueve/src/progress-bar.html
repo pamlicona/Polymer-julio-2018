@@ -1,0 +1,187 @@
+<!--por defecto-->
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+
+<dom-module id="progress-bar">
+    <template>
+        <style>
+            :host {
+                display: block;
+                --button-color: #86876f;
+                --bar-height : 100px;
+            }
+            
+            * {
+                padding: 0;
+                margin: 0;
+            }
+
+            .progress_bar_container {
+                width: 100%;
+                height: var(--bar-height);
+                text-align: left;
+            }
+
+            .progress_bar {
+                width: 1px;
+                background-color: blue;
+                color: white;
+                height: 100%;
+                transition: 1s;
+                text-align: center;
+                transition-timing-function: linear;
+            }
+
+            .bar_buttons {
+                margin-top: 15px;
+                display: flex;
+                align-items: center;
+                justify-content: space-around;
+            }
+
+            .bar_button {
+                width: 300px;
+                color: azure;
+                background-color: blueviolet;
+                height: 30px;
+                border-radius: 6px;
+                cursor: pointer;
+            }
+
+            button {
+                border-radius: 6px;
+                background-color: var(--button-color);
+                color: white;
+                cursor: pointer;
+                font-size: 25px;
+                height: 30px;
+            }
+
+            button:focus {
+                outline: none;
+            }
+        </style>
+        <section class="progress_bar_container">
+            <div class="progress_bar" style="transition: 1s; width: 1px;"></div>
+        </section>
+        <section class="bar_buttons">
+            <button class="bar_button" on-click="startProgressBar">Iniciar</button>
+            <button class="bar_button" on-click="changeBarColor">Cambiar Color</button>
+        </section>
+    </template>
+    <script>
+        (function progressBar(customElements){
+            'use strict';
+
+            class ProgressBar extends Polymer.Element {
+                
+                static get is() { return 'progress-bar'; }
+                
+                static get properties() {
+                    return {
+                        currentBarProgress : {
+                            type : Number,
+                            value : 0
+                        },
+                        currentTransitionTime : {
+                            type : Number,
+                            value : 0
+                        },
+                        colors : {
+                            type : Array,
+                            value : ['blue', 'red', 'green', 'orange', 'purple', 'cyan', 'gray']
+                        },
+                        time : {
+                            type : String,
+                            value : 'fast'
+                        },
+                        space : {
+                            type : String,
+                            value : 'slow'
+                        },
+                        speed : {
+                            type : String,
+                            value : 'medium'
+                        }
+                    }
+                }
+                
+                connectedCallback() {
+                    super.connectedCallback();   
+                    
+                    this.bar = this.shadowRoot.querySelector(".progress_bar");
+                }
+                
+                startProgressBar(){
+                    console.log("start button pressed"); 
+                    this.currentBarProgress = 0;
+                    this.currentTransitionTime = 0;
+                    this.setBarProperties(1, 0);
+                    this.addWidthToProgressBar();
+                }
+                
+                //just for testing
+                iniciaProgressBar(){ 
+                    this.currentBarProgress = 101;
+                    setTimeout(()=>{this.addWidthToProgressBar()}, 4000);   
+                }
+
+                //métodos de la implementación del loader
+                setBarProperties(newWidth, newTransitionTime){
+                    console.log(`newWidth: ${newWidth} newTime: ${newTransitionTime}`);
+
+                    this.bar.setAttribute("style", `transition: ${newTransitionTime}s linear; width: ${newWidth}%;`); 
+                }
+
+                getSpaceValuesForInterval(value){
+                    if(value.toUpperCase() == 'SLOW') return {minSpace:5, maxSpace:10};
+                    else if(value.toUpperCase() == 'MEDIUM') return {minSpace:14, maxSpace:25};
+                    else if(value.toUpperCase() == 'FAST') return {minSpace:30, maxSpace:50};
+                }
+
+                getTimeValuesForInterval(value){
+                    if(value.toUpperCase() == 'SLOW') return {minTime: 6, maxTime: 10};
+                    else if(value.toUpperCase() == 'MEDIUM') return {minTime:4, maxTime:8};
+                    else if(value.toUpperCase() == 'FAST') return {minTime:1, maxTime:4};
+                }
+
+                addWidthToProgressBar(){
+                    if(this.currentBarProgress >= 100){
+                        //la barra se ha cargado completamente
+                        this.dispatchEvent(new CustomEvent('load-finished', {
+                          bubbles: true,
+                          composed: true,
+                          detail: {
+                              message : `finish in ${this.speed} mode`
+                          }
+                        }))
+                        return;
+                    }   
+                    
+                    //seteamos estas variables para compatibilidad con "speed"
+                    this.space = this.speed;
+                    this.time = this.speed;
+
+                    let {minSpace, maxSpace} = this.getSpaceValuesForInterval(this.space);
+                    this.currentBarProgress += this.getRandomNumber(minSpace, maxSpace);
+                    if(this.currentBarProgress > 100) this.currentBarProgress = 100;
+
+                    let {minTime, maxTime} = this.getTimeValuesForInterval(this.time);
+                    this.currentTransitionTime = this.getRandomNumber(minTime, maxTime);
+
+                    this.setBarProperties(this.currentBarProgress, this.currentTransitionTime);
+
+                    setTimeout(()=>{this.addWidthToProgressBar()}, this.currentTransitionTime*1000);
+                }
+
+                getRandomNumber(numeroInferior, numeroSuperior){
+                    return Math.floor((Math.random() * numeroSuperior) + numeroInferior);
+                }
+
+                changeBarColor(){
+                    this.bar.style['background-color'] = this.colors[this.getRandomNumber(0, this.colors.length)];
+                }
+            }
+        customElements.define(ProgressBar.is, ProgressBar);
+        })(window.customElements);
+  </script>
+</dom-module>
