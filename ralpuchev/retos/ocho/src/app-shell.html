@@ -1,0 +1,161 @@
+<!--por defecto-->
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/lib/elements/dom-if.html">
+<link rel="import" href="../bower_components/polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/app-route/app-location.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="character-card.html">
+<link rel="import" href="character-detail.html">
+
+paper-tabs.html
+
+<dom-module id="app-shell">
+    <template>
+        <style>
+            a {
+                text-align: center;
+                text-decoration: none;
+                color: darkslateblue;
+                font-size: 21px;
+                font-weight: bold;
+                margin-top: 30px;
+            }
+            
+            iron-pages {
+                display: flex;
+                align-items: center;
+                justify-content: space-around;
+            }
+            
+            .page {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: row;
+                flex-wrap: wrap;
+                flex-flow: row wrap;
+                align-content: flex-end;
+            }
+        </style>
+        <iron-ajax id="charactersRequest"
+          auto
+          url="https://rickandmortyapi.com/api/character"
+          params='{"page": "1"}'
+          handle-as="json"
+          on-response="handleResponse"
+          last-response="{{characters}}">
+        </iron-ajax>
+        <paper-tabs selected="0">
+            <paper-tab>
+                <a href="All">All</a>
+            </paper-tab>
+            <paper-tab>
+                <a href="Alive">Alive</a>
+            </paper-tab>
+            <paper-tab>
+                <a href="Dead">Dead</a>
+            </paper-tab>
+            <paper-tab>
+                <a href="Unknown">Unknown</a>
+            </paper-tab>
+        </paper-tabs>    
+        
+        <app-location route="{{route}}"></app-location>
+        <app-route
+            route={{route}}
+            pattern="/:page"
+            data={{data}}
+            tail={{subroute}}
+        ></app-route>
+
+        <iron-pages selected="{{data.page}}" attr-for-selected="page" fallback-selection="All">
+            <div page='All'>
+                <section class="page">
+                    <template is="dom-repeat" items="[[characters.results]]" as="character">
+                        <a href="[[character.id]]"><character-card character-id="[[character.id]]" name="[[character.name]]" status="[[character.status]]" species="[[character.species]]" image="[[character.image]]" on-character-selected="characterSelected"></character-card></a>
+                    </template>
+                </section>
+            </div>
+            <div page='Alive'>
+                <section class="page">
+                    <template is="dom-repeat" items="[[characters.results]]" as="character" filter="isAlive">
+                        <a href="[[character.id]]"><character-card character-id="[[character.id]]" name="[[character.name]]" status="[[character.status]]" species="[[character.species]]" image="[[character.image]]"></character-card></a>
+                    </template>
+                </section>
+            </div>
+            <div page='Dead'>
+                <section class="page">
+                    <template is="dom-repeat" items="[[characters.results]]" as="character" filter="isDead">
+                        <a href="[[character.id]]"><character-card character-id="[[character.id]]" name="[[character.name]]" status="[[character.status]]" species="[[character.species]]" image="[[character.image]]"></character-card></a>
+                    </template>
+                </section>
+            </div>
+            <div page='Unknown'>
+                <section class="page">
+                    <template is="dom-repeat" items="[[characters.results]]" as="character" filter="isUnknow">
+                        <a href="[[character.id]]"><character-card character-id="[[character.id]]" name="[[character.name]]" status="[[character.status]]" species="[[character.species]]" image="[[character.image]]"></character-card></a>
+                    </template>
+                </section>
+            </div>
+        </iron-pages>
+    </template>
+    <script>
+        (function appShell(customElements){
+            'use strict';
+
+            class AppShell extends Polymer.Element {
+                static get is() { return 'app-shell'; }
+                
+                static get properties() {
+                    return {
+                        characters : {
+                            type: Array,
+                            values: []
+                        }
+                    }
+                }
+                
+                connectedCallback() {
+                    super.connectedCallback();   
+                }
+                
+                characterSelected(event){
+                    console.log(event.detail.characterId);
+                }
+                
+                handleResponse(){
+                    console.log("caracteres descargados");
+                    console.log(this.characters.results);
+                    
+                    const ironPage = this.shadowRoot.querySelector("iron-pages");
+                    for(let character of this.characters.results){
+                        let newDiv = document.createElement('div');
+                        newDiv.innerHTML = `<character-detail info='${JSON.stringify(character)}'></character-detail>`;
+                        newDiv.setAttribute("page", character.id);
+                        
+                        Polymer.dom(ironPage).appendChild(newDiv);
+                    }
+                }
+                
+                isAlive(character, status){
+                    if(character.status.toUpperCase() == "ALIVE") return true;
+                    return false;
+                }
+                
+                isDead(character, status){
+                    if(character.status.toUpperCase() == "DEAD") return true;
+                    return false;
+                }
+                
+                isUnknow(character, status){
+                    if(character.status.toUpperCase() == "UNKNOWN") return true;
+                    return false;
+                }
+            }
+        customElements.define(AppShell.is, AppShell);
+        })(window.customElements);
+  </script>
+</dom-module>

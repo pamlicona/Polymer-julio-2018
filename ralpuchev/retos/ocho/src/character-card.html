@@ -1,0 +1,80 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<dom-module id="character-card">
+    <template>
+        <style>
+            .card {
+                border: 1px solid gray;
+                border-radius: 9px;
+                width: 90%;
+                margin: 0 auto;
+            }
+            
+            img {
+                border-radius: 9px 9px 0px 0px;
+                width: 100%;
+            }
+            
+            .text-wrapper{
+                text-align: left;
+                padding: 9px;
+            }
+        </style>
+        <section class="card" on-click="characterClicked">
+            <img src="[[image]]"/>
+            <div class="text-wrapper">
+                <div class="character_name">Nombre: [[name]]</div>
+                <div class="character_status">Estatus: [[status]]</div>
+                <div class="character_species">Especie: [[species]]</div>
+            </div>
+        </section>
+    </template>
+    <script>
+        (function characterCard(customElements){
+            'use strict';
+
+            class CharacterCard extends Polymer.Element {
+                static get is() { return 'character-card'; }
+                
+                static get properties() {
+                    return {
+                        characterId : {
+                            type: Number,
+                            value: 0
+                        },
+                        image : {
+                            type: String,
+                            value: ''
+                        },
+                        name : {
+                            type: String,
+                            value: ''
+                        },
+                        status : {
+                            type: String,
+                            value: ''
+                        },
+                        species : {
+                            type: String,
+                            value: ''
+                        }
+                    }
+                }
+          
+                connectedCallback() {
+                    super.connectedCallback();
+                }
+                
+                characterClicked(){
+                    this.dispatchEvent(new CustomEvent('character-selected', {
+                        bubbles: true,
+                        composed: true,
+                        detail: {
+                            characterId: this.characterId
+                        }
+                    }))
+                }
+            }
+            customElements.define(CharacterCard.is, CharacterCard);
+        })(window.customElements);
+    </script>
+</dom-module>
