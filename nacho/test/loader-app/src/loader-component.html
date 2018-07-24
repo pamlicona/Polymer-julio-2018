@@ -1,0 +1,128 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+
+<dom-module id="loader-component">
+  <template>
+    <style>
+      .loader{
+        width: .5%;
+        height: 30px;
+        background-color: #4CAF50;
+        transition: width 900ms ;
+      }
+    </style>
+    <div id="loader" class="loader"></div>
+  </template>
+  <script>
+    (function loaderComponent(customElements){
+      'use strict';
+
+      class LoaderComponent extends Polymer.Element {
+        static get is() { return 'loader-component'; }
+        static get properties() {
+          return {
+            startTime:{
+              type:Number,
+              value:1
+            },
+            endTime:{
+              type:Number,
+              value:2
+            },
+            startWidth:{
+              type:Number,
+              value:1
+            },
+            endWidth:{
+              type:Number,
+              value:100
+            },
+            initialWidth:{
+              type:Number,
+              value:0
+            },
+            speed:{
+              type:String,
+              value:''
+            }
+          }
+        }
+        connectedCallback() {
+          super.connectedCallback();
+        }
+        static get observers() {
+          return [
+            '_newMode(speed)'
+          ]
+        }
+        _newMode(speed){
+          if(speed == "fast"){
+            this.endWidth = 60;
+            this.endTime = 4;
+          }else if(speed == "slow"){
+            this.endWidth = 20;
+            this.startTime = 6;
+            this.endTime = 10;
+          }else{
+            return;
+          }
+        }
+
+        _executeDispatchEvent(timeFinish){
+          this.dispatchEvent(new CustomEvent('load-finished',{
+            bubbles: true,
+            detail:{
+              message: `finish in ${this.speed} mode`,
+              timeFinish: timeFinish
+            }
+          }));
+        }
+
+        _calculaTime(){
+          return parseInt(Math.floor(Math.random() *
+                          (this.endTime - this.startTime + 1)
+                          + this.startTime)
+                          .toString() + "000");
+        }
+
+        _calculaWidth(){
+          let newWidth = Math.floor(Math.random() *
+                          (this.endWidth - this.startWidth + 1)
+                          + this.startWidth);
+          if((this.initialWidth + newWidth) > 100){
+            return 100;
+          }else{
+            return this.initialWidth += newWidth;
+          }
+        }
+
+        _timeOut(){
+          const time = this._calculaTime();
+          const width = this._calculaWidth();
+          this.$.loader.style.transition = `width ${time}ms`;
+          this.$.loader.style.width = `${width}%`;
+          if (width == 100) {
+            this._executeDispatchEvent(time);
+          }else {
+            setTimeout(()=>this._timeOut(),time);
+          }
+        }
+        _getRandomColor() {
+          let letters = '0123456789ABCDEF';
+          let color = '#';
+          for (let i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+          }
+          return color;
+        }
+
+        changeColor(){
+          this.$.loader.style.backgroundColor = this._getRandomColor();
+        }
+        startLoader(){
+          this._timeOut();
+        }
+      }
+      customElements.define(LoaderComponent.is, LoaderComponent);
+    })(window.customElements);
+  </script>
+</dom-module>
