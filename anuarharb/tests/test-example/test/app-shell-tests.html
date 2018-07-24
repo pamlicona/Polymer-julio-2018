@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="../bower_components/webcomponentsjs/webcomponents-loader.js"></script>
+  <script src="../bower_components/web-component-tester/browser.js"></script>
+
+  <link rel="import" href="../bower_components/test-fixture/test-fixture.html">
+  <link rel="import" href="../src/app-shell.html">
+</head>
+<body>
+  <test-fixture id="app-shell">
+    <template>
+      <app-shell name="Anuar" last-name="Harb"></app-shell>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="app-shell-2">
+    <template>
+      <app-shell name="Ramon" last-name="Juarez"></app-shell>
+    </template>
+  </test-fixture>
+
+  <script>
+    suite('Full name tests', () => {
+      let myView;
+      let myView2;
+      setup( () => {
+        myView = fixture('app-shell');
+        myView2 = fixture('app-shell-2');
+      })
+      test('Name in h1 should be Anuar Harb', () => {
+        const name = myView.shadowRoot.querySelector('h1');
+        assert.equal(name.textContent, 'Anuar Harb');
+      });
+      test('fullName property should be Anuar Harb', () => {
+        assert.equal(myView.fullName, 'Anuar Harb');
+      });
+      test('Event detail fullName should be Anuar Harb', () => {
+        myView.addEventListener('test-event', (event) => {
+          assert.equal(event.detail, 'Anuar Harb');
+        });
+        myView._testEvent();
+      });
+      // test('timeout should return Anuar Harb', (done) => {
+      //   function getResult() {
+      //     const result = myView._timeTest();
+      //     return result;
+      //     done();
+      //   }
+      //   const result = getResult();
+      //   assert.equal(result, 'AnuarHarb');
+      // })
+    })
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,70 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<dom-module id="form-component">
+  <template>
+    <style>
+     h1 {
+       color: red;
+     }
+    </style>
+    <form style="display:flex;">
+        <label for="name">Nombre</label>
+        <input type="text" id="name">
+        <label for="name">Animal</label>
+        <input type="text" id="animal">
+        <label for="name">Raza</label>
+        <input type="text" id="raza">
+        <label for="name">Dueño</label>
+        <input type="text" id="dueño">
+    </form>
+    <button on-click="_addItem">Agregar ficha</button>
+  </template>
+  <script>
+    (function formComponent(customElements){
+      'use strict';
+
+      class FormComponent extends Polymer.Element {
+        static get is() { return 'form-component'; }
+        static get properties() {
+          return {
+            isAdmin :{
+              type: Boolean,
+              value: false
+
+            },
+            users : {
+              type: Array,
+              value : [
+                'Angel',
+                'Rafael',
+                'Pamela',
+                'Abner',
+                'David',
+                'Ignacio'
+
+              ]
+                
+            },
+            passwords : {
+              type: Array,
+              value : [
+                'uno',
+                'dos',
+                'tres',
+                'cuatro',
+                'cinco',
+                'seis'
+              ]
+            }
+          }
+        }
+        _addItem() {
+          console.log('Agregar al array');
+          let petsArray = this.pets;
+          console.log(petsArray);
+          this.push(newItem);
+        }
+      }
+      customElements.define(FormComponent.is, FormComponent);
+    })(window.customElements);
+  </script>
+</dom-module>

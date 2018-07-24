@@ -1,0 +1,82 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="pet-card-component.html">
+<link rel="import" href="/bower_components/polymer/lib/elements/dom-repeat.html">
+
+
+
+<dom-module id="pets-form-component">
+
+
+  <template>
+    <style>
+      section {
+        display: flex;
+        justify-content:center;
+      }
+      picture {
+        height: 200px;
+        width: 400px;
+        overflow: hidden;
+      }
+      img {
+        max-height: 100%;
+        width: 100%;
+      }
+      .petsContainer{
+        border: 5px solid gray;
+        border-radius: 10px;
+      }
+    </style>
+    <section class="petsContainer" >
+      <h2>Agregar Mascota Nueva</h2>
+      <form action="">
+        <label for="nombre"> Nombre: </label> <input type="text" name="">
+        <label for="dueño"> Dueño:   </label> <input type="text" name="">
+        <label for="animal"> Animal: </label> <input type="text" name="">
+        <label for="raza">Raza:     </label> <input type="text" name="">
+        <button type="button" on-click="_addPet()">Agregar</button>
+      </form>
+    </section>
+  </template>
+
+
+
+
+  <script>
+    (function appShell(customElements){
+      'use strict';
+
+      class PetsFormComponent extends Polymer.Element {
+        static get is() { return 'pets-form-component'; }
+        static get properties() {
+          return {
+            name: {
+              type: String,
+              value: ""
+            },
+            animal: {
+              type: String,
+              value: ""
+            },
+            breed: {
+              type: String,
+              value: ""
+            },
+            owner: {
+              type: String,
+              value: ""
+            }
+          }
+        }
+
+        connectedCallback() {
+          super.connectedCallback();
+          // things to do
+        }
+      }
+      customElements.define(PetsFormComponent.is, PetsFormComponent);
+    })(window.customElements);
+  </script>
+
+
+</dom-module>

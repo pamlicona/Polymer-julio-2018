@@ -1,0 +1,112 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="/bower_components/polymer/lib/elements/dom-if.html">
+<link rel="import" href="/bower_components/polymer/lib/elements/dom-repeat.html">
+
+<dom-module id="card-component">
+  
+
+  <template>
+    <style>
+      .name{
+        position: relative;
+        margin-top: -50px;
+        margin-bottom: 50px;
+        color: white;
+        font-size: 21px;
+        text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+      }
+      .row{
+        margin: 1px 0px 0px 0px;
+        display: flex;
+        justify-content: space-between;
+      }
+      .dataL{
+        margin-left: 22px; 
+        color: rgb(184,184,184);
+      }
+      .dataR{
+        margin-right: 22px;
+        color: yellow;
+      }
+      .alignR{
+        text-align: right;
+      }
+    </style>
+
+  
+    <section> 
+      <div class="card_header">
+        <img width="100%" src="/src/img/personajes/[[side]]/[[itemCard.mass]].jpg">
+        <div class="name">[[itemCard.name]]</div>
+      </div>
+      <div class="card_content">
+        <div class="row">
+          <div class="dataL"> <p>Name</p> </div>
+          <div class="dataR">  <p>[[itemCard.name]]</p>    </div>  
+        </div>
+
+        <div class="row">
+          <div class="dataL"> <p>Gender</p> </div>
+          <div class="dataR">  <p>[[itemCard.gender]]</p>    </div>  
+        </div>
+
+        <div class="row">
+          <div class="dataL"> <p>Mass</p> </div>
+          <div class="dataR">  <p>[[itemCard.mass]]</p>    </div>  
+        </div>
+        <div class="row">
+          <div class="dataL"> <p>Height</p> </div>
+          <div class="dataR">  <p>[[itemCard.height]]</p>    </div>  
+        </div>
+
+        <div class="row">
+          <div class="dataL"> <p>Birth Year</p> </div>
+          <div class="dataR">  <p>[[itemCard.birth_year]]</p>    </div>  
+        </div>
+
+        <div class="row">
+          <div class="dataL"> <p>Films</p> </div>
+          <div class="dataR alignR">
+            <template is="dom-repeat" items="[[itemCard.films]]">  
+              <p>[[item]]</p>
+              </template>
+          </div>  
+        </div>
+      </div>
+    </section>
+
+  </template>
+
+
+
+  <script>
+    (function appShell(customElements){
+      'use strict';
+
+      class CardComponent extends Polymer.Element {
+        static get is() { return 'card-component'; }
+        static get properties() {
+          return {
+              itemCard:{
+                type : Object,
+                value : {}
+              },
+              side:{
+                type : String,
+                value : ""
+              }
+          }
+        }
+
+        _printelement(){
+          console.log(this.itemCard);
+        }
+
+      
+      }
+      customElements.define(CardComponent.is, CardComponent);
+    })(window.customElements);
+  </script>
+
+
+</dom-module>

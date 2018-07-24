@@ -35,21 +35,25 @@
         <card-component
           type-card="subject"
           start-random="[[start]]"
+          list="[[listSubject]]"
           on-send-word="setValues"
         ></card-component>
         <card-component
           type-card="verb"
           start-random="[[start]]"
+          list="[[listVerb]]"
           on-send-word="setValues"
         ></card-component>
         <card-component
           type-card="adjective"
           start-random="[[start]]"
+          list="[[listAdjective]]"
           on-send-word="setValues"
         ></card-component>
         <card-component
           type-card="place"
           start-random="[[start]]"
+          list="[[listPlace]]"
           on-send-word="setValues"
         ></card-component>
       </div>
@@ -75,6 +79,22 @@
                 type: Boolean,
                 value: false
               },
+              listSubject: {
+                type: Array,
+                value: ['El perro', 'El tucan', 'Juan', 'María', 'Dios', 'La vecina', 'Mi profe']
+              },
+              listVerb: {
+                type: Array,
+                value: ['come', 'baila', 'corre', 'juega', 'fuma', 'ladra', 'muerde']
+              },
+              listAdjective: {
+                type: Array,
+                value: ['con superman ', 'un ladrillo', 'un nopal', 'con el Peje', 'Dios', 'marihuana', 'la bamba']
+              },
+              listPlace: {
+                type: Array,
+                value: ['en un avión', 'en el camión', 'en su cantón', 'con su mamá', 'en la iglesia', 'en los pinos', 'en Revolución']
+              }
             }
           }
 

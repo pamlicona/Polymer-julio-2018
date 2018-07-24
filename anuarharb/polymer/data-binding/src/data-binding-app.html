@@ -1,0 +1,55 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="example-component.html">
+
+<dom-module id="data-binding-app">
+  <template>
+    <style>
+      .red {
+        color: red;
+      }
+    </style>
+    <h1>[[anuar]]</h1>
+    <example-component class$="[[_nameChange()]]" my-name="Oscar" on-my-name-changed="_nameChange" pets="[[pets]]"></example-component>
+  </template>
+  <script>
+    (function dataBindingApp(customElements) {
+      'use strict';
+
+      class DataBindingApp extends Polymer.Element {
+        static get is() { return 'data-binding-app'; }
+        static get properties() {
+          return {
+            pets: {
+              type: Array,
+              value: [
+                {index: 0,name: 'firuais', type: 'dog', toys:['bone', 'ball', 'toy']},
+                {index: 1,name: 'Pelusa', type: 'cat', toys:['bone', 'ball', 'toy']},
+                {index: 2,name: 'Hmmm', type: 'dog', toys:['bone', 'ball', 'toy']},
+                {index: 3,name: 'hahaha', type: 'cat', toys:['bone', 'ball', 'toy']},
+                {index: 4,name: 'Poppy', type: 'dog', toys:['bone', 'ball', 'toy']},
+                {index: 5,name: 'Petalo', type: 'cat', toys:['bone', 'ball', 'toy']}
+              ]
+            },
+          }
+        }
+
+        connectedCallback() {
+          super.connectedCallback();
+          this._namePets(10,6,4,3,10);
+        }
+
+        _namePets(number, ...numbers) {
+          let result = number;
+          for(const number of numbers) {
+            result += number;
+          }
+          console.log(result);
+        }
+
+        
+      }
+      customElements.define(DataBindingApp.is, DataBindingApp);
+    })(window.customElements);
+  </script>
+
+</dom-module>

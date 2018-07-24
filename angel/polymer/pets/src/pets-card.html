@@ -1,0 +1,66 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/lib/elements/dom-repeat.html">
+<dom-module id="pets-card">
+  <template>
+    <style>
+    p{
+      font-weight: bold;
+    }
+    article{
+      display: flex;
+      border: 1px solid #dedede;
+      margin: 1rem 0;
+      flex-direction: column;
+    }
+  </style>
+  <template  is="dom-repeat" items="[[pets]]" as="pet">
+    <template is="dom-if" if="isDog">
+        <h2>Dogs</h2>
+        <p>[[pet.name]]</p>
+        <p>[[pet.race]]</p>
+        <p>[[pet.kind]]</p>
+    </template>
+    <template is="dom-if" if="isCat">
+        <h2>Cats</h2>
+        <p>[[pet.name]]</p>
+        <p>[[pet.owner]]</p>
+        <p>[[pet.kind]]</p>
+    </template>
+    <template is="dom-if" if="isAnimal">
+        <h2>Animals</h2>
+        <p>[[pet.name]]</p>
+        <p>[[pet.kind]]</p>
+    </template>
+  </template>
+  </template>
+
+  <script>
+    (function petsCard(customElements){
+      'use strict';
+
+      class PetsCard extends Polymer.Element {
+        static get is() { return 'pets-card'; }
+        static get properties() {
+          return {
+            isDog(pets) {
+              if(pet.kind == 'dog') {
+                return true;
+              }
+            },
+            isCat(pets) {
+              if(pet.kind == 'cat') {
+                return true;
+              }
+            },
+            isAnimal(pets){
+              if (pet.kind == 'animal') {
+                return true;
+              }
+            }
+          }
+        }
+      }
+      customElements.define(PetsCard.is, PetsCard);
+    })(window.customElements);
+  </script>
+</dom-module>
