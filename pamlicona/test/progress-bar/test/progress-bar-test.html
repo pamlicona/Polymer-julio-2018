@@ -52,12 +52,12 @@
         slowTest = fixture('slowTest');
         fastTest = fixture('fastTest');
       })
-      test('Increase width is from 1 to 20%', () => {
+      test('Slow increase width is from 1 to 20%', () => {
         const width = slowTest._getRandomWidth();
         //const width = 21;
         assert.closeTo(width, 10, 10);
       });
-      test('Increase width is from 1 to 60%', () => {
+      test('Fast increase width is from 1 to 60%', () => {
         const width = fastTest._getRandomWidth();
         //const width = 61;
         assert.closeTo(width, 30, 30);
@@ -70,12 +70,12 @@
         slowTest = fixture('slowTest');
         fastTest = fixture('fastTest');
       })
-      test('Increase time is from 6 to 10 seconds', () => {
+      test('Slow increase time is from 6 to 10 seconds', () => {
         let speed = slowTest._getRandomSpedd();
         //let speed = 11;
         assert.closeTo(speed, 5, 5);
       });
-      test('Increase time is from 1 to 4 seconds', () => {
+      test('Fast increase time is from 1 to 4 seconds', () => {
         let speed = fastTest._getRandomSpedd();
         //let speed = 5;
         assert.closeTo(speed, 2, 2);
