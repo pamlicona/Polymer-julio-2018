@@ -133,9 +133,9 @@
                 }
 
                 getSpaceValuesForInterval(value){
-                    if(value.toUpperCase() == 'SLOW') return {minSpace:5, maxSpace:10};
+                    if(value.toUpperCase() == 'SLOW') return {minSpace:1, maxSpace:20};
                     else if(value.toUpperCase() == 'MEDIUM') return {minSpace:14, maxSpace:25};
-                    else if(value.toUpperCase() == 'FAST') return {minSpace:30, maxSpace:50};
+                    else if(value.toUpperCase() == 'FAST') return {minSpace:1, maxSpace:60};
                 }
 
                 getTimeValuesForInterval(value){
