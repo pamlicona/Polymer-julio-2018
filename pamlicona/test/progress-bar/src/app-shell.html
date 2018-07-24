@@ -1,0 +1,55 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="progress-bar.html">
+
+<dom-module id="app-shell">
+  <template>
+    <style>
+    </style>
+
+    <progress-bar
+      speed="[[speed]]"
+      color="[[color]]"
+      on-my-message="showMessage">
+    </progress-bar>
+
+    <div id="message"></div>
+
+    <div class="section-button">
+      <button class="section-button__button" on-click="setColor">Cambiar color</button>
+    </div>
+
+  </template>
+  <script>
+    (function appShell(customElements){
+      'use strict';
+
+      class AppShell extends Polymer.Element {
+        static get is() { return 'app-shell'; }
+        static get properties() {
+          return {
+            speed: {
+              type: String,
+              value: 'slow'
+            },
+            color: {
+              type: String,
+              value: 'blue'
+            }
+          }
+        }
+
+        setColor() {
+          const colors = ['red', 'purple', 'green', 'aqua', 'brown', 'cadetblue', 'chartreuse'];
+          const activeColor = colors[Math.floor(Math.random()*7)];
+          this.set('color', activeColor);
+        }
+
+        showMessage(event) {
+          let message = event.detail.message;
+          this.$.message.innerHTML = `<p>${message}</p>`
+        }
+      }
+      customElements.define(AppShell.is, AppShell);
+    })(window.customElements);
+  </script>
+</dom-module>

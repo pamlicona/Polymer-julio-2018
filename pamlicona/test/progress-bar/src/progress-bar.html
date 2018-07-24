@@ -1,0 +1,123 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+
+<dom-module id="progress-bar">
+  <template>
+    <style>
+      :host {
+      	--color-bar: aliceblue;
+      	--color-full-bar: blue;
+      	--margin-top: 20px;
+      }
+
+      .section-button {
+      	display: flex;
+      	justify-content: center;
+      	margin-top: var(--margin-top);
+      }
+
+      .section-button__button {
+        background-color: var(--color-full-bar);
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 10px 17px 10px 17px;
+        letter-spacing: 1px;
+        transition: all .4s;
+      }
+
+      .progress {
+      	background-color: var(--color-bar);
+      }
+
+      .progress__bar {
+      	height: 10px;
+      	max-width: 100%;
+        width: 0px;
+      }
+    </style>
+
+    <div class="progress">
+      <div class="progress__bar" id="progressBar"></div>
+    </div>
+
+    <div class="section-button">
+      <button class="section-button__button" on-click="_updateProgressbar">Puchame</button>
+    </div>
+  </template>
+
+<script>
+  (function progressBar(customElements) {
+    'use strict';
+
+    class ProgressBar extends Polymer.Element {
+      static get is() { return 'progress-bar'; }
+      static get properties() {
+        return {
+          speed: {
+            type: String,
+            value: 'fast'
+          },
+          color: {
+            type: String,
+            value: 'blue',
+            observer: '_changeColor'
+          },
+          progress: {
+            type: Number,
+            value: 0
+          }
+        }
+      }
+
+      _changeColor() {
+        this.$.progressBar.style.backgroundColor = this.color;
+      }
+
+      _getRandomSpedd() {
+        if (this.speed === 'fast') {
+          return Math.floor(Math.random() * 3) + 1;
+        }
+        return Math.floor(Math.random() * 5) + 6;
+      }
+
+      _getRandomWidth() {
+        if (this.speed === 'fast') {
+          return Math.floor(Math.random() * 60) + 1;
+        }
+        return Math.floor(Math.random() * 20) + 1;
+      }
+
+      _sendMessage() {
+        this.dispatchEvent(new CustomEvent('my-message', {
+          detail: {
+            message: `Finish in ${this.speed} mode`
+          }
+        }));
+      }
+
+      _reload(speed) {
+        setTimeout(() => {
+          this._updateProgressbar();
+        }, `${speed}000`);
+      }
+
+      _stylesBar() {
+        let speed = this._getRandomSpedd();
+        this.$.progressBar.style.width = `${this.progress}%`;
+        this.$.progressBar.style.transition = `width ${speed}s`;
+        this._reload(speed);
+      }
+
+      _updateProgressbar() {
+        if (this.progress >= 100) {
+          this._sendMessage();
+        } else {
+          let newProgress = this.progress + this._getRandomWidth();
+          this.set('progress', newProgress);
+          this._stylesBar();
+        }
+      }
+    }
+    customElements.define(ProgressBar.is, ProgressBar);
+  })(window.customElements);
+</script>
