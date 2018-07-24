@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../bower_components/webcomponentsjs/webcomponents-loader.js"></script>
+    <script src="../bower_components/web-component-tester/browser.js"></script>
+    <link rel="import" href="../bower_components/test-fixture/test-fixture.html">
+    <link rel="import" href="../src/progress-bar.html">
+</head>
+<body>
+    <test-fixture id="progress-bar-s1-t1">
+        <template>
+            <progress-bar speed="slow"></progress-bar>
+        </template>
+    </test-fixture>
+    <test-fixture id="progress-bar-s1-t2">
+        <template>
+            <progress-bar speed="fast"></progress-bar>
+        </template>
+    </test-fixture>
+    <test-fixture id="progress-bar-s3-t1">
+        <template>
+            <progress-bar speed="slow"></progress-bar>
+        </template>
+    </test-fixture>
+    <test-fixture id="progress-bar-s3-t2">
+        <template>
+            <progress-bar speed="fast"></progress-bar>
+        </template>
+    </test-fixture>
+
+    <script>
+        suite('S1: Time for bar progress', () => {
+            let myProgressBarT1;
+            let myProgressBarT2;
+            
+            setup( () => {
+                myProgressBarT1 = fixture('progress-bar-s1-t1');
+                myProgressBarT2 = fixture('progress-bar-s1-t2');
+            })
+            
+            test('Time for slow mode should be 6 - 10 seconds', function(){
+                let startTime = 0;
+                myProgressBarT1.addWidthToProgressBar();
+                let finalTime = myProgressBarT1.currentTransitionTime;
+                
+                let time = finalTime - startTime;
+                
+                expect(time).to.be.within(6, 10);
+            });
+            
+            test('Time for fast mode should be 1 - 4 seconds', function(){
+                let startTime = 0;
+                myProgressBarT2.addWidthToProgressBar();
+                let finalTime = myProgressBarT2.currentTransitionTime;
+                
+                let time = finalTime - startTime;
+                
+                expect(time).to.be.within(1, 4);
+            });
+        });
+        
+        suite('S2: Load finished event', () => {
+            let myProgressBarT1;
+            let myProgressBarT2;
+            
+            setup( () => {
+                myProgressBarT1 = fixture('progress-bar-s3-t1');
+                myProgressBarT2 = fixture('progress-bar-s3-t2');
+            })
+            
+            test('Event message should be "finish in slow mode"', function(done){
+                myProgressBarT1.addEventListener('load-finished', function(event){
+                    const finalMessage = event.detail.message;
+                    assert.equal(finalMessage, 'finish in slow mode');
+                    done();
+                })   
+                myProgressBarT1.iniciaProgressBar();//trick
+            });
+            
+            test('Event message should be "finish in fast mode"', function(done){
+                myProgressBarT2.addEventListener('load-finished', function(event){
+                    const finalMessage = event.detail.message;
+                    assert.equal(finalMessage, 'finish in fast mode');
+                    done();
+                })   
+                myProgressBarT2.startProgressBar();
+            });
+        });
+    </script>
+
+</body>
+</html>
