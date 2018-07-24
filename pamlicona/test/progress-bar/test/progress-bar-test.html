@@ -55,12 +55,12 @@
       test('Increase width is from 1 to 20%', () => {
         const width = slowTest._getRandomWidth();
         //const width = 21;
-        assert.closeTo(width, 1, 19);
+        assert.closeTo(width, 10, 10);
       });
       test('Increase width is from 1 to 60%', () => {
         const width = fastTest._getRandomWidth();
         //const width = 61;
-        assert.closeTo(width, 1, 59);
+        assert.closeTo(width, 30, 30);
       });
     })
     suite('Seconds', () => {
@@ -72,13 +72,13 @@
       })
       test('Increase time is from 6 to 10 seconds', () => {
         let speed = slowTest._getRandomSpedd();
-        //let speed = 10;
-        assert.closeTo(speed, 6, 4);
+        //let speed = 11;
+        assert.closeTo(speed, 5, 5);
       });
       test('Increase time is from 1 to 4 seconds', () => {
         let speed = fastTest._getRandomSpedd();
         //let speed = 5;
-        assert.closeTo(speed, 1, 3);
+        assert.closeTo(speed, 2, 2);
       });
     })
   </script>
