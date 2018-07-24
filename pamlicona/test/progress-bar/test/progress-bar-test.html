@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Progress Bar Test</title>
+  <script src="../bower_components/webcomponentsjs/webcomponents-loader.js"></script>
+  <script src="../bower_components/web-component-tester/browser.js"></script>
+
+  <link rel="import" href="../bower_components/test-fixture/test-fixture.html">
+  <link rel="import" href="../src/progress-bar.html">
+</head>
+<body>
+  <test-fixture id="slowTest">
+    <template>
+      <progress-bar speed="slow"></progress-bar>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="fastTest">
+    <template>
+      <progress-bar speed="fast"></progress-bar>
+    </template>
+  </test-fixture>
+
+  <script>
+    suite('Message', () => {
+      let slowTest;
+      let fastTest;
+      setup(function() {
+        slowTest = fixture('slowTest');
+        fastTest = fixture('fastTest');
+      })
+      test('Message should be Finish in slow mode', () => {
+        slowTest.addEventListener('my-message', (event) => {
+          assert.equal(event.detail.message, 'Finish in slow mode');
+        });
+        slowTest._sendMessage();
+      });
+      test('Message should be Finish in fast mode', () => {
+        fastTest.addEventListener('my-message', (event) => {
+          assert.equal(event.detail.message, 'Finish in fast mode');
+        });
+        fastTest._sendMessage();
+      });
+    })
+    suite('Width', () => {
+      let slowTest;
+      let fastTest;
+      setup(function() {
+        slowTest = fixture('slowTest');
+        fastTest = fixture('fastTest');
+      })
+      test('Slow increase width is from 1 to 20%', () => {
+        const width = slowTest._getRandomWidth();
+        //const width = 21;
+        assert.closeTo(width, 10, 10);
+      });
+      test('Fast increase width is from 1 to 60%', () => {
+        const width = fastTest._getRandomWidth();
+        //const width = 61;
+        assert.closeTo(width, 30, 30);
+      });
+    })
+    suite('Seconds', () => {
+      let slowTest;
+      let fastTest;
+      setup(function() {
+        slowTest = fixture('slowTest');
+        fastTest = fixture('fastTest');
+      })
+      test('Slow increase time is from 6 to 10 seconds', () => {
+        let speed = slowTest._getRandomSpedd();
+        //let speed = 11;
+        assert.closeTo(speed, 5, 5);
+      });
+      test('Fast increase time is from 1 to 4 seconds', () => {
+        let speed = fastTest._getRandomSpedd();
+        //let speed = 5;
+        assert.closeTo(speed, 2, 2);
+      });
+    })
+  </script>
+</body>
+</html>
