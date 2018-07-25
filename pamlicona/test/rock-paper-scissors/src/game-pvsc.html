@@ -1,17 +1,20 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="selection-component.html">
 <link rel="import" href="../bower_components/paper-radio-group/paper-radio-group.html">
+<link rel="import" href="get-winner.html">
 
 <dom-module id="game-pvsc">
   <template>
     <style>
     </style>
 
-    <paper-radio-group>
-      <selection-component type-selection="rock" on-my-selection="_getWin"></selection-component>
-      <selection-component type-selection="paper" on-my-selection="_getWin"></selection-component>
-      <selection-component type-selection="scissors" on-my-selection="_getWin"></selection-component>
-    </paper-radio-group>
+    <selection-component on-my-selection="_getWin"></selection-component>
+
+    <get-winner 
+      player-one-selection="[[playerOne]]" 
+      player-two-selection="[[playerTwo]]" 
+      on-my-winner="_showWinner">
+    </get-winner>
 
   </template>
 
@@ -23,12 +26,41 @@
       static get is() { return 'game-pvsc'; }
       static get properties() {
         return {
-          route: Object
+          route: {
+            type: Object,
+            //observer: '_getSelectionComputer'
+          },
+          playerOne: {
+            type: String,
+            value: ''
+          },
+          playerTwo: {
+            type: String,
+            value: ''
+          },
+          optionsList: {
+            type: Array,
+            value: ['rock', 'paper', 'scissors']
+          }
         }
       }
 
-      _getWin() {
+      _showWinner(event) {
+        console.log('win', event.detail.winner);
+      }
 
+      _getSelectionComputer() {
+        let position = Math.floor(Math.random() * 3);
+        let playerTwo = this.optionsList[position];
+        this.set('playerTwo', playerTwo);
+        console.log('computer', this.playerTwo)
+      }
+
+      _getWin(event) {
+        this._getSelectionComputer();
+        let playerOne = event.detail.selection;
+        this.set('playerOne', playerOne);
+        console.log('player', this.playerOne)
       }
     }
     customElements.define(GamePvsc.is, GamePvsc);

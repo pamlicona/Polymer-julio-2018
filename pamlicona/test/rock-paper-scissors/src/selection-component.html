@@ -7,13 +7,11 @@
     <style>
     </style>
 
-    <!--paper-radio-group>
-      <paper-radio-button name="rock" value="rock">Rock</paper-radio-button>
-      <paper-radio-button name="paper" value="paper">Paper</paper-radio-button>
-      <paper-radio-button name="scissors" value="scissors">Scissors</paper-radio-button>
-    </paper-radio-group-->
-
-    <paper-radio-button name="[[typeSelection]]" value="[[typeSelection]]">[[typeSelection]]</paper-radio-button>
+    <paper-radio-group on-iron-select="_getSelection">
+      <paper-radio-button name="rock">Rock</paper-radio-button>
+      <paper-radio-button name="paper">Paper</paper-radio-button>
+      <paper-radio-button name="scissors">Scissors</paper-radio-button>
+    </paper-radio-group>
 
   </template>
 
@@ -30,6 +28,11 @@
             value: ''
           }
         }
+      }
+
+      _getSelection(event) {
+        this.set('typeSelection', event.detail.item.name);
+        this._sendSelection();
       }
 
       _sendSelection() {

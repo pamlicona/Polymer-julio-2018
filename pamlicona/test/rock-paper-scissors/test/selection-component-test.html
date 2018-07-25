@@ -12,51 +12,38 @@
   <link rel="import" href="../src/selection-component.html">
 </head>
 <body>
-  <test-fixture id="rock">
+  <test-fixture id="selectionComponent">
     <template>
-      <selection-component type-selection="rock"></selection-component>
-    </template>
-  </test-fixture>
-
-  <test-fixture id="paper">
-    <template>
-      <selection-component type-selection="paper"></selection-component>
-    </template>
-  </test-fixture>
-
-  <test-fixture id="scissors">
-    <template>
-      <selection-component type-selection="scissors"></selection-component>
+      <selection-component></selection-component>
     </template>
   </test-fixture>
 
   <script>
     suite('Return selection', () => {
-      let rock;
-      let paper;
-      let scissors;
+      let selectionComponent;
       setup(function() {
-        rock = fixture('rock');
-        paper = fixture('paper');
-        scissors = fixture('scissors');
+        selectionComponent = fixture('selectionComponent');
       })
       test('Selection should be rock', () => {
-        rock.addEventListener('my-selection', (event) => {
+        selectionComponent.addEventListener('my-selection', (event) => {
           assert.equal(event.detail.selection, 'rock');
         });
-        rock._sendSelection();
+        selectionComponent.typeSelection = 'rock';
+        selectionComponent._sendSelection();
       });
       test('Selection should be paper', () => {
-        paper.addEventListener('my-selection', (event) => {
+        selectionComponent.addEventListener('my-selection', (event) => {
           assert.equal(event.detail.selection, 'paper');
         });
-        paper._sendSelection();
+        selectionComponent.typeSelection = 'paper';
+        selectionComponent._sendSelection();
       });
       test('Selection should be scissors', () => {
-        scissors.addEventListener('my-selection', (event) => {
+        selectionComponent.addEventListener('my-selection', (event) => {
           assert.equal(event.detail.selection, 'scissors');
         });
-        scissors._sendSelection();
+        selectionComponent.typeSelection = 'scissors';
+        selectionComponent._sendSelection();
       });
     })
   </script>
