@@ -1,0 +1,108 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+
+<dom-module id="slider-component">
+  <template>
+    <style>
+      #myProgress {
+        width: 100%;
+        background-color: #ddd;
+      }
+
+      #myBar {
+        width: 1%;
+        height: 30px;
+        background-color: #4CAF50;
+      }
+    </style>
+    
+      <div id="myProgress">
+        <div id="myBar"></div>
+      </div>
+
+      <br>
+      
+  </template>
+
+  <script>
+    (function appShell(customElements){
+      'use strict';
+
+      class SliderComponent extends Polymer.Element {
+        static get is() { return 'slider-component'; }
+        static get properties() {
+          return {
+            progress: {
+              type : String,
+              value : ""
+            },
+            speed:{
+              type: String,
+              value: "",
+              observer: '_speedChanged'
+            },
+            time:{
+              type: Number,
+              value: ""
+            },
+            percentage:{
+              type: String,
+              value: ""
+            },
+            width:{
+              type: Number,
+              value: ""
+            }
+
+          }
+        }
+
+       moveF(time, percentage) {
+          var elem = this.$.myBar;   
+          //var width = percentage;
+          this.width = percentage;
+          var id = setInterval(() => {
+            if (this.width >= 100) {
+              clearInterval(id);
+            } else {
+              this.width++; 
+              elem.style.width = this.width + '%'; 
+            }
+          }, time);
+        }
+
+        moveS(time, percentage) {
+          var elem = this.$.myBar;   
+          //var width = percentage;
+          this.width = percentage;
+          var id = setInterval(() => {
+            if (this.width >= 100) {
+              clearInterval(id);
+            } else {
+              this.width++; 
+              elem.style.width = this.width + '%'; 
+            }
+          }, time);
+        }
+
+        _speedChanged(){
+            if(this.speed == "slow"){
+              
+              this.moveS(this.time, this.percentage);
+            }
+            else if (this.speed =="fast"){
+             
+              this.moveF(this.time, this.percentage);
+            }
+            else{
+               var elem = this.$.myBar;  
+               elem.style.width = '0' + '%';  
+            }
+        }
+
+        
+        
+      }
+      customElements.define(SliderComponent.is, SliderComponent);
+    })(window.customElements);
+  </script>
+</dom-module>
