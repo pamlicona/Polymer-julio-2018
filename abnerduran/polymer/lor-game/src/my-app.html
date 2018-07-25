@@ -26,6 +26,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="lazy-import" href="my-human-vs-human.html">
 <link rel="lazy-import" href="my-human-vs-computer.html">
 <link rel="lazy-import" href="my-view404.html">
+<link rel="lazy-import" href="my-faq.html">
 
 <dom-module id="my-app">
   <template>
@@ -40,7 +41,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       app-drawer-layout:not([narrow]) [drawer-toggle] {
         display: none;
       }
-      
+
       app-header {
         background-color: var(--app-secondary-color);
         color: #fff;
@@ -50,6 +51,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       app-header paper-icon-button {
         --paper-icon-button-ink-color: white;
+      }
+
+      a {
+        text-decoration: none;
+        color: white;
+        cursor: pointer;
+      }
+
+      .home {
+        position: absolute;
+        left: 0;
+        margin-left: 2rem;
+      }
+
+      .home img {
+        max-height: 65px;
       }
 
       .faq {
@@ -81,8 +98,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <app-header slot="header" condenses reveals effects="waterfall">
           <app-toolbar>
             <paper-icon-button icon="my-icons:menu" drawer-toggle></paper-icon-button>
+            <div class="home"><a on-click="_goToHome"><img src="images/home.png"></a></div>
             <div main-title>Lord of the rings</div>
-            <div class="faq">?</div>
+            <div class="faq"><a name="faq" href="#faq">?</a></div>
           </app-toolbar>
         </app-header>
 
@@ -91,6 +109,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <my-human-vs-human name="human-vs-human"></my-human-vs-human>
           <my-human-vs-computer name="human-vs-computer"></my-human-vs-computer>
           <my-view404 name="view404"></my-view404>
+          <my-faq name="faq"></my-faq>
         </iron-pages>
       </app-header-layout>
     </app-drawer-layout>
@@ -139,6 +158,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _showPage404() {
         this.page = 'view404';
+      }
+
+      _goToHome() {
+        window.location.replace(window.location.origin + window.location.pathname);
       }
     }
 
