@@ -1,0 +1,64 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="/bower_components/app-route/app-location.html">
+<link rel="import" href="/bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="/bower_components/app-route/app-route.html">
+<link rel="import" href="/bower_components/app-route/app-route.html">
+<link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="game-pvsc.html">
+
+<dom-module id="app-shell">
+  <template>
+    <style>
+    </style>
+
+    <app-location route="{{route}}" use-hash-as-path></app-location>
+    <app-route
+      route="{{route}}"
+      pattern="/:page"
+      data="{{data}}"
+      tail="{{subroute}}">
+    </app-route>
+
+    <div class="selection">
+      <paper-button class="selection__button" on-tap="_changeSelection" data-args="pvsc">Player VS Computer</paper-button>
+      <paper-button class="selection__button" on-tap="_changeSelection" data-args="pvsp">Player VS Player</paper-button>
+    </div>
+
+    <iron-pages selected="[[data.page]]" fallback-selection="list" attr-for-selected="page-name">
+      <game-pvsc page-name="pvsc" route="[[subroute]]"></game-pvsc>
+      <!--game-pvsp page-name="pvsp" route="[[subroute]]"></game-pvsp-->
+    </iron-pages>
+
+  </template>
+  <script>
+    (function appShell(customElements){
+      'use strict';
+
+      class AppShell extends Polymer.Element {
+        static get is() { return 'app-shell'; }
+        static get properties() {
+          return {
+          }
+        }
+
+        _changeSelection(event) {
+          let path = event.target.getAttribute('data-args');
+          this.set('route.path', `/${path}`);
+        }
+
+        static get observers() {
+          return [
+            '_routeChanged(data.page)'
+          ]
+        }
+
+        _routeChanged(page) {
+          if(page) {
+            Polymer.importHref(this.resolveUrl('game-' + page + '.html'), null, null, true);
+          }
+        }
+      }
+      customElements.define(AppShell.is, AppShell);
+    })(window.customElements);
+  </script>
+</dom-module>

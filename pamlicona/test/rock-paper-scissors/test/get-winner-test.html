@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Selecction Test</title>
+  <script src="../bower_components/webcomponentsjs/webcomponents-loader.js"></script>
+  <script src="../bower_components/web-component-tester/browser.js"></script>
+
+  <link rel="import" href="../bower_components/test-fixture/test-fixture.html">
+  <link rel="import" href="../src/get-winner.html">
+</head>
+<body>
+  <test-fixture id="rockVsPaper">
+    <template>
+      <get-winner player-one-selection="rock" player-two-selection="paper"></get-winner>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="paperVsScissors">
+    <template>
+      <get-winner player-one-selection="paper" player-two-selection="scissors"></get-winner>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="scissorsVsRock">
+    <template>
+      <get-winner player-one-selection="scissors" player-two-selection="rock"></get-winner>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="paperVsRock">
+    <template>
+      <get-winner player-one-selection="paper" player-two-selection="rock"></get-winner>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="scissorsVsPaper">
+    <template>
+      <get-winner player-one-selection="scissors" player-two-selection="paper"></get-winner>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="rockVsScissors">
+    <template>
+      <get-winner player-one-selection="rock" player-two-selection="scissors"></get-winner>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="paperVsPaper">
+    <template>
+      <get-winner player-one-selection="paper" player-two-selection="paper"></get-winner>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="scissorsVsScissors">
+    <template>
+      <get-winner player-one-selection="scissors" player-two-selection="scissors"></get-winner>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="rockVsRock">
+    <template>
+      <get-winner player-one-selection="rock" player-two-selection="rock"></get-winner>
+    </template>
+  </test-fixture>
+
+  <script>
+    suite('Return winner', () => {
+      let rockVsPaper;
+      let paperVsScissors;
+      let scissorsVsRock;
+      let paperVsRock;
+      let scissorsVsPaper;
+      let rockVsScissors;
+      setup(function() {
+        rockVsPaper = fixture('rockVsPaper');
+        paperVsScissors = fixture('paperVsScissors');
+        scissorsVsRock = fixture('scissorsVsRock');
+        paperVsRock = fixture('paperVsRock');
+        scissorsVsPaper = fixture('scissorsVsPaper');
+        rockVsScissors = fixture('rockVsScissors');
+      })
+      test('Rock vs Paper win Paper', (done) => {
+        rockVsPaper.addEventListener('my-winner', (event) => {
+          assert.equal(event.detail.winner, 'paper');
+          done();
+        });
+        rockVsPaper._winner();
+      });
+      test('Rock vs Scissors win Rock', (done) => {
+        scissorsVsRock.addEventListener('my-winner', (event) => {
+          assert.equal(event.detail.winner, 'rock');
+          done();
+        });
+        scissorsVsRock._winner();
+      });
+      test('Paper vs Scissors win Scissors', (done) => {
+        paperVsScissors.addEventListener('my-winner', (event) => {
+          assert.equal(event.detail.winner, 'scissors');
+          done();
+        });
+        paperVsScissors._winner();
+      });
+      test('Paper vs Rock win Paper', (done) => {
+        paperVsRock.addEventListener('my-winner', (event) => {
+          assert.equal(event.detail.winner, 'paper');
+          done();
+        });
+        paperVsRock._winner();
+      });
+      test('Scissors vs Rock win Rock', (done) => {
+        rockVsScissors.addEventListener('my-winner', (event) => {
+          assert.equal(event.detail.winner, 'rock');
+          done();
+        });
+        rockVsScissors._winner();
+      });
+      test('Scissors vs Paper win Scissors', (done) => {
+        scissorsVsPaper.addEventListener('my-winner', (event) => {
+          assert.equal(event.detail.winner, 'scissors');
+          done();
+        });
+        scissorsVsPaper._winner();
+      });
+    })
+    suite('Return draw', () => {
+      let paperVsPaper;
+      let scissorsVsScissors;
+      let scissorsVsRock;
+      setup(function() {
+        paperVsPaper = fixture('paperVsPaper');
+        scissorsVsScissors = fixture('scissorsVsScissors');
+        rockVsRock = fixture('rockVsRock');
+      })
+      test('Paper vs Paper is Draw', (done) => {
+        paperVsPaper.addEventListener('my-winner', (event) => {
+          assert.equal(event.detail.winner, 'draw');
+          done();
+        });
+        paperVsPaper._winner();
+      });
+      test('Scissors vs Scissors is Draw', (done) => {
+        scissorsVsScissors.addEventListener('my-winner', (event) => {
+          assert.equal(event.detail.winner, 'draw');
+          done();
+        });
+        scissorsVsScissors._winner();
+      });
+      test('Rock vs Rock is Draw', (done) => {
+        rockVsRock.addEventListener('my-winner', (event) => {
+          assert.equal(event.detail.winner, 'draw');
+          done();
+        });
+        rockVsRock._winner();
+      });
+    })
+  </script>
+</body>
+</html>

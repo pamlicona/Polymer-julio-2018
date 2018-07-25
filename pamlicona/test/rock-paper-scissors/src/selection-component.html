@@ -1,0 +1,45 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-radio-button/paper-radio-button.html">
+
+
+<dom-module id="selection-component">
+  <template>
+    <style>
+    </style>
+
+    <!--paper-radio-group>
+      <paper-radio-button name="rock" value="rock">Rock</paper-radio-button>
+      <paper-radio-button name="paper" value="paper">Paper</paper-radio-button>
+      <paper-radio-button name="scissors" value="scissors">Scissors</paper-radio-button>
+    </paper-radio-group-->
+
+    <paper-radio-button name="[[typeSelection]]" value="[[typeSelection]]">[[typeSelection]]</paper-radio-button>
+
+  </template>
+
+<script>
+  (function selectionComponent(customElements) {
+    'use strict';
+
+    class SelectionComponent extends Polymer.Element {
+      static get is() { return 'selection-component'; }
+      static get properties() {
+        return {
+          typeSelection: {
+            type: String,
+            value: ''
+          }
+        }
+      }
+
+      _sendSelection() {
+        this.dispatchEvent(new CustomEvent('my-selection', {
+          detail: {
+            selection: this.typeSelection
+          }
+        }));
+      }
+    }
+    customElements.define(SelectionComponent.is, SelectionComponent);
+  })(window.customElements);
+</script>
