@@ -4,6 +4,7 @@
 <link rel="import" href="/bower_components/app-route/app-route.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
 <link rel="import" href="game-pvsc.html">
+<link rel="import" href="game-pvsp.html">
 
 <dom-module id="app-shell">
   <template>
@@ -65,7 +66,7 @@
 
     <iron-pages selected="[[data.page]]" fallback-selection="list" attr-for-selected="page-name">
       <game-pvsc page-name="pvsc" route="[[subroute]]"></game-pvsc>
-      <!--game-pvsp page-name="pvsp" route="[[subroute]]"></game-pvsp-->
+      <game-pvsp page-name="pvsp" route="[[subroute]]"></game-pvsp>
       <game-win page-name="win" route="[[subroute]]"></game-win>
     </iron-pages>
 

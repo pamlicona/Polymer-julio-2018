@@ -1,11 +1,10 @@
-<link rel="import" href="../bower_components/paper-radio-group/paper-radio-group.html">
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="/bower_components/app-route/app-location.html">
 <link rel="import" href="/bower_components/app-route/app-route.html">
 <link rel="import" href="selection-component.html">
 <link rel="import" href="get-winner.html">
 
-<dom-module id="game-pvsc">
+<dom-module id="game-pvsp">
   <template>
     <style>
     </style>
@@ -17,7 +16,10 @@
       data="{{data}}">
     </app-route>
 
-    <selection-component on-my-selection="_getWin"></selection-component>
+    <h2>Player One</h2>
+    <selection-component on-my-selection="_getWinOne"></selection-component>
+    <h2>Player Two</h2>
+    <selection-component class="hidden" on-my-selection="_getWinTwo"></selection-component>
 
     <get-winner
       player-one-selection="[[playerOne]]"
@@ -28,11 +30,11 @@
   </template>
 
 <script>
-  (function gamePvsc(customElements) {
+  (function gamePvsp(customElements) {
     'use strict';
 
-    class GamePvsc extends Polymer.Element {
-      static get is() { return 'game-pvsc'; }
+    class GamePvsp extends Polymer.Element {
+      static get is() { return 'game-pvsp'; }
       static get properties() {
         return {
           route: {
@@ -45,32 +47,27 @@
           playerTwo: {
             type: String,
             value: ''
-          },
-          optionsList: {
-            type: Array,
-            value: ['rock', 'paper', 'scissors']
           }
         }
       }
 
       _showWinner(event) {
         let winner = event.detail.winner;
+        //this.set('playerOne', '');
+        //this.set('playerTwo', '');
         this.set('route.path', `/win/${winner}`);
       }
 
-      _getSelectionComputer() {
-        let position = Math.floor(Math.random() * 3);
-        let playerTwo = this.optionsList[position];
-        this.set('playerTwo', playerTwo);
-      }
-
-      _getWin(event) {
-        this._getSelectionComputer();
+      _getWinOne(event) {
         let playerOne = event.detail.selection;
-        console.log(playerOne)
         this.set('playerOne', playerOne);
       }
+
+      _getWinTwo(event) {
+        let playerTwo = event.detail.selection;
+        this.set('playerTwo', playerTwo);
+      }
     }
-    customElements.define(GamePvsc.is, GamePvsc);
+    customElements.define(GamePvsp.is, GamePvsp);
   })(window.customElements);
 </script>

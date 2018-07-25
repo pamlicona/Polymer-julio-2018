@@ -23,9 +23,9 @@
             value: ''
           },
           winner: {
-            type: String,
-            value: '',
-            computed: '_getWinner(playerOneSelection, playerTwoSelection)'
+            type: Object,
+            //computed: '_getWinner(playerOneSelection, playerTwoSelection)',
+            observer: '_winner'
           },
           listOptions: {
             type: Array,
@@ -46,20 +46,23 @@
 
       static get observers() {
         return [
-          '_winner(playerOneSelection, playerTwoSelection)'
+          '_getWinner(playerOneSelection, playerTwoSelection)'
         ]
       }
 
       _getWinner(playerOne, playerTwo) {
-        return this.listOptions.find(item => {
-          return (
-            (playerOne === item.one && playerTwo === item.two) ||
-            (playerOne === item.two && playerTwo === item.one)
-          )
-        });
+        console.log('1',playerOne, '2',playerTwo)
+        if (playerOne !== '' && playerTwo !== '') {
+          this.winner = this.listOptions.find(item => {
+            return (
+              (playerOne === item.one && playerTwo === item.two) ||
+              (playerOne === item.two && playerTwo === item.one)
+            )
+          });
+        }
       }
 
-      _winner(playerOne, playerTwo) {
+      _winner() {
         if (this.winner !== undefined) {
           this.dispatchEvent(new CustomEvent('my-winner', {
             detail: {

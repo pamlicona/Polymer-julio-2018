@@ -35,15 +35,15 @@
     </style>
 
     <paper-radio-group on-iron-select="_getSelection" class="radios">
-      <paper-radio-button class="radios__rock" name="rock">
+      <paper-radio-button checked="false" class="radios__rock" name="rock">
         <img src="src/assets/img/Mario-Bros.png" />
       </paper-radio-button>
 
-      <paper-radio-button class="radios__paper" name="paper">
+      <paper-radio-button checked="false" class="radios__paper" name="paper">
         <img src="src/assets/img/princess.png" />
       </paper-radio-button>
 
-      <paper-radio-button class="radios__scissors" name="scissors">
+      <paper-radio-button id="scissors" checked="false" class="radios__scissors" name="scissors">
         <img src="src/assets/img/bowser.png" />
       </paper-radio-button>
     </paper-radio-group>
@@ -68,9 +68,11 @@
       _getSelection(event) {
         this.set('typeSelection', event.detail.item.name);
         this._sendSelection();
+        this.$.scissors.checked = false;
       }
 
       _sendSelection() {
+        console.log('evebt');
         this.dispatchEvent(new CustomEvent('my-selection', {
           detail: {
             selection: this.typeSelection
