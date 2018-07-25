@@ -25,8 +25,7 @@
           winner: {
             type: String,
             value: '',
-            computed: '_getWinner(playerOneSelection, playerTwoSelection)',
-            observer: '_winner'
+            computed: '_getWinner(playerOneSelection, playerTwoSelection)'
           },
           listOptions: {
             type: Array,
@@ -45,8 +44,13 @@
         }
       }
 
+      static get observers() {
+        return [
+          '_winner(playerOneSelection, playerTwoSelection)'
+        ]
+      }
+
       _getWinner(playerOne, playerTwo) {
-        console.log('jsjsjs', playerOne, playerTwo)
         return this.listOptions.find(item => {
           return (
             (playerOne === item.one && playerTwo === item.two) ||

@@ -2,14 +2,42 @@
 <link rel="import" href="/bower_components/app-route/app-location.html">
 <link rel="import" href="/bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="/bower_components/app-route/app-route.html">
-<link rel="import" href="/bower_components/app-route/app-route.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
 <link rel="import" href="game-pvsc.html">
 
 <dom-module id="app-shell">
   <template>
     <style>
+      .selection {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        height: 200px;
+      }
+
+      paper-button {
+        border: 2px solid;
+        padding: 15px;
+        font-weight: bold;
+      }
+
+      h2 {
+        background-color: white;
+        display: flex;
+        margin: 0px;
+        height: 60px;
+        justify-content: center;
+        font-family: sans-serif;
+        font-weight: 100;
+        letter-spacing: 2px;
+        font-size: 26px;
+        align-items: center;
+      }
     </style>
+
+    <header>
+      <h2>Rock Paper and Scissors</h2>
+    </header>
 
     <app-location route="{{route}}" use-hash-as-path></app-location>
     <app-route
@@ -27,6 +55,7 @@
     <iron-pages selected="[[data.page]]" fallback-selection="list" attr-for-selected="page-name">
       <game-pvsc page-name="pvsc" route="[[subroute]]"></game-pvsc>
       <!--game-pvsp page-name="pvsp" route="[[subroute]]"></game-pvsp-->
+      <game-win page-name="win" route="[[subroute]]"></game-win>
     </iron-pages>
 
   </template>

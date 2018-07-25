@@ -5,12 +5,46 @@
 <dom-module id="selection-component">
   <template>
     <style>
+      .radios {
+        display: grid;
+        grid-template-columns: 0.3fr 1fr 1fr 1fr 0.3fr;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .radios__rock {
+        grid-column: 2;
+      }
+
+      .radios__rock img {
+        width: 50%;
+      }
+
+      .radios__paper img {
+        width: 56%;
+      }
+
+      paper-radio-button {
+        --paper-radio-button-radio-container: {
+          position: absolute;
+          visibility: hidden;
+        };
+      }
+
     </style>
 
-    <paper-radio-group on-iron-select="_getSelection">
-      <paper-radio-button name="rock">Rock</paper-radio-button>
-      <paper-radio-button name="paper">Paper</paper-radio-button>
-      <paper-radio-button name="scissors">Scissors</paper-radio-button>
+    <paper-radio-group on-iron-select="_getSelection" class="radios">
+      <paper-radio-button class="radios__rock" name="rock">
+        <img src="src/assets/img/Mario-Bros.png" />
+      </paper-radio-button>
+
+      <paper-radio-button class="radios__paper" name="paper">
+        <img src="src/assets/img/princess.png" />
+      </paper-radio-button>
+
+      <paper-radio-button class="radios__scissors" name="scissors">
+        <img src="src/assets/img/bowser.png" />
+      </paper-radio-button>
     </paper-radio-group>
 
   </template>

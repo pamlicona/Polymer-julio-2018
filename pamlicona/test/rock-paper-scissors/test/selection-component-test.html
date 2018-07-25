@@ -24,23 +24,26 @@
       setup(function() {
         selectionComponent = fixture('selectionComponent');
       })
-      test('Selection should be rock', () => {
+      test('Selection should be rock', (done) => {
         selectionComponent.addEventListener('my-selection', (event) => {
           assert.equal(event.detail.selection, 'rock');
+          done();
         });
         selectionComponent.typeSelection = 'rock';
         selectionComponent._sendSelection();
       });
-      test('Selection should be paper', () => {
+      test('Selection should be paper', (done) => {
         selectionComponent.addEventListener('my-selection', (event) => {
           assert.equal(event.detail.selection, 'paper');
+          done();
         });
         selectionComponent.typeSelection = 'paper';
         selectionComponent._sendSelection();
       });
-      test('Selection should be scissors', () => {
+      test('Selection should be scissors', (done) => {
         selectionComponent.addEventListener('my-selection', (event) => {
           assert.equal(event.detail.selection, 'scissors');
+          done();
         });
         selectionComponent.typeSelection = 'scissors';
         selectionComponent._sendSelection();
