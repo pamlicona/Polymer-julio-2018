@@ -36,11 +36,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         display: block;
       }
-
+      
       app-drawer-layout:not([narrow]) [drawer-toggle] {
         display: none;
       }
-
+      
       app-header {
         background-color: var(--app-secondary-color);
         color: #fff;
@@ -97,10 +97,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </template>
 
   <script>
-    // Gesture events like tap and track generated from touch will not be
-    // preventable, allowing for better scrolling performance.
-    // Polymer.setPassiveTouchGestures(true);
-
     class MyApp extends Polymer.Element {
       static get is() { return 'my-app'; }
 
@@ -126,7 +122,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       _routePageChanged(page, routeData) {
-        // console.log(page, routeData);
         // If no page was found in the route data, page will be an empty string.
         // Default to 'view1' in that case.
         this.page = page || 'view1';
