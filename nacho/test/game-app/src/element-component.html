@@ -1,0 +1,100 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+
+<dom-module id="element-component">
+  <template>
+    <style>
+      .container {
+        display: block;
+        position: relative;
+        margin-bottom: 12px;
+        margin-top: 12px;
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+      .container input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+      }
+      .checks{
+        padding: 50px;
+      }
+      .opacity{
+        opacity: .3;
+      }
+    </style>
+    <div id="checks" class="checks">
+      <label class="container">
+        <img src="https://vignette.wikia.nocookie.net/leonhartimvu/images/4/4f/Charmander_ES.png/revision/latest?cb=20141012205004" style="width: 100px;">
+        <input type="radio" on-click="_getElement" data-element="fuego" name="mode">
+      </label>
+      <label class="container">
+        <img src="https://vignette.wikia.nocookie.net/leonhartimvu/images/f/f5/001_Bulbasaur_AG3.png/revision/latest?cb=20141012072249" style="width: 200px;">
+        <input type="radio" on-click="_getElement" data-element="tierra" name="mode">
+      </label>
+      <label class="container">
+        <img src="http://static.pokemonpets.com/images/monsters-images-300-300/7-Squirtle.png" style="width: 125px;">
+        <input type="radio" on-click="_getElement" data-element="agua" name="mode">
+      </label>
+    </div>
+  </template>
+  <script>
+    (function elementComponent(customElements){
+      'use strict';
+
+      class ElementComponent extends Polymer.Element {
+        static get is() { return 'element-component'; }
+        static get properties() {
+          return {
+              element:{
+                type:String,
+                value:'',
+                observer:'_changeElement'
+              },
+              player:{
+                type: String,
+                value: 'Computer'
+              }
+          }
+        }
+        connectedCallback() {
+          super.connectedCallback();
+        }
+        _getElement(event){
+          const element = event.target.getAttribute('data-element');
+          this.element = element;
+        }
+
+        _changeElement(newVal){
+          if(newVal){
+            this.resetOpacity(true);
+            this._executeDispatchEvent();
+          }
+        }
+
+        _executeDispatchEvent(){
+          this.dispatchEvent(new CustomEvent('selected-element',{
+            bubbles: true,
+            detail:{
+              message: this.element,
+              player: this.player
+            }
+          }));
+        }
+
+        resetOpacity(value){
+          if(value){
+            this.$.checks.classList.add("opacity");
+          }else{
+            this.$.checks.classList.remove("opacity");
+          }
+        }
+
+      }
+      customElements.define(ElementComponent.is, ElementComponent);
+    })(window.customElements);
+  </script>
+</dom-module>

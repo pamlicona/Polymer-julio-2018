@@ -1,0 +1,72 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+
+<dom-module id="logic-component">
+  <template>
+    <style>
+    :host {
+      display: none;
+    }
+    </style>
+  </template>
+  <script>
+    (function logicComponent(customElements){
+      'use strict';
+
+      class LogicComponent extends Polymer.Element {
+        static get is() { return 'logic-component'; }
+        static get properties() {
+          return {
+            players:{
+              type:Array,
+              value:[]
+            }
+          }
+        }
+        connectedCallback() {
+          super.connectedCallback();
+        }
+
+        static get observers() {
+          return [
+            '_resultGame(players.length)'
+          ]
+        }
+        _resultGame(data){
+          if(data==2){
+            this._executeDispatchEvent(this._compareResults(this.players[0],this.players[1]));
+          }
+        }
+
+        _compareResults(playerOne,playerTwo){
+
+          if(playerOne.value == playerTwo.value){
+            return {winner:"Empate"};
+          }else if(playerOne.value == 'agua' && playerTwo.value == 'tierra'){
+            return {winner:`Player ${playerTwo.player} elemento => ${playerTwo.value}`};
+          }else if(playerOne.value == 'agua' && playerTwo.value == 'fuego'){
+            return {winner:`Player ${playerOne.player} elemento => ${playerOne.value}`};
+          }else if(playerOne.value == 'tierra' && playerTwo.value == 'agua'){
+            return {winner:`Player ${playerOne.player} elemento => ${playerOne.value}`};
+          }else if(playerOne.value == 'tierra' && playerTwo.value == 'fuego'){
+            return {winner:`Player ${playerTwo.player} elemento => ${playerTwo.value}`};
+          }else if(playerOne.value == 'fuego' && playerTwo.value == 'agua'){
+            return {winner:`Player ${playerTwo.player} elemento => ${playerTwo.value}`};
+          }else if(playerOne.value == 'fuego' && playerTwo.value == 'tierra'){
+            return {winner:`Player ${playerOne.player} elemento => ${playerOne.value}`};
+          }
+        }
+
+        _executeDispatchEvent(message){
+          this.dispatchEvent(new CustomEvent('logic-game',{
+            bubbles: true,
+            detail:{
+              message: message,
+            }
+          }));
+        }
+
+      }
+      customElements.define(LogicComponent.is, LogicComponent);
+    })(window.customElements);
+  </script>
+</dom-module>
