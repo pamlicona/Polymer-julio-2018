@@ -1,0 +1,227 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/lib/elements/dom-if.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="my-human-vs-human">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+        padding: 10px;
+      }
+
+      h2,
+      h3 {
+        color: #ffffff
+      }
+
+      img {
+        max-width: 350px;
+      }
+
+      p {
+        color: #ffffff;
+        font-size: 1.5rem;
+      }
+
+      .options {
+        display: flex;
+        justify-content: space-between;
+        margin: 19vh 0 22vh;
+      }
+
+      .options.no-margin {
+        margin: 3vh 0;
+      }
+
+      .options a {
+        align-items: center;
+        display: flex;
+        position: relative;
+        cursor: pointer;
+      }
+
+      .options a .description {
+        position: absolute;
+        color: #ffffff;
+        top: 30%;
+        left: 28%;
+        font-size: 2rem;
+        transition: opacity .2s linear;
+        opacity: 0;
+      }
+
+      .options a:hover .description {
+        opacity: 1;
+      }
+
+      .options a:hover .opacity {
+        opacity: .6;
+      }
+
+      .final_image {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .final_image p {
+        font-size: 2rem;
+        width: 100%;
+        text-align: center;
+        background: black;
+        padding: 2rem 0rem;
+        margin-bottom: 20vh;
+      }
+
+      .final_image img {
+        margin-bottom: 2vh;
+      }
+    </style>
+
+    <template is="dom-if" if="[[!firstOption]]">
+      <h2>Player 1: Select your option</h2>
+      <div class="options">
+        <a on-click="_setFirstHumanHobbit">
+          <div class="opacity"></div>
+          <p class="description">Hobbit</p>
+          <img src="images/hobbit.jpg">
+        </a>
+        <a on-click="_setFirstHumanOrc">
+          <div class="opacity"></div>
+          <p class="description">Orc</p>
+          <img src="images/orc.jpg">
+        </a>
+        <a on-click="_setFirstHumanElf">
+          <div class="opacity"></div>
+          <p class="description">Elf</p>
+          <img src="images/elf.jpg">
+        </a>
+      </div>
+    </template>
+
+    <template is="dom-if" if="[[step2]]">
+        <h2>Player 2: Select your option</h2>
+        <div class="options">
+          <a on-click="_setSecondHumanHobbit">
+            <div class="opacity"></div>
+            <p class="description">Hobbit</p>
+            <img src="images/hobbit.jpg">
+          </a>
+          <a on-click="_setSecondHumanOrc">
+            <div class="opacity"></div>
+            <p class="description">Orc</p>
+            <img src="images/orc.jpg">
+          </a>
+          <a on-click="_setSecondHumanElf">
+            <div class="opacity"></div>
+            <p class="description">Elf</p>
+            <img src="images/elf.jpg">
+          </a>
+        </div>
+      </template>
+
+    <template is="dom-if" if="[[result]]">
+      <div class="options no-margin">
+        <p>Player 1: [[firstOption]]</p>
+        <p>Player 2: [[secondOption]]</p>
+      </div>
+      <div class="final_image">
+        <img src="images/[[finalImage]].jpg">
+        <p>[[result]]</p>
+      </div>
+    </template>
+  </template>
+
+  <script>
+    class MyHumanHuman extends Polymer.Element {
+      static get is() { return 'my-human-vs-human'; }
+      static get properties() {
+        return {
+          firstOption: {
+            type: String,
+            value: null,
+            reflectToAttribute: true,
+            observer: '_firstOptionSelected',
+          },
+          secondOption: {
+            type: String,
+            value: null,
+            reflectToAttribute: true,
+            observer: '_secondOptionSelected',
+          },
+          step2: {
+            type: Boolean,
+            value: false
+          },
+          result: {
+            type: String,
+            value: null
+          },
+          finalImage: {
+            type: String
+          }
+        };
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+        console.log('my-human-vs-human created!');
+      }
+
+      _setFirstHumanHobbit() {
+        this.firstOption = "Hobbit";
+      }
+      _setFirstHumanOrc() {
+        this.firstOption = "Orc";
+      }
+      _setFirstHumanElf() {
+        this.firstOption = "Elf";
+      }
+
+      _setSecondHumanHobbit() {
+        this.secondOption = "Hobbit";
+      }
+      _setSecondHumanOrc() {
+        this.secondOption = "Orc";
+      }
+      _setSecondHumanElf() {
+        this.secondOption = "Elf";
+      }
+
+      _firstOptionSelected() {
+        if(!this.firstOption){
+          return;
+        }
+        this.step2 = true;
+        this._dispatchEvent('first-option-selected', this.firstOption);
+      }
+
+      _secondOptionSelected() {
+        if(!this.secondOption){
+          return;
+        }
+        this._dispatchEvent('second-option-selected', this.secondOption);
+        this._getResult();
+      }
+
+      _getResult() {
+        this.step2 = false;
+        const rules = { "Hobbit": { "Hobbit": "Was a tie", "Orc": "Orc wins", "Elf": "Hobbit wins" }, "Orc": { "Orc": "Was a tie", "Elf": "Elf wins", "Hobbit": "Orc wins" }, "Elf": { "Elf": "Was a tie", "Hobbit": "Hobbit wins", "Orc": "Elf wins" } }
+        this.result = rules[this.firstOption][this.secondOption];
+        const finalImage = this.result.split(" ");
+        this.finalImage = finalImage[0].toLowerCase();
+      }
+
+      _dispatchEvent(event, detail, bubbles = true) {
+        this.dispatchEvent(new CustomEvent(event, {
+          bubbles: bubbles,
+          composed: true,
+          detail: detail
+        }));
+      }
+    }
+
+    window.customElements.define(MyHumanHuman.is, MyHumanHuman);
+  </script>
+</dom-module>
