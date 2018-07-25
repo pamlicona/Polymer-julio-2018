@@ -1,0 +1,35 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="character-card.html">
+<dom-module id="character-detail">
+    <template>
+        <style>
+        </style>
+        <character-card character-id="[[info.id]]" name="[[info.name]]" status="[[info.status]]" species="[[info.species]]" image="[[info.image]]"></character-card>
+    </template>
+    <script>
+        (function characterDetail(customElements){
+            'use strict';
+
+            class CharacterDetail extends Polymer.Element {
+                static get is() { return 'character-detail'; }
+                
+                static get properties() {
+                    return {
+                        info : {
+                            type : Array,
+                            value : []
+                        }
+                    }
+                }
+          
+                connectedCallback() {
+                    super.connectedCallback();
+                    
+                    console.log("valores:");
+                    console.log(this.info);
+                }
+            }
+            customElements.define(CharacterDetail.is, CharacterDetail);
+        })(window.customElements);
+    </script>
+</dom-module>

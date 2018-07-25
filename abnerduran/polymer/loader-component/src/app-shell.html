@@ -1,0 +1,117 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="loader-component.html">
+
+<dom-module id="app-shell">
+  <template>
+    <style>
+      :host {
+        /* text-align: center; */
+      }
+
+      .buttons {
+          display:flex; 
+          justify-content: flex-start;
+          margin-top: 30px;
+          padding: 0 1rem;;
+      }
+      .buttons > button {
+          margin-right: 10px;
+          padding: .4rem 1rem;
+          background: rgb(19, 228, 148);
+          color: white;
+          font-size: 18px;
+          border-radius: 12px;
+          border: 1px solid transparent;
+          cursor: pointer;
+      }
+
+      .buttons > button.color {
+          background: blue;
+      }
+
+      .buttons > button:hover {
+          filter: brightness(1.1);
+          transform: scale(1.05)
+      }
+      .buttons > button:active,
+      .buttons > button:focus {
+        outline: none;
+      }
+    </style>
+    
+    <loader-component></loader-component>
+
+    <div class="buttons">
+        <button on-click="startFastLoader">Fast</button>
+        <button on-click="startSlowLoader">Slow</button>
+        <button class="color" on-click="changeColor">Color</button>
+    </div>
+
+  </template>
+  <script>
+    (function appShell(customElements) {
+      'use strict';
+
+      class AppShell extends Polymer.Element {
+        static get is() { return 'app-shell'; }
+        static get properties() {
+          return {
+            speed: {
+              type: String,
+              value: 'fast',
+              reflectToAttribute: true,
+            },
+            message: {
+              type: String,
+              value: null
+            }
+          }
+        }
+
+        connectedCallback() {
+          super.connectedCallback();
+          this.addEventListener('finish-event', this._getMessage);
+        }
+
+        _getMessage() {
+          this.message = event.detail;
+          console.log(this.message);
+        }
+        
+        startFastLoader() {
+          this.speed = 'fast';
+          this.setSpeedAttr();
+        }
+
+        startSlowLoader() {
+          this.speed = 'slow';
+          this.setSpeedAttr();
+        }
+
+        setSpeedAttr(){
+          const loader = this.shadowRoot.querySelector('loader-component');
+          loader.setAttribute('speed', this.speed);
+        }
+
+        changeColor() {
+          const color = this.getRandomColor();
+          const loaderComponent = this.shadowRoot.querySelector('loader-component');
+          const btnColor = this.shadowRoot.querySelector('.color');
+          loaderComponent.shadowRoot.querySelector('.loader').style.background = color;
+          btnColor.style.background = color;
+        };
+
+        getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+      }
+      customElements.define(AppShell.is, AppShell);
+    })(window.customElements);
+  </script>
+</dom-module>

@@ -1,0 +1,65 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="loader-component.html">
+<link rel="import" href="styles-component.html">
+
+<dom-module id="app-shell">
+  <template>
+    <style include="custom-styles">
+
+    </style>
+
+    <h1>Loader Random</h1>
+    <loader-component speed=[[speed]] id="loaderComponent" on-load-finished="_finishLoader"></loader-component>
+
+    <label class="container">Slow
+      <input type="radio" on-click="_setMode" data-speed="slow" name="mode">
+      <span class="checkmark"></span>
+    </label>
+    <label class="container">Fast
+      <input type="radio" on-click="_setMode" data-speed="fast" name="mode">
+      <span class="checkmark"></span>
+    </label>
+
+    <button type="button" name="button" on-click="_startLoader">Inicia el Proceso </button>
+    <button type="button" name="button" on-click="_changeColor">Cambia el Color</button>
+    <h1 id="message"></h1>
+
+  </template>
+  <script>
+    (function appShell(customElements){
+      'use strict';
+
+      class AppShell extends Polymer.Element {
+        static get is() { return 'app-shell'; }
+        static get properties() {
+          return {
+            imgActive: {
+              type: String,
+              value: "https://randomuser.me/api/portraits/men/7.jpg"
+            }
+          }
+        }
+        connectedCallback() {
+          super.connectedCallback();
+        }
+        _startLoader(){
+          this.$.loaderComponent.startLoader();
+        }
+        _changeColor(){
+          this.$.loaderComponent.changeColor();
+        }
+        _setMode(event){
+          let speed = event.target.getAttribute('data-speed');
+          this.speed = speed;
+        }
+        _finishLoader(event){
+          console.log(event);
+          setTimeout(()=>{
+            this.$.message.innerHTML = event.detail.message;
+          }, event.detail.timeFinish);
+        }
+      }
+      customElements.define(AppShell.is, AppShell);
+    })(window.customElements);
+  </script>
+</dom-module>
