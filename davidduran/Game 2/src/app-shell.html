@@ -1,0 +1,134 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="game-component.html">
+<link rel="import" href="personaje-card-component.html">
+<link rel="import" href="/bower_components/polymer/lib/elements/dom-if.html">
+<link rel="import" href="/bower_components/app-route/app-location.html">
+<link rel="import" href="/bower_components/app-route/app-route.html">
+<link rel="import" href="/bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="/bower_components/iron-ajax/iron-ajax.html">
+
+
+<dom-module id="app-shell">
+  
+  <template>
+    <style>
+      .userLoged {  
+        font-family: sans-serif;
+      }
+      :host {
+        text-align: center;
+      }
+      slider-component {
+        display: block;
+      }
+      form {
+        margin-top: 40px;
+      }
+      body {
+        background-image: url("img/img-login.png");
+      }
+    </style>
+
+    <app-location route="{{route}}"></app-location>
+    <app-route
+      route="{{route}}"
+      pattern="/:page"
+      data="{{data}}"
+      tail="{{tail}}">
+    </app-route>
+
+    <iron-pages selected="[[data.page]]" attr-for-selected="page" fallback-selection="Machine" >
+      
+      <section page="Game2Players">
+          <game-component></game-component>
+      </section>
+
+      <section  page="Machine">
+            <game-component></game-component>
+      </section>
+
+     
+    </iron-pages>
+
+    
+  </template>
+
+
+  <script>
+    (function appShell(customElements) {
+      'use strict';
+
+      class AppShell extends Polymer.Element {
+        static get is() { return 'app-shell'; }
+        static get properties() {
+          return {
+            route:{
+              type: String,
+              value: ""
+            },
+            side: {
+              type: String,
+              value: "Light"
+            },
+
+            logged : {
+              type: Boolean,
+              value: true
+            },
+            showLogin:{
+              type: Boolean,
+              value: true 
+            },
+            showIndexDark:{
+              type: Boolean,
+              value: true 
+            },
+            showIndexLight:{
+              type: Boolean,
+              value: false 
+            },
+            
+
+          }
+        }
+
+       //add new image Method
+        _addPet() {
+          return 0;
+        }
+
+        _mostrarRoute() {
+          console.log(this.route);
+        }
+
+        _cambiarRoute() {
+          this.set('route', '/otra/66');
+        }
+
+        _mostrarData() {
+          console.log('Data:', this.data);
+          console.log('Tail:', this.tail);
+        }
+
+        redirectSide(event){
+          this.set('showLogin', false);
+          if (event.detail.type === 'light') {
+            this.set('showIndexLight', true);
+            this.set('side', "Light");
+            this.set('route.path', '/LightSide/');
+          }else{
+            this.set('showIndexDark', true);
+            this.set('side', 'Dark');
+            this.set('route.path', '/DarkSide');
+          }
+          console.log("logueado" + this.side);
+        }
+
+
+      }
+    customElements.define(AppShell.is, AppShell);
+    })(window.customElements);
+  </script>
+
+
+</dom-module>
