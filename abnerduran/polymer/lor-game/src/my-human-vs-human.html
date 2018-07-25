@@ -14,18 +14,18 @@
     <template is="dom-if" if="[[!firstOption]]">
       <h2>Player 1: Select your option</h2>
       <div class="options">
-        <a on-click="_setFirstHumanHobbit">
-          <div class="opacity"></div>
+        <a on-click="_setFirstOption">
+          <div class="opacity" name="Hobbit"></div>
           <p class="description">Hobbit</p>
           <img src="images/hobbit.jpg">
         </a>
-        <a on-click="_setFirstHumanOrc">
-          <div class="opacity"></div>
+        <a on-click="_setFirstOption">
+          <div class="opacity" name="Orc"></div>
           <p class="description">Orc</p>
           <img src="images/orc.jpg">
         </a>
-        <a on-click="_setFirstHumanElf">
-          <div class="opacity"></div>
+        <a on-click="_setFirstOption">
+          <div class="opacity" name="Elf"></div>
           <p class="description">Elf</p>
           <img src="images/elf.jpg">
         </a>
@@ -35,18 +35,18 @@
     <template is="dom-if" if="[[step2]]">
         <h2>Player 2: Select your option</h2>
         <div class="options">
-          <a on-click="_setSecondHumanHobbit">
-            <div class="opacity"></div>
+          <a on-click="_setSecondOption">
+            <div class="opacity" name="Hobbit"></div>
             <p class="description">Hobbit</p>
             <img src="images/hobbit.jpg">
           </a>
-          <a on-click="_setSecondHumanOrc">
-            <div class="opacity"></div>
+          <a on-click="_setSecondOption">
+            <div class="opacity" name="Orc"></div>
             <p class="description">Orc</p>
             <img src="images/orc.jpg">
           </a>
-          <a on-click="_setSecondHumanElf">
-            <div class="opacity"></div>
+          <a on-click="_setSecondOption">
+            <div class="opacity" name="Elf"></div>
             <p class="description">Elf</p>
             <img src="images/elf.jpg">
           </a>
@@ -101,38 +101,26 @@
         console.log('my-human-vs-human created!');
       }
 
-      _setFirstHumanHobbit() {
-        this.firstOption = "Hobbit";
-      }
-      _setFirstHumanOrc() {
-        this.firstOption = "Orc";
-      }
-      _setFirstHumanElf() {
-        this.firstOption = "Elf";
+      _setFirstOption(event) {
+        const option = event.target.getAttribute('name');
+        this.firstOption = option;
       }
 
-      _setSecondHumanHobbit() {
-        this.secondOption = "Hobbit";
-      }
-      _setSecondHumanOrc() {
-        this.secondOption = "Orc";
-      }
-      _setSecondHumanElf() {
-        this.secondOption = "Elf";
+      _setSecondOption(event) {
+        const option = event.target.getAttribute('name');
+        this.secondOption = option;
       }
 
       _firstOptionSelected() {
-        if(!this.firstOption){
+        if(!this.firstOption)
           return;
-        }
         this.step2 = true;
         this._dispatchEvent('first-option-selected', this.firstOption);
       }
 
       _secondOptionSelected() {
-        if(!this.secondOption){
+        if(!this.secondOption)
           return;
-        }
         this._dispatchEvent('second-option-selected', this.secondOption);
         this._getResult();
       }
@@ -141,9 +129,13 @@
         this.step2 = false;
         const rules = { "Hobbit": { "Hobbit": "Was a tie", "Orc": "Orc wins", "Elf": "Hobbit wins" }, "Orc": { "Orc": "Was a tie", "Elf": "Elf wins", "Hobbit": "Orc wins" }, "Elf": { "Elf": "Was a tie", "Hobbit": "Hobbit wins", "Orc": "Elf wins" } }
         this.result = rules[this.firstOption][this.secondOption];
+        this._getFinalImage();
+        return this.result;
+      }
+
+      _getFinalImage() {
         const finalImage = this.result.split(" ");
         this.finalImage = finalImage[0].toLowerCase();
-        return this.result;
       }
 
       _dispatchEvent(event, detail, bubbles = true) {

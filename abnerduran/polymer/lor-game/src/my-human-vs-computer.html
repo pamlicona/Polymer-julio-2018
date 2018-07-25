@@ -14,18 +14,18 @@
     <template is="dom-if" if="[[!humanOption]]">
       <h2>Select your option</h2>
       <div class="options">
-        <a on-click="_setHumanHobbit">
-          <div class="opacity"></div>
+        <a on-click="_setHumanOption">
+          <div class="opacity" name="Hobbit"></div>
           <p class="description">Hobbit</p>
           <img src="images/hobbit.jpg">
         </a>
-        <a on-click="_setHumanOrc">
-          <div class="opacity"></div>
+        <a on-click="_setHumanOption">
+          <div class="opacity" name="Orc"></div>
           <p class="description">Orc</p>
           <img src="images/orc.jpg">
         </a>
-        <a on-click="_setHumanElf">
-          <div class="opacity"></div>
+        <a on-click="_setHumanOption">
+          <div class="opacity" name="Elf"></div>
           <p class="description">Elf</p>
           <img src="images/elf.jpg">
         </a>
@@ -83,20 +83,14 @@
         this.machineOption = machineOption;
       }
 
-      _setHumanHobbit() {
-        this.humanOption = "Hobbit";
-      }
-      _setHumanOrc() {
-        this.humanOption = "Orc";
-      }
-      _setHumanElf() {
-        this.humanOption = "Elf";
+      _setHumanOption(event) {
+        const option = event.target.getAttribute('name');
+        this.humanOption = option
       }
 
       _humanOptionSelected() {
-        if (!this.humanOption) {
+        if (!this.humanOption) 
           return;
-        }
         this._dispatchEvent('human-option-selected', this.humanOption);
         this._getResult();
       }
@@ -108,9 +102,13 @@
       _getResult() {
         const rules = { "Hobbit": { "Hobbit": "Was a tie", "Orc": "Orc wins", "Elf": "Hobbit wins" }, "Orc": { "Orc": "Was a tie", "Elf": "Elf wins", "Hobbit": "Orc wins" }, "Elf": { "Elf": "Was a tie", "Hobbit": "Hobbit wins", "Orc": "Elf wins" } }
         this.result = rules[this.humanOption][this.machineOption];
+        this._getFinalImage();
+        return this.result;
+      }
+
+      _getFinalImage() {
         const finalImage = this.result.split(" ");
         this.finalImage = finalImage[0].toLowerCase();
-        return this.result;
       }
 
       _dispatchEvent(event, detail, bubbles = true) {
