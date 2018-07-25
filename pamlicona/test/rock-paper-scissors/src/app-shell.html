@@ -33,6 +33,12 @@
         font-size: 26px;
         align-items: center;
       }
+
+      .selection__info {
+        border: 2px solid;
+        padding: 30px 20px 30px 40px;
+        background-color: aliceblue;
+      }
     </style>
 
     <header>
@@ -49,6 +55,11 @@
 
     <div class="selection">
       <paper-button class="selection__button" on-tap="_changeSelection" data-args="pvsc">Player VS Computer</paper-button>
+      <ul class="selection__info">
+        <li>Mario win Bowser</li>
+        <li>Bowser win Princess</li>
+        <li>Princess win Mario</li>
+      </ul>
       <paper-button class="selection__button" on-tap="_changeSelection" data-args="pvsp">Player VS Player</paper-button>
     </div>
 

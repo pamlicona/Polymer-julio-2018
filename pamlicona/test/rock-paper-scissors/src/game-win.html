@@ -22,6 +22,7 @@
     </app-route>
 
     <div class="result">
+
 	    <template is="dom-if" if="[[rock]]">
 	      <img class="result__img" src="src/assets/img/Mario-Bros.png" />
 	    </template>
@@ -49,26 +50,7 @@
       static get is() { return 'game-win'; }
       static get properties() {
         return {
-          route: {
-            type: Object//,
-            //observer: '_newWin'
-          },
-          rock: {
-          	type: Boolean,
-          	value: false
-          },
-          paper: {
-          	type: Boolean,
-          	value: false
-          },
-          scissors: {
-          	type: Boolean,
-          	value: false
-          },
-          draw: {
-          	type: Boolean,
-          	value: false
-          }
+          route: Object
         }
       }
 
