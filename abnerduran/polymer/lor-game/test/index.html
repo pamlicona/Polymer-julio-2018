@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>Tests</title>
+
+    <script src="../bower_components/web-component-tester/browser.js"></script>
+  </head>
+  <body>
+    <script>
+      WCT.loadSuites([
+        // Load using native shadow dom
+        'my-human-vs-computer-test.html?dom=shadow',
+        'my-human-vs-human-test.html?dom=shadow',
+      ]);
+    </script>
+  </body>
+</html>

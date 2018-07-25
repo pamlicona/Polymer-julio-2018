@@ -178,7 +178,7 @@
         this.result = rules[this.humanOption][this.machineOption];
         const finalImage = this.result.split(" ");
         this.finalImage = finalImage[0].toLowerCase();
-
+        return this.result;
       }
 
       _dispatchEvent(event, detail, bubbles = true) {
