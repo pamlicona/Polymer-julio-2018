@@ -16,6 +16,11 @@
         background: rgba(0,0,0,0.1)
       }
 
+      .titleN{
+        margin-top: -100px;
+        color: white;
+        position: absolute;
+      }
       #content{
         position: relative;
         margin: calc(50vh - 150px) auto 0 auto;
@@ -216,7 +221,8 @@
       <iron-pages selected="[[data.page]]" attr-for-selected="page" fallback-selection="Player1" >
         <section page="Player1">
         <div class="cards__container hidden" id="cardsC">
-          <h1>Player 1</h1>
+            <h1 class="titleN">[[winner]]</h1> </br>
+            <h1 class="titleN"></h1>
             <card-component on-send-user-selection="_gameStart" item-card="blaster"></card-component>
             <card-component on-send-user-selection="_gameStart" item-card="sable"></card-component>
             <card-component on-send-user-selection="_gameStart" item-card="force"></card-component>
@@ -225,7 +231,7 @@
 
         <section page="Player2">
         <div class="cards__container hidden" id="cardsC2">
-          <h1>Player 2</h1>
+          <h1 class="titleN">Juego contra Player</h1>
             <card-component on-send-user-selection="_gameStart" item-card="blaster"></card-component>
             <card-component on-send-user-selection="_gameStart" item-card="sable"></card-component>
             <card-component on-send-user-selection="_gameStart" item-card="force"></card-component>
@@ -233,7 +239,7 @@
         </section>
       </iron-pages>
 
-        <button id="return" on-click="_changeSideLogin">Reiniciar Juego</button>
+        <button id="return" on-click="_resetGame">Reiniciar Juego</button>
       </div>
     </section>      
   </template>
@@ -252,6 +258,11 @@
               value: ""
             },
 
+            player:{
+              type: String,
+              value: "Maquina"
+            },
+
             Player1Selection: {
               type: String,
               value: ""
@@ -263,14 +274,24 @@
             route : {
               type: String,
               value : ""
+            },
+            winner :{
+              type: String,
+              value: " Juego " 
             }
-
           }
         }
 
+        _resetGame(){
+          this.Player1Selection = "";
+          this.Player2Selection = "";
+          this.winner = "Juego Nuevo";
+          alert("Juego Reiniciado");
+        }
 
         _showLoginDarkSide(){
           this.typeGame = "2players";
+          this.player = "Player 1";
           //this.typeGame = "machine";
           var cLight2    = this.$.cardsC;
           var bg         = this.$.contentgradient;
@@ -287,6 +308,7 @@
 
         _showLoginLightSide(){
          this.typeGame = "machine";
+         this.player = "Maquina";
           var cLight2 = this.$.cardsC;
           var bg = this.$.contentgradient;
           var ret = this.$.return;
@@ -366,18 +388,22 @@
             console.log("game machine started");
             let result = this._logicGame(event.detail.type, this._machineSelection());
             if(result == 1){
-              alert("Player Wins");
+              this.winner = "Eres el Ganador!"
+              //alert("Player Wins");
             }
             else if(result == 2){
-              alert("Machine Wins");
+              this.winner = "La maquina Ganó"; 
+              //alert("Machine Wins");
             }
             else{
-              alert ("A draw");
+              this.winner = "Empate";
+              //alert ("A draw");
             }
           }
           else{
             if(this.Player1Selection == ""){
               this.Player1Selection = event.detail.type;
+              this.winner = "Jugador 2 Es tu turno ...";
               console.log("waiting player 2 ...");
             }
             else{
@@ -385,13 +411,16 @@
               this.Player2Selection = event.detail.type;
               let result = this._logicGame(this.Player1Selection, this.Player2Selection);
               if(result == 1){
-                alert("Player 1 Wins");
+                this.winner = "Gano Jugador 1";
+                //alert("Player 1 Wins");
               }
               else if(result == 2){
-                alert("Player 2 Wins");
+                this.winner = "Ganó Jugador 2";
+                //alert("Player 2 Wins");
               }
               else{
-                alert ("A draw");
+                this.winner = "Empate";
+                //alert ("You have tied the game");
               }
             }
           }
