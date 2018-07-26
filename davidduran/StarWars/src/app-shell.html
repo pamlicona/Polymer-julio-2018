@@ -62,14 +62,7 @@
       </section>
     </iron-pages>
 
-         <template is="dom-if" if="[[showIndexDark]]">
-            <personaje-card-component side="[[side]]" list-people="[[listPeopleL.results]]" ></personaje-card-component>
-          </template>
-
-         <template is="dom-if" if="[[showIndexLight]]">
-          <personaje-card-component side="[[side]]" list-people="[[listPeopleL.results]]" ></personaje-card-component>
-        </template>    
-  
+        
 
    <iron-ajax id="ironAjax"
       auto
@@ -124,7 +117,10 @@
               ]
             },
 
-            
+            route:{
+              type: String,
+              value: ""
+            },
             side: {
               type: String,
               value: "Light"
@@ -174,13 +170,11 @@
           if (event.detail.type === 'light') {
             this.set('showIndexLight', true);
             this.set('side', "Light");
-            //window.location.replace ("/LightSide");
-            //this.set('route', '/LightSide/');
+            this.set('route.path', '/LightSide/');
           }else{
             this.set('showIndexDark', true);
             this.set('side', 'Dark');
-            //this.set('route', '/DarkSide');
-            //window.location.replace ("/DarkSide");
+            this.set('route.path', '/DarkSide');
           }
           console.log("logueado" + this.side);
         }
