@@ -1,0 +1,125 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/lib/elements/dom-if.html">
+<link rel="import" href="game-styles.html">
+
+<dom-module id="my-human-vs-computer">
+  <template>
+    <style include="game-styles">
+      :host {
+        display: block;
+        padding: 10px;
+      }
+    </style>
+
+    <template is="dom-if" if="[[!humanOption]]">
+      <h2>Select your option</h2>
+      <div class="options">
+        <a on-click="_setHumanOption">
+          <div class="opacity" name="Hobbit"></div>
+          <p class="description">Hobbit</p>
+          <img src="images/hobbit.jpg">
+        </a>
+        <a on-click="_setHumanOption">
+          <div class="opacity" name="Orc"></div>
+          <p class="description">Orc</p>
+          <img src="images/orc.jpg">
+        </a>
+        <a on-click="_setHumanOption">
+          <div class="opacity" name="Elf"></div>
+          <p class="description">Elf</p>
+          <img src="images/elf.jpg">
+        </a>
+      </div>
+    </template>
+
+    <template is="dom-if" if="[[result]]">
+      <div class="options no-margin">
+        <p>Human: [[humanOption]]</p>
+        <p>Machine: [[machineOption]]</p>
+      </div>
+      <div class="final_image">
+        <img src="images/[[finalImage]].jpg">
+        <p>[[result]]</p>
+      </div>
+    </template>
+  </template>
+
+  <script>
+    class MyHumanComputer extends Polymer.Element {
+      static get is() { return 'my-human-vs-computer'; }
+      static get properties() {
+        return {
+          humanOption: {
+            type: String,
+            value: null,
+            reflectToAttribute: true,
+            observer: '_humanOptionSelected',
+          },
+          machineOption: {
+            type: String,
+            reflectToAttribute: true,
+            observer: '_machineOptionSelected',
+          },
+          result: {
+            type: String,
+            value: null
+          },
+          finalImage: {
+            type: String
+          }
+        };
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+        console.log('my-human-vs-computer created!');
+        this._setMachineOption();
+      }
+
+      _setMachineOption() {
+        const gameOptions = ["Hobbit", "Orc", "Elf"];
+        const index = Math.floor(Math.random() * 3);
+        const machineOption = gameOptions[index];
+        this.machineOption = machineOption;
+      }
+
+      _setHumanOption(event) {
+        const option = event.target.getAttribute('name');
+        this.humanOption = option
+      }
+
+      _humanOptionSelected() {
+        if (!this.humanOption) 
+          return;
+        this._dispatchEvent('human-option-selected', this.humanOption);
+        this._getResult();
+      }
+
+      _machineOptionSelected() {
+        this._dispatchEvent('machine-option-selected', this.machineOption);
+      }
+
+      _getResult() {
+        const rules = { "Hobbit": { "Hobbit": "Was a tie", "Orc": "Orc wins", "Elf": "Hobbit wins" }, "Orc": { "Orc": "Was a tie", "Elf": "Elf wins", "Hobbit": "Orc wins" }, "Elf": { "Elf": "Was a tie", "Hobbit": "Hobbit wins", "Orc": "Elf wins" } }
+        this.result = rules[this.humanOption][this.machineOption];
+        this._getFinalImage();
+        return this.result;
+      }
+
+      _getFinalImage() {
+        const finalImage = this.result.split(" ");
+        this.finalImage = finalImage[0].toLowerCase();
+      }
+
+      _dispatchEvent(event, detail, bubbles = true) {
+        this.dispatchEvent(new CustomEvent(event, {
+          bubbles: bubbles,
+          composed: true,
+          detail: detail
+        }));
+      }
+    }
+
+    window.customElements.define(MyHumanComputer.is, MyHumanComputer);
+  </script>
+</dom-module>

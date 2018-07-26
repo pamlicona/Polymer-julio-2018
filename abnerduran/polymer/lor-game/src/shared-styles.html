@@ -1,0 +1,29 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+
+<!-- shared styles for all views -->
+<dom-module id="shared-styles">
+  <template>
+    <style>
+      :host {
+        background: url(../images/home-background.jpg);
+        background-size: cover;
+      }
+      h1 {
+        margin: 16px 0;
+        color: #212121;
+        font-size: 22px;
+      }
+
+      .opacity {
+        opacity: 0;
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: 0;
+        background: #000000;
+        transition:all .6s linear;
+      }
+    </style>
+  </template>
+</dom-module>

@@ -1,0 +1,78 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="shared-styles.html">
+
+<!-- shared styles for game views -->
+<dom-module id="game-styles">
+    <template>
+        <style include="shared-styles">
+            h2,
+            h3 {
+                color: #ffffff
+            }
+
+            img {
+                max-width: 350px;
+                border-radius: 10px;
+            }
+
+            p {
+                color: #ffffff;
+                font-size: 1.5rem;
+            }
+
+            .options {
+                display: flex;
+                justify-content: space-between;
+                margin: 19vh 0 22vh;
+            }
+
+            .options.no-margin {
+                margin: 3vh 0;
+            }
+
+            .options a {
+                align-items: center;
+                display: flex;
+                position: relative;
+                cursor: pointer;
+            }
+
+            .options a .description {
+                position: absolute;
+                color: #ffffff;
+                top: 30%;
+                left: 28%;
+                font-size: 2rem;
+                transition: opacity .2s linear;
+                opacity: 0;
+            }
+
+            .options a:hover .description {
+                opacity: 1;
+            }
+
+            .options a:hover .opacity {
+                opacity: .6;
+            }
+
+            .final_image {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .final_image p {
+                font-size: 2rem;
+                width: 100%;
+                text-align: center;
+                background: black;
+                padding: 2rem 0rem;
+                margin-bottom: 20vh;
+            }
+
+            .final_image img {
+                margin-bottom: 2vh;
+            }
+        </style>
+    </template>
+</dom-module>

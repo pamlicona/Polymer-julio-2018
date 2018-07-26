@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+  <title>my-view1</title>
+
+  <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../bower_components/web-component-tester/browser.js"></script>
+
+  <!-- Import the element to test -->
+  <link rel="import" href="../src/my-human-vs-computer.html">
+  <link rel="import" href="../src/my-human-vs-human.html">
+</head>
+
+<body>
+  <test-fixture id="my-human-computer">
+    <template>
+      <my-human-vs-computer></my-human-vs-computer>
+    </template>
+  </test-fixture>
+
+  <script>
+    suite('Human vs computer tests', function () {
+      let myHumanComputer;
+      setup(() => {
+        myHumanComputer = fixture('my-human-computer');
+      })
+      test('Human: Hobbit, Machine: Orc => Orc wins', function () {
+        myHumanComputer.machineOption = "Orc";
+        myHumanComputer.humanOption = "Hobbit";
+        const result = myHumanComputer._getResult();
+        assert.equal(result, 'Orc wins');
+      });
+      test('Human: Elf, Machine: Orc => Elf wins', function () {
+        myHumanComputer.machineOption = "Orc";
+        myHumanComputer.humanOption = "Elf";
+        const result = myHumanComputer._getResult();
+        assert.equal(result, 'Elf wins');
+      });
+    });
+
+    suite('Human vs computer events', function () {
+      let myHumanComputer;
+      setup(() => {
+        myHumanComputer = fixture('my-human-computer');
+      })
+      test('Human option selected', function () {
+        const option = "Hobbit";
+        myHumanComputer.humanOption = option;
+        myHumanComputer.addEventListener('human-option-selected', () => {
+          assert.equal(event.detail, option);
+        });
+        myHumanComputer._dispatchEvent('human-option-selected', option);
+      });
+      test('Machine option selected', function (done) {
+        myHumanComputer.addEventListener('machine-option-selected', () => {
+          console.log('test evento');
+          assert.equal(true, true);
+          done();
+        });
+        myHumanComputer._setMachineOption();
+      });
+    });
+  </script>
+</body>
+
+</html>
