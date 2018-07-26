@@ -1,6 +1,6 @@
 <link rel="import" href="/bower_components/polymer/polymer-element.html">
 <link rel="import" href="game-component.html">
-<link rel="import" href="personaje-card-component.html">
+<link rel="import" href="type-game-component.html">
 <link rel="import" href="/bower_components/polymer/lib/elements/dom-if.html">
 <link rel="import" href="/bower_components/app-route/app-location.html">
 <link rel="import" href="/bower_components/app-route/app-route.html">
@@ -29,7 +29,7 @@
       }
     </style>
 
-    <app-location route="{{route}}"></app-location>
+    <app-location use-hash-as-path  route="{{route}}"></app-location>
     <app-route
       route="{{route}}"
       pattern="/:page"
@@ -37,16 +37,14 @@
       tail="{{tail}}">
     </app-route>
 
-    <iron-pages selected="[[data.page]]" attr-for-selected="page" fallback-selection="Machine" >
+    <iron-pages selected="[[data.page]]" attr-for-selected="page" fallback-selection="GameSelector" >
       
-      <section page="Game2Players">
-          <game-component></game-component>
+      <section page="Game">
+          <game-component on-reset="_resetGame" type-game="[[typeGame]]"></game-component>
       </section>
-
-      <section  page="Machine">
-            <game-component></game-component>
+       <section page="GameSelector">
+          <type-game-component on-send-user-selection="_setTypeGame"></type-game-component>
       </section>
-
      
     </iron-pages>
 
@@ -66,36 +64,15 @@
               type: String,
               value: ""
             },
-            side: {
+            typeGame: {
               type: String,
-              value: "Light"
-            },
-
-            logged : {
-              type: Boolean,
-              value: true
-            },
-            showLogin:{
-              type: Boolean,
-              value: true 
-            },
-            showIndexDark:{
-              type: Boolean,
-              value: true 
-            },
-            showIndexLight:{
-              type: Boolean,
-              value: false 
-            },
-            
+              value: ""
+            }
 
           }
         }
 
-       //add new image Method
-        _addPet() {
-          return 0;
-        }
+       
 
         _mostrarRoute() {
           console.log(this.route);
@@ -108,6 +85,15 @@
         _mostrarData() {
           console.log('Data:', this.data);
           console.log('Tail:', this.tail);
+        }
+
+        _setTypeGame (event){
+          this.set('', event.detail.type);
+          this.set('route.path', '/Game/');
+        }
+
+        _resetGame(){
+          this.set('route.path', '/GameSelector/');
         }
 
         redirectSide(event){
