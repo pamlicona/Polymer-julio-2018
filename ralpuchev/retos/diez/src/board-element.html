@@ -1,0 +1,147 @@
+<!--por defecto-->
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+
+<dom-module id="board-element">
+    <template>
+        <style>
+            .board-container {
+                width: 60%;
+                text-align: center;
+                font-size: 40px;
+                margin: 0 auto;
+                border: 1px solid lightgray;
+                padding: 21px;
+                border-radius: 6px;
+                box-shadow: 1px 11px 20px -3px;
+            }
+            
+            .points-container {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-top: 12px;
+                margin-bottom: 12px;
+            }
+            
+            .points-team {
+                font-size: 60px;
+                background-color: black;
+                color: white;
+                padding: 9px;
+            }
+            
+            .points-separator {
+                padding: 9px;
+            }
+            
+            .selectable-item-image {
+                width: 60px;
+            }
+            
+            .board-main-image {
+                width: 100%;
+            }
+            
+            button { 
+                background-color: black;
+                color: white;
+                font-size: 25px;
+                padding: 12px;
+                border-radius: 6px;
+                width: 100%;
+                cursor: pointer;
+            }
+        </style>
+        <section class="board-container">
+            <img src="[[mainImage]]" class="board-main-image"/>
+            <div class="winner-team">[[winnerTeam]]</div>
+            <div class="winner-label">[[winnerLabel]]</div>
+            <div class="points-container">
+                <div class="points-team">[[pointsTeamOne]]</div>
+                <div class="points-separator">VS</div>
+                <div class="points-team">[[pointsTeamTwo]]</div>
+            </div>
+            <div class="points-container">
+                <img src="[[imageOne]]" class="selectable-item-image"/>
+                <div class="points-separator">...</div>
+                <img src="[[imageTwo]]" class="selectable-item-image"/>
+            </div>
+            <button on-click="newGame">Otra Vez</button>
+        </section>
+    </template>
+    <script>
+        (function boardElement(customElements){
+            'use strict';
+
+            class BoardElement extends Polymer.Element {
+                static get is() { return 'board-element'; }
+                
+                static get properties() {
+                    return {
+                        winnerTeam : {
+                            type : String,
+                            value : ''
+                        },
+                        winnerLabel : {
+                            type : String,
+                            value : ''
+                        },
+                        pointsTeamOne : {
+                            type : Number,
+                            value : 0
+                        },
+                        pointsTeamTwo : {
+                            type : Number,
+                            value : 0
+                        },
+                        mainImage : {
+                            type : String,
+                            value : ''
+                        }
+                    }
+                }
+                
+                connectedCallback() {
+                    super.connectedCallback();  
+                }
+                
+                reset() {
+                    this.winnerTeam = '';
+                    this.winnerLabel = '';
+                    this.pointsTeamOne = 0;
+                    this.pointsTeamTwo = 0;
+                }
+                
+                setImageOne(src){
+                    this.imageOne = src;
+                }
+                
+                setImageTwo(src){
+                    this.imageTwo = src;
+                }
+                
+                addPoint(team) {
+                    if(team == 1) this.pointsTeamOne++;
+                    else this.pointsTeamTwo++;
+                    
+                    this.winnerTeam = team;
+                    this.winnerLabel = "¡GANA!";
+                }
+                
+                drawGame() {
+                    this.winnerTeam = '';
+                    this.winnerLabel = "¡EMPATE!";
+                }
+                
+                newGame() {
+                    this.dispatchEvent(new CustomEvent('new-game', {
+                        bubbles: true,
+                        composed: true,
+                        detail: {}
+                    }));
+                }
+            }
+        customElements.define(BoardElement.is, BoardElement);
+        })(window.customElements);
+  </script>
+</dom-module>

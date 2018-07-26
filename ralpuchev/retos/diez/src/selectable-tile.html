@@ -1,0 +1,203 @@
+<!--por defecto-->
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/lib/elements/dom-if.html">
+<link rel="import" href="../bower_components/polymer/lib/elements/dom-repeat.html">
+
+<dom-module id="selectable-tile">
+    <template>
+        <style>
+            .tile {
+                cursor: pointer;
+                width: 100%;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                opacity: 0.8;
+            }
+            
+            .tile:hover{
+                opacity: 1;
+            }
+            
+            .tile-image {
+                height: 100%;
+                width: 100%;
+                background-position: center;
+            }
+            
+            .tile-text-left {
+                margin-left: -90%;
+                margin-top: 50%;
+                font-size: 39px;
+                color: yellow;
+                width: 90%;
+                background-color: black;
+                padding: 9px;
+                text-align: right;
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+            }
+            
+            .tile-text-right {
+                margin-left: -100%;
+                margin-top: 50%;
+                font-size: 39px;
+                color: yellow;
+                width: 85%;
+                background-color: black;
+                padding: 9px;
+                text-align: left;
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+            }
+            
+            .selectable-item {
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+            }
+            
+            .selectable-item-image {
+                width: 60px;
+            }
+            
+            .winner {
+                opacity: 1;
+            }
+            
+            .loser {
+                opacity: 0.3;
+            }
+            
+            .hidden {
+                display: none;
+            }
+            
+            .show {
+                display: flex;
+            }
+        </style>
+        <section class="tile" id="tile_[[team]]">
+            <img src="[[image]]" class="tile-image">
+            <template id="texto" is="dom-if" if="[[thereIsItems]]">
+                <div class$="tile-text-[[side]]">[[text]]</div>
+            </template>
+            <template id="items" is="dom-if" if="[[!thereIsItems]]">
+                <div class$="tile-text-[[side]]">
+                    <template id="selectable_items" is="dom-repeat" items="[[items]]" as="option">
+                        <div class="selectable-item" id="[[index]]">
+                            <img src="[[option]]" class="selectable-item-image">
+                        </div>
+                    </template>
+                </div>
+                <div id="selected_item_[[team]]">
+                </div>
+            </template>
+        </section>
+    </template>
+    <script>
+        (function selectableTile(customElements){
+            'use strict';
+
+            class SelectableTile extends Polymer.Element {
+                static get is() { return 'selectable-tile'; }
+                
+                static get properties() {
+                    return {
+                        image : {
+                            type : String,
+                            value : ''
+                        },
+                        text : {
+                            type : String,
+                            value : 'texto por defecto'
+                        },
+                        side : {
+                            type : String,
+                            value : 'right'
+                        },
+                        items : {
+                            type : Array,
+                            value : []
+                        },
+                        thereIsItems : {
+                            type : Boolean,
+                            value : false,
+                            computed : 'emptyItems(items)'
+                        },
+                        team : {
+                            type : String,
+                            value : ''
+                        },
+                        selectedElement : {
+                            type : Object,
+                            value : null
+                        }
+                    }
+                }
+                
+                connectedCallback() {
+                    super.connectedCallback();
+                    
+                    setTimeout(()=>{this.connectSelectableOptions()}, 1000);
+                }
+                
+                connectSelectableOptions() {
+                    const options = this.shadowRoot.querySelectorAll(".selectable-item");
+                    for(let option of options){
+                        option.onclick = (event) => {
+                            const element = event.path[1];
+                            this.selectedElement = element;
+                            this.dispatchEvent(new CustomEvent('item-selected', {
+                                bubbles: true,
+                                composed: true,
+                                detail: {
+                                    team : this.team,
+                                    itemIndex : element.id
+                                }
+                            }));
+                            this.hideSelectableOptions();
+                        }
+                    }
+                }
+                
+                hideSelectableOptions() {
+                    const options = this.shadowRoot.querySelectorAll(".selectable-item");
+                    for(const option of options){
+                        //option.style.display = "none";
+                        option.classList.add("hidden");
+                        option.classList.remove("show");
+                    }
+                }
+                
+                showSelectableOptions() {
+                    const options = this.shadowRoot.querySelectorAll(".selectable-item");
+                    for(const option of options){
+                        //option.style.display = "flex";
+                        option.classList.remove("hidden");
+                        option.classList.add("show");
+                    }
+                }
+                
+                setTileState(estate) {
+                    const tile = this.shadowRoot.querySelector(".tile");
+                    tile.classList.add(estate);
+                }
+                
+                resetState(){
+                    const tile = this.shadowRoot.querySelector(".tile");
+                    tile.setAttribute("class", "tile");
+                    this.showSelectableOptions();
+                }
+                
+                emptyItems() {
+                    if(this.items.length == 0) return true;
+                    return false;
+                }
+            }
+        customElements.define(SelectableTile.is, SelectableTile);
+        })(window.customElements);
+  </script>
+</dom-module>
