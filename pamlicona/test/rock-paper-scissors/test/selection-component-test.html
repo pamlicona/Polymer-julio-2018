@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Selecction Test</title>
+  <script src="../bower_components/webcomponentsjs/webcomponents-loader.js"></script>
+  <script src="../bower_components/web-component-tester/browser.js"></script>
+
+  <link rel="import" href="../bower_components/test-fixture/test-fixture.html">
+  <link rel="import" href="../src/selection-component.html">
+</head>
+<body>
+  <test-fixture id="selectionComponent">
+    <template>
+      <selection-component></selection-component>
+    </template>
+  </test-fixture>
+
+  <script>
+    suite('Return selection', () => {
+      let selectionComponent;
+      setup(function() {
+        selectionComponent = fixture('selectionComponent');
+      })
+      test('Selection should be rock', (done) => {
+        selectionComponent.addEventListener('my-selection', (event) => {
+          assert.equal(event.detail.selection, 'rock');
+          done();
+        });
+        selectionComponent.typeSelection = 'rock';
+        selectionComponent._sendSelection();
+      });
+      test('Selection should be paper', (done) => {
+        selectionComponent.addEventListener('my-selection', (event) => {
+          assert.equal(event.detail.selection, 'paper');
+          done();
+        });
+        selectionComponent.typeSelection = 'paper';
+        selectionComponent._sendSelection();
+      });
+      test('Selection should be scissors', (done) => {
+        selectionComponent.addEventListener('my-selection', (event) => {
+          assert.equal(event.detail.selection, 'scissors');
+          done();
+        });
+        selectionComponent.typeSelection = 'scissors';
+        selectionComponent._sendSelection();
+      });
+    })
+  </script>
+</body>
+</html>

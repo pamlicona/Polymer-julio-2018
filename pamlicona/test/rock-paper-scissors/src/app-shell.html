@@ -1,0 +1,105 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="/bower_components/app-route/app-location.html">
+<link rel="import" href="/bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="/bower_components/app-route/app-route.html">
+<link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="game-pvsc.html">
+<link rel="import" href="game-pvsp.html">
+
+<dom-module id="app-shell">
+  <template>
+    <style>
+      .selection {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        height: 200px;
+      }
+
+      paper-button {
+        border: 2px solid;
+        padding: 15px;
+        font-weight: bold;
+      }
+
+      h2 {
+        background-color: white;
+        display: flex;
+        margin: 0px;
+        height: 60px;
+        justify-content: center;
+        font-family: sans-serif;
+        font-weight: 100;
+        letter-spacing: 2px;
+        font-size: 26px;
+        align-items: center;
+      }
+
+      .selection__info {
+        border: 2px solid;
+        padding: 30px 20px 30px 40px;
+        background-color: aliceblue;
+      }
+    </style>
+
+    <header>
+      <h2>Rock Paper and Scissors</h2>
+    </header>
+
+    <app-location route="{{route}}" use-hash-as-path></app-location>
+    <app-route
+      route="{{route}}"
+      pattern="/:page"
+      data="{{data}}"
+      tail="{{subroute}}">
+    </app-route>
+
+    <div class="selection">
+      <paper-button class="selection__button" on-tap="_changeSelection" data-args="pvsc">Player VS Computer</paper-button>
+      <ul class="selection__info">
+        <li>Mario win Bowser</li>
+        <li>Bowser win Princess</li>
+        <li>Princess win Mario</li>
+      </ul>
+      <paper-button class="selection__button" on-tap="_changeSelection" data-args="pvsp">Player VS Player</paper-button>
+    </div>
+
+    <iron-pages selected="[[data.page]]" fallback-selection="list" attr-for-selected="page-name">
+      <game-pvsc page-name="pvsc"></game-pvsc>
+      <game-pvsp page-name="pvsp"></game-pvsp>
+      <game-win page-name="win" route="[[subroute]]"></game-win>
+    </iron-pages>
+
+  </template>
+  <script>
+    (function appShell(customElements){
+      'use strict';
+
+      class AppShell extends Polymer.Element {
+        static get is() { return 'app-shell'; }
+        static get properties() {
+          return {
+          }
+        }
+
+        _changeSelection(event) {
+          let path = event.target.getAttribute('data-args');
+          this.set('route.path', `/${path}`);
+        }
+
+        static get observers() {
+          return [
+            '_routeChanged(data.page)'
+          ]
+        }
+
+        _routeChanged(page) {
+          if(page) {
+            Polymer.importHref(this.resolveUrl('game-' + page + '.html'), null, null, true);
+          }
+        }
+      }
+      customElements.define(AppShell.is, AppShell);
+    })(window.customElements);
+  </script>
+</dom-module>

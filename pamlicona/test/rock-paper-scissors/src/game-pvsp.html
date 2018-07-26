@@ -1,0 +1,76 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="/bower_components/app-route/app-location.html">
+<link rel="import" href="/bower_components/app-route/app-route.html">
+<link rel="import" href="selection-component.html">
+<link rel="import" href="get-winner.html">
+
+<dom-module id="game-pvsp">
+  <template>
+    <style>
+      h2 {
+        display: flex;
+        justify-content: center;
+        text-decoration: underline;
+      }
+    </style>
+
+    <app-location route="{{route}}" use-hash-as-path></app-location>
+    <app-route
+      route="{{route}}"
+      pattern="/:win"
+      data="{{data}}">
+    </app-route>
+
+    <h2>Player One</h2>
+    <selection-component on-my-selection="_getWinOne"></selection-component>
+    <h2>Player Two</h2>
+    <selection-component class="hidden" on-my-selection="_getWinTwo"></selection-component>
+
+    <get-winner
+      player-one-selection="[[playerOne]]"
+      player-two-selection="[[playerTwo]]"
+      on-my-winner="_showWinner">
+    </get-winner>
+
+  </template>
+
+<script>
+  (function gamePvsp(customElements) {
+    'use strict';
+
+    class GamePvsp extends Polymer.Element {
+      static get is() { return 'game-pvsp'; }
+      static get properties() {
+        return {
+          route: {
+            type: Object
+          },
+          playerOne: {
+            type: String,
+            value: ''
+          },
+          playerTwo: {
+            type: String,
+            value: ''
+          }
+        }
+      }
+
+      _showWinner(event) {
+        let winner = event.detail.winner;
+        this.set('route.path', `/win/${winner}`);
+      }
+
+      _getWinOne(event) {
+        let playerOne = event.detail.selection;
+        this.set('playerOne', playerOne);
+      }
+
+      _getWinTwo(event) {
+        let playerTwo = event.detail.selection;
+        this.set('playerTwo', playerTwo);
+      }
+    }
+    customElements.define(GamePvsp.is, GamePvsp);
+  })(window.customElements);
+</script>

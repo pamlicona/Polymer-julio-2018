@@ -1,0 +1,73 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+
+<dom-module id="get-winner">
+  <template>
+    <style>
+    </style>
+  </template>
+
+<script>
+  (function getWinner(customElements) {
+    'use strict';
+
+    class GetWinner extends Polymer.Element {
+      static get is() { return 'get-winner'; }
+      static get properties() {
+        return {
+          playerOneSelection: {
+            type: String,
+            value: ''
+          },
+          playerTwoSelection: {
+            type: String,
+            value: ''
+          },
+          winner: {
+            type: Object,
+            computed: '_getWinner(playerOneSelection, playerTwoSelection)',
+            observer: '_winner'
+          },
+          listOptions: {
+            type: Array,
+            value: [
+              { one: 'rock', two: 'rock', win: 'draw' },
+              { one: 'rock', two: 'paper', win: 'paper' },
+              { one: 'rock', two: 'scissors', win: 'rock' },
+              { one: 'paper', two: 'rock', win: 'paper' },
+              { one: 'paper', two: 'paper', win: 'draw' },
+              { one: 'paper', two: 'scissors', win: 'scissors' },
+              { one: 'scissors', two: 'rock', win: 'rock' },
+              { one: 'scissors', two: 'scissors', win: 'draw' },
+              { one: 'scissors', two: 'paper', win: 'scissors' }
+            ]
+          }
+        }
+      }
+
+      _getWinner(playerOne, playerTwo) {
+        console.log('1',playerOne, '2',playerTwo)
+        if (playerOne !== '' && playerTwo !== '') {
+          return this.listOptions.find(item => {
+            return (
+              (playerOne === item.one && playerTwo === item.two) ||
+              (playerOne === item.two && playerTwo === item.one)
+            )
+          });
+        }
+      }
+
+      _winner() {
+        if (this.winner !== undefined) {
+          this.dispatchEvent(new CustomEvent('my-winner', {
+            detail: {
+              winner: this.winner.win
+            }
+          }));
+        }
+        this.set('playerOneSelection', '');
+        this.set('playerTwoSelection', '');
+      }
+    }
+    customElements.define(GetWinner.is, GetWinner);
+  })(window.customElements);
+</script>
