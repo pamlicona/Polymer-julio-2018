@@ -1,0 +1,336 @@
+<!--por defecto-->
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/app-route/app-location.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="selectable-tile.html">
+<link rel="import" href="board-element.html">
+
+<dom-module id="app-shell">
+    <template>
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+                font-family: sans-serif;
+            }
+            
+            .main-layout {
+                display: flex;
+                align-items: center;
+                width: 100vw;
+                height: 100vh;
+            }
+            
+            .main-container {
+                width: 100%;
+                height: 100%;
+            }
+            
+            .board-container {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: auto;
+                height: 100%;
+            }
+            
+            .board-images {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: auto;
+                height: 100%;
+                flex-direction: column;
+            }
+            
+            .main-image {
+                width: 90%;
+            }
+        </style>
+        <app-location route="{{route}}"></app-location>
+        <app-route
+            route={{route}}
+            pattern="/:page/:subroute"
+            data={{data}}
+            tail={{subroute}}
+        ></app-route>
+        <iron-pages selected="{{data.subroute}}" attr-for-selected="page" fallback-selection="">
+            <div page=''>
+                <section class="main-layout">
+                    <section class="main-container">
+                        <a href="humanvshuman">
+                            <selectable-tile text="Humano VS Humano" image="[[capitanSelectedImage]]" side="left"></selectable-tile>
+                        </a>
+                    </section>
+                    <section class="main-container">
+                        <div class="board-images">
+                            <image src="images/logo.png" class="main-image"/>
+                            <image src="images/kon.png" class="main-image"/>
+                        </div>
+                    </section>
+                    <section class="main-container">
+                        <a href="humanvspc">
+                            <selectable-tile text="Humano VS PC" image="[[spadaSelectedImage]]" side="right"></selectable-tile>
+                        </a>
+                    </section>
+                </section>
+            </div>
+            <div page='humanvshuman'>
+                <section class="main-layout" id="humanvshuman">
+                    <section class="main-container">
+                        <selectable-tile id="tile_1" team="1" items="[[items]]" image="[[capitanSelectedImage]]" side="left"></selectable-tile>
+                    </section>
+                    <section class="main-container">
+                        <div class="board-container">
+                            <board-element id="board_one" main-image="images/logo.png"></board-element>
+                        </div>
+                    </section>
+                    <section class="main-container">
+                        <selectable-tile id="tile_2" team="2" items="[[items]]" image="[[spadaSelectedImage]]" side="right"></selectable-tile>
+                    </section>
+                </section>
+            </div>
+            <div page='humanvspc'>
+                <section class="main-layout" id="humanvspc">
+                    <section class="main-container">
+                        <selectable-tile id="tile_humano" team="humano" items="[[items]]" image="[[capitanSelectedImage]]" side="left"></selectable-tile>
+                    </section>
+                    <section class="main-container">
+                        <div class="board-container">
+                            <board-element id="board_two" main-image="images/logo.png"></board-element>
+                        </div>
+                    </section>
+                    <section class="main-container">
+                        <selectable-tile id="tile_pc" team="pc" items="[[itemsPC]]" image="[[spadaSelectedImage]]" side="right"></selectable-tile>
+                    </section>
+                </section>
+            </div>
+        </iron-pages>
+    </template>
+    <script>
+        (function appShell(customElements){
+            'use strict';
+
+            class AppShell extends Polymer.Element {
+                static get is() { return 'app-shell'; }
+                
+                static get properties() {
+                    return {
+                        capitans : {
+                            type : Array,
+                            value : ['images/capitanes/1.png', 'images/capitanes/2.png', 'images/capitanes/3.jpg', 'images/capitanes/4.jpg', 'images/capitanes/5.jpg', 'images/capitanes/6.png', 'images/capitanes/7.jpg', 'images/capitanes/8.jpg', 'images/capitanes/9.png']
+                        },
+                        spadas : {
+                            type : Array,
+                            value : ['images/spadas/1.jpg', 'images/spadas/2.jpg', 'images/spadas/3.jpg', 'images/spadas/4.jpg', 'images/spadas/5.jpg', 'images/spadas/6.jpg', 'images/spadas/7.jpg', 'images/spadas/8.png', 'images/spadas/9.jpg']
+                        },
+                        capitanSelectedImage : {
+                            type : String,
+                            value : '',
+                            computed : 'getCapitanRandomImage(data.page)'
+                        },
+                        spadaSelectedImage : {
+                            type : String,
+                            value : '',
+                            computed : 'getSpadaRandomImage(data.page)'
+                        },
+                        items : {
+                            type : Array,
+                            value : ["images/piedra.jpg", "images/papel.jpg", "images/tijera.jpg", "images/random.jpg"]
+                        },
+                        itemsPC : {
+                            type : Array,
+                            value : ["images/random.jpg"]
+                        },
+                        data : {
+                            type : Array,
+                            value : [],
+                            observer : 'pageChanged'
+                        },
+                        options : {
+                            type : Array,
+                            value : []
+                        },
+                        gameType : {
+                            type : String,
+                            value : ""
+                        }
+                    }
+                }
+                
+                connectedCallback() {
+                    super.connectedCallback();  
+                    
+                    this.addEventListener('item-selected', (event)=>{
+                        
+                        this.options.push(event.detail);
+                        if(this.options.length == 2){
+                            this.computeWinner();
+                        }
+                    });
+                    
+                    this.addEventListener('new-game', (event)=>{
+                        
+                        let tileOne;
+                        let tileTwo;
+                        
+                        if(this.gameType == 'humanvshuman'){
+                            tileOne = this.shadowRoot.querySelector(`#tile_1`);
+                            tileTwo = this.shadowRoot.querySelector(`#tile_2`);
+                        }else{
+                            tileOne = this.shadowRoot.querySelector(`#tile_humano`);
+                            tileTwo = this.shadowRoot.querySelector(`#tile_pc`);
+                        }
+                        
+                        tileOne.resetState(); 
+                        tileTwo.resetState(); 
+                        
+                        this.options = [];
+                    });
+                }
+                
+                computeWinner() {
+                    const optionOne = this.options[0];
+                    if(optionOne.itemIndex == 3){
+                        //esta es la opción random, entonces calculamos un número random entre 0 y 2
+                        optionOne.itemIndex = this._getRandomNumber(0, 3);
+                    }
+                    
+                    const optionTwo = this.options[1];
+                    if(optionTwo.itemIndex == 3){
+                        //esta es la opción random, entonces calculamos un número random entre 0 y 2
+                        optionTwo.itemIndex = this._getRandomNumber(0, 3);
+                    }
+                    
+                    console.log(optionOne.team);
+                    
+                    const tileOne = this.shadowRoot.querySelector(`#tile_${optionOne.team}`);
+                    const tileTwo = this.shadowRoot.querySelector(`#tile_${optionTwo.team}`);
+                    
+                    let board;
+                    if(this.gameType == 'humanvshuman') {
+                        board = this.shadowRoot.querySelector("#board_one");
+                    }else{
+                        board = this.shadowRoot.querySelector("#board_two");
+                        
+                        if(optionOne.team == "pc"){
+                            optionOne.itemIndex = this._getRandomNumber(0, 3);
+                            optionOne.team = 2;
+                            optionTwo.team = 1;
+                        }else if(optionTwo.team == "pc"){
+                            optionTwo.itemIndex = this._getRandomNumber(0, 3);
+                            optionOne.team = 1;
+                            optionTwo.team = 2;
+                        }
+                    }
+                    
+                    if(optionOne.itemIndex == optionTwo.itemIndex){
+                        //draw
+                        tileOne.setTileState("winner");
+                        tileTwo.setTileState("winner");
+                        board.drawGame();
+                    }else{
+                        //piedra, papel, tijera
+                        
+                        if(optionOne.itemIndex == "0" && optionTwo.itemIndex == "1"){
+                            //2 win
+                            tileOne.setTileState("loser");
+                            tileTwo.setTileState("winner");
+                            board.addPoint(optionTwo.team);
+                        }else if(optionOne.itemIndex == "0" && optionTwo.itemIndex == "2"){
+                            //1 win
+                            tileOne.setTileState("winner");
+                            tileTwo.setTileState("loser");
+                            board.addPoint(optionOne.team);
+                        }else if(optionOne.itemIndex == "1" && optionTwo.itemIndex == "0"){
+                            //1 win
+                            tileOne.setTileState("winner");
+                            tileTwo.setTileState("loser");
+                            board.addPoint(optionOne.team);
+                        }else if(optionOne.itemIndex == "1" && optionTwo.itemIndex == "2"){
+                            //2 win
+                            tileOne.setTileState("loser");
+                            tileTwo.setTileState("winner");
+                            board.addPoint(optionTwo.team);
+                        }else if(optionOne.itemIndex == "2" && optionTwo.itemIndex == "0"){
+                            //2 win
+                            tileOne.setTileState("loser");
+                            tileTwo.setTileState("winner");
+                            board.addPoint(optionTwo.team);
+                        }else if(optionOne.itemIndex == "2" && optionTwo.itemIndex == "1"){
+                            //1 win
+                            tileOne.setTileState("winner");
+                            tileTwo.setTileState("loser");
+                            board.addPoint(optionOne.team);
+                        }
+                    }
+                    
+                    board.setImageOne(this.items[optionOne.itemIndex]);
+                    board.setImageTwo(this.items[optionTwo.itemIndex]);
+                }
+                
+                pageChanged() {
+                    console.log("page changed");
+                    console.log(this.data);
+                    
+                    if(this.data.subroute == "humanvshuman"){
+                        const mainPageContainer = this.shadowRoot.querySelector("#humanvshuman");
+                        const tiles = mainPageContainer.querySelectorAll("selectable-tile");
+                        for(let tile of tiles){
+                            tile.showSelectableOptions();
+                        }
+                        
+                        //reset a las opciones seleccionadas
+                        this.options = [];
+                        
+                        const tileOne = this.shadowRoot.querySelector(`#tile_1`);
+                        tileOne.resetState(); 
+                        
+                        const tileTwo = this.shadowRoot.querySelector(`#tile_2`);
+                        tileTwo.resetState(); 
+                        
+                        const board = this.shadowRoot.querySelector("#board_one");
+                        board.reset();
+                        
+                        this.gameType = "humanvshuman";
+                        
+                    }else if(this.data.subroute == "humanvspc"){
+                        const mainPageContainer = this.shadowRoot.querySelector("#humanvspc");
+                        const tiles = mainPageContainer.querySelectorAll("selectable-tile");
+                        for(let tile of tiles){
+                            tile.showSelectableOptions();
+                        }
+                        
+                        //reset a las opciones seleccionadas
+                        this.options = [];
+                        
+                        const tileOne = this.shadowRoot.querySelector(`#tile_humano`);
+                        tileOne.resetState(); 
+                        
+                        const tileTwo = this.shadowRoot.querySelector(`#tile_pc`);
+                        tileTwo.resetState(); 
+                        
+                        const board = this.shadowRoot.querySelector("#board_two");
+                        board.reset();
+                        
+                        this.gameType = "humanvspc";
+                    }
+                }
+                
+                getCapitanRandomImage() {
+                    return this.capitans[this._getRandomNumber(0, this.capitans.length)];
+                }
+                
+                getSpadaRandomImage() {
+                    return this.spadas[this._getRandomNumber(0, this.spadas.length)];
+                }
+                
+                _getRandomNumber(numeroInferior, numeroSuperior){
+                    return Math.floor((Math.random() * numeroSuperior) + numeroInferior);
+                }
+            }
+        customElements.define(AppShell.is, AppShell);
+        })(window.customElements);
+  </script>
+</dom-module>
