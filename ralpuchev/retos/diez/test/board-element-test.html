@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Test</title>
+    <script src="../bower_components/webcomponentsjs/webcomponents-loader.js"></script>
+    <script src="../bower_components/web-component-tester/browser.js"></script>
+    <link rel="import" href="../bower_components/test-fixture/test-fixture.html">
+    <link rel="import" href="../src/board-element.html">
+</head>
+<body>
+    <test-fixture id="s1-board">
+        <template>
+            <board-element></board-element>
+        </template>
+    </test-fixture>
+    
+    <script>
+        /*
+        Board-Element
+        sumar 1 punto al equipo 1 (izquierda)
+        sumar 1 punto al equipo 2 (derecha)
+        empate - no se sumará ningun punto
+        */
+        
+        suite('S1: Board Element', () => {
+            let myBoard;
+            
+            setup(() => {
+                myBoard = fixture('s1-board');
+            })
+            
+            test('Add a point to team 1', function(){
+                let teamInicialPoints = 0;
+                myBoard.addPoint(1);
+                let teamFinalPoints = myBoard.pointsTeamOne;
+                
+                let points = teamFinalPoints - teamInicialPoints;
+                assert.equal(points, 1);
+            });
+            
+            test('Add a point to team 2', function(){
+                let teamInicialPoints = 0;
+                myBoard.addPoint(2);
+                let teamFinalPoints = myBoard.pointsTeamTwo;
+                
+                let points = teamFinalPoints - teamInicialPoints;
+                assert.equal(points, 1);
+            });
+            
+            test('Draw Game - No change', function(){
+                const t1sp = 0;
+                const t2sp = 0;
+                
+                myBoard.drawGame();
+                
+                let t1fp = myBoard.pointsTeamOne;
+                let t1p = t1fp - t1sp;
+                
+                let t2fp = myBoard.pointsTeamTwo;
+                let t2p = t2fp - t2sp;
+                
+                assert.equal(t1p, 0) & assert.equal(t1p, t2p);
+            });
+            
+            /*test('New Game Event', (done)=>{
+                this.addEventListener('new-game', (event)=>{
+                    done();
+                });
+                myBoard.newGame();
+            });*/
+            
+            test('New Game Button Pressed', (done)=>{
+                this.addEventListener('new-game', (event)=>{
+                    done();
+                });
+                
+                const button = myBoard.shadowRoot.querySelector("button");
+                button.click();
+            });
+        });
+    </script>
+
+</body>
+</html>

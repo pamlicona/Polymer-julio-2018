@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Test</title>
+    <script src="../bower_components/webcomponentsjs/webcomponents-loader.js"></script>
+    <script src="../bower_components/web-component-tester/browser.js"></script>
+    <link rel="import" href="../bower_components/test-fixture/test-fixture.html">
+    <link rel="import" href="../src/selectable-tile.html">
+</head>
+<body>
+    <test-fixture id="algo">
+        <template>
+            <selectable-tile text="Humano VS Humano" image="../images/spadas/5.jpg" side="left"></selectable-tile>
+        </template>
+    </test-fixture>
+    
+    <script>
+        /*
+        selectable-tile
+        1.- Check text
+        2.- Check items
+        3.- Hidden items
+        4.- show items
+        */
+        
+        suite('S2: Tile Element', () => {
+            var myTile = null;
+            
+            setup(() => {
+                myTile = fixture("algo");
+            })
+            
+            test('Tile text should be "Humano VS Humano"', function(done) {
+                setTimeout(()=>{
+                    const divTexto = myTile.shadowRoot.querySelector(".tile-text-left");                    
+                    assert.equal(divTexto.innerHTML, "Humano VS Humano");
+                    done();
+                }, 500)
+            });
+            
+            test('Tile items should be 4', function(done){
+                myTile.items = ["../images/piedra.jpg", "../images/papel.jpg", "../images/tijera.jpg", "../images/random.jpg"];
+                setTimeout(()=>{
+                    const items = myTile.shadowRoot.querySelectorAll(".selectable-item");                    
+                    assert.equal(items.length, 4);
+                    done();
+                }, 500)
+            });
+            
+            test('Tile items should be hidden', function(done){
+                myTile.items = ["../images/piedra.jpg", "../images/papel.jpg", "../images/tijera.jpg", "../images/random.jpg"];
+                
+                setTimeout(()=>{
+                    myTile.hideSelectableOptions();
+                    const items = myTile.shadowRoot.querySelectorAll(".selectable-item");                    
+                    let hiddenItems = 0;
+                    for(let item of items){
+                        if(item.classList.contains('hidden')) hiddenItems++;
+                    }
+                    
+                    assert.equal(hiddenItems, items.length);
+                    done();
+                }, 500)
+            });
+            
+            test('Tile items should be showing', function(done){
+                myTile.items = ["../images/piedra.jpg", "../images/papel.jpg", "../images/tijera.jpg", "../images/random.jpg"];
+                
+                setTimeout(()=>{
+                    myTile.hideSelectableOptions();
+                    myTile.showSelectableOptions();
+                    const items = myTile.shadowRoot.querySelectorAll(".selectable-item");                    
+                    let hiddenItems = 0;
+                    for(let item of items){
+                        if(item.classList.contains('show')) hiddenItems++;
+                    }
+                    
+                    assert.equal(hiddenItems, items.length);
+                    done();
+                }, 500)
+            });
+            
+            test('Tile should fire "item-selected" custom event', (done) => {
+                myTile.items = ["../images/piedra.jpg", "../images/papel.jpg", "../images/tijera.jpg", "../images/random.jpg"];
+                
+                setTimeout(()=>{
+                    const items = myTile.shadowRoot.querySelectorAll(".selectable-item");                    
+                    
+                    this.addEventListener('item-selected', (event)=>{
+                        done();
+                    })
+                    
+                    items[0].click();
+                }, 2000)
+            });
+        });
+    </script>
+
+</body>
+</html>
