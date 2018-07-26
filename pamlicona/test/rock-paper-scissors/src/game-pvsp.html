@@ -7,6 +7,11 @@
 <dom-module id="game-pvsp">
   <template>
     <style>
+      h2 {
+        display: flex;
+        justify-content: center;
+        text-decoration: underline;
+      }
     </style>
 
     <app-location route="{{route}}" use-hash-as-path></app-location>
@@ -53,8 +58,6 @@
 
       _showWinner(event) {
         let winner = event.detail.winner;
-        //this.set('playerOne', '');
-        //this.set('playerTwo', '');
         this.set('route.path', `/win/${winner}`);
       }
 

@@ -24,7 +24,7 @@
           },
           winner: {
             type: Object,
-            //computed: '_getWinner(playerOneSelection, playerTwoSelection)',
+            computed: '_getWinner(playerOneSelection, playerTwoSelection)',
             observer: '_winner'
           },
           listOptions: {
@@ -44,16 +44,10 @@
         }
       }
 
-      static get observers() {
-        return [
-          '_getWinner(playerOneSelection, playerTwoSelection)'
-        ]
-      }
-
       _getWinner(playerOne, playerTwo) {
         console.log('1',playerOne, '2',playerTwo)
         if (playerOne !== '' && playerTwo !== '') {
-          this.winner = this.listOptions.find(item => {
+          return this.listOptions.find(item => {
             return (
               (playerOne === item.one && playerTwo === item.two) ||
               (playerOne === item.two && playerTwo === item.one)
@@ -70,6 +64,8 @@
             }
           }));
         }
+        this.set('playerOneSelection', '');
+        this.set('playerTwoSelection', '');
       }
     }
     customElements.define(GetWinner.is, GetWinner);

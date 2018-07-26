@@ -13,7 +13,7 @@
     <app-location route="{{route}}" use-hash-as-path></app-location>
     <app-route
       route="{{route}}"
-      pattern="/:win"
+      pattern="/:page/:win"
       data="{{data}}">
     </app-route>
 
@@ -67,7 +67,6 @@
       _getWin(event) {
         this._getSelectionComputer();
         let playerOne = event.detail.selection;
-        console.log(playerOne)
         this.set('playerOne', playerOne);
       }
     }
