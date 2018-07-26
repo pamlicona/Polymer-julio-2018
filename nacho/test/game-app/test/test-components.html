@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Test Game</title>
+  <script src="../bower_components/webcomponentsjs/webcomponents-loader.js"></script>
+  <script src="../bower_components/web-component-tester/browser.js"></script>
+
+  <link rel="import" href="../bower_components/test-fixture/test-fixture.html">
+
+  <link rel="import" href="../src/element-component.html">
+  <link rel="import" href="../src/logic-component.html">
+</head>
+<body>
+  <test-fixture id="elementPlayer">
+    <template>
+      <element-component></element-component>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="startGame">
+    <template>
+      <logic-component></logic-component>
+    </template>
+  </test-fixture>
+
+
+  <script>
+  //No sirve con propiedades que no estan declaradas
+    suite('Suite 1 Selección de elementos', () => {
+      let elementPlayer;
+
+      setup(() => {
+        elementPlayer = fixture('elementPlayer');
+      })
+      test('Jugador: Computer Element: Fuego', (done) => {
+        elementPlayer.addEventListener('selected-element', (event) => {
+          assert.equal(event.detail.message, 'fuego');
+          assert.equal(event.detail.player, 'Computer');
+          done();
+        });
+        elementPlayer.setAttribute('element','fuego');
+      });
+      test('Jugador: One Element: Tierra', (done) => {
+        elementPlayer.addEventListener('selected-element', (event) => {
+          assert.equal(event.detail.message, 'tierra');
+         assert.equal(event.detail.player, 'One');
+          done();
+        });
+        elementPlayer.setAttribute('player','One');
+        elementPlayer.setAttribute('element','tierra');
+      });
+      test('Jugador: Two Element: Agua', (done) => {
+        elementPlayer.addEventListener('selected-element', (event) => {
+          assert.equal(event.detail.message, 'agua');
+          assert.equal(event.detail.player, 'Two');
+          done();
+        });
+        elementPlayer.setAttribute('player','Two');
+        elementPlayer.setAttribute('element','agua');
+      });
+    });
+
+
+    suite('Suite 2 Star Game', () => {
+      let startGame;
+      setup( () => {
+        startGame = fixture('startGame');
+      });
+
+      test('Game: Charmander vs Squirtle => Squirtle', (done) => {
+        startGame.addEventListener('logic-game', (event) => {
+          let winner = 'Player Two elemento => agua';
+          assert.equal(event.detail.message.winner, winner);
+          done();
+        });
+        let players = '[{"player":"One","value":"fuego"},{"player":"Two","value":"agua"}]';
+        startGame.setAttribute('players',players);
+      });
+
+      test('Game: Charmander vs Charmander => Empate', (done) => {
+        startGame.addEventListener('logic-game', (event) => {
+          let winner = 'Empate';
+          assert.equal(event.detail.message.winner, winner);
+          done();
+        });
+        let players = '[{"player":"One","value":"fuego"},{"player":"Two","value":"fuego"}]';
+        startGame.setAttribute('players',players);
+      });
+
+      test('Game: Charmander vs Bulbasaur => Charmander', (done) => {
+        startGame.addEventListener('logic-game', (event) => {
+          let winner = 'Player One elemento => fuego';
+          assert.equal(event.detail.message.winner, winner);
+          done();
+        });
+        let players = '[{"player":"One","value":"fuego"},{"player":"Two","value":"tierra"}]';
+        startGame.setAttribute('players',players);
+      });
+
+      test('Game: Bulbasaur vs Squirtle => Bulbasaur', (done) => {
+        startGame.addEventListener('logic-game', (event) => {
+          let winner = 'Player One elemento => tierra';
+          assert.equal(event.detail.message.winner, winner);
+          done();
+        });
+        let players = '[{"player":"One","value":"tierra"},{"player":"Two","value":"agua"}]';
+        startGame.setAttribute('players',players);
+      });
+      test('Game: Bulbasaur vs Bulbasaur => Empate', (done) => {
+        startGame.addEventListener('logic-game', (event) => {
+          let winner = 'Empate';
+          assert.equal(event.detail.message.winner, winner);
+          done();
+        });
+        let players = '[{"player":"One","value":"tierra"},{"player":"Two","value":"tierra"}]';
+        startGame.setAttribute('players',players);
+      });
+
+      test('Game: Squirtle vs Squirtle => Empate', (done) => {
+        startGame.addEventListener('logic-game', (event) => {
+          let winner = 'Empate';
+          assert.equal(event.detail.message.winner, winner);
+          done();
+        });
+        let players = '[{"player":"One","value":"agua"},{"player":"Two","value":"agua"}]';
+        startGame.setAttribute('players',players);
+      });
+    });
+
+  </script>
+
+</body>
+</html>
