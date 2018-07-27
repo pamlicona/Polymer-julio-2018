@@ -1,0 +1,134 @@
+  <link rel="import" href="/bower_components/polymer/polymer-element.html">
+  <link rel="import" href="/bower_components/polymer/lib/elements/dom-if.html">
+  <link rel="import" href="mixins/redux-mixin.html">
+
+  <dom-module id="card-component">
+    <template>
+      <style>
+        :host {
+          --color-text: gray;
+        }
+
+        .card-container {
+          border: 3px solid;
+          min-width: 120px;
+          text-align: center;
+          min-height: 89px;
+          box-shadow: 0 0 0 6px hsl(0, 0%, 80%);
+          border-color: orange;
+        }
+
+        .card-container__text {
+          margin-top: 34px;
+          color: var(--color-text);
+        }
+      </style>
+
+      <div class="card-container">
+        <template is="dom-if" if="[[subject]]">
+          <p class="card-container__text">[[subjectWord]]</p>
+        </template>
+        <template is="dom-if" if="[[verb]]">
+          <p class="card-container__text">[[verbWord]]</p>
+        </template>
+        <template is="dom-if" if="[[adjective]]">
+          <p class="card-container__text">[[adjectiveWord]]</p>
+        </template>
+        <template is="dom-if" if="[[place]]">
+          <p class="card-container__text">[[placeWord]]</p>
+        </template>
+      </div>
+    </template>
+    <script>
+      (function cardComponent(customElements){
+        'use strict';
+
+        class CardComponent extends ReduxMixin(Polymer.Element) {
+          static get is() { return 'card-component'; }
+          static get properties() {
+            return {
+              list: {
+                type: Array,
+                value: []
+              },
+              subject: {
+                type: Boolean,
+                value: false
+              },
+              verb: {
+                type: Boolean,
+                value: false
+              },
+              adjective: {
+                type: Boolean,
+                value: false
+              },
+              place: {
+                type: Boolean,
+                value: false
+              },
+              startRandom: {
+                type: Boolean,
+                value: false,
+                observer: '_startRandom'
+              },
+              subjectWord: {
+                type: String,
+                statePath: 'subjectWord'
+              },
+              verbWord: {
+                type: String,
+                statePath: 'verbWord'
+              },
+              adjectiveWord: {
+                type: String,
+                statePath: 'adjectiveWord'
+              },
+              placeWord: {
+                type: String,
+                statePath: 'placeWord'
+              }
+            }
+          }
+
+          _sendEvent() {
+            if (this.subject) {
+              this.dispatch({
+                type: 'CHANGE_SUBJECT',
+                subjectWord: this.word
+              });
+            } else if (this.verb) {
+              this.dispatch({
+                type: 'CHANGE_VERB',
+                verbWord: this.word
+              });
+            } else if (this.adjective) {
+              this.dispatch({
+                type: 'CHANGE_ADJECTIVE',
+                adjectiveWord: this.word
+              });
+            } else if (this.place) {
+              this.dispatch({
+                type: 'CHANGE_PLACE',
+                placeWord: this.word
+              });
+            }
+          }
+
+          _getRandomNumber() {
+            let randomNumber = Math.floor(Math.random() * 7);
+            return randomNumber
+          }
+
+          _startRandom(newValue, oldValue) {
+            if (oldValue !== undefined) {
+              let positionList = this._getRandomNumber();
+              this.word = this.list[positionList];
+              this._sendEvent();
+            }
+          }
+        }
+        customElements.define(CardComponent.is, CardComponent);
+      })(window.customElements);
+    </script>
+  </dom-module>

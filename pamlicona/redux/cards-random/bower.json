@@ -1,0 +1,10 @@
+{
+  "name": "component-polymer",
+  "description": "My first compoenent of polymer",
+  "version": "1.0.0",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^2.0.0",
+    "webcomponentjs": "webcomponents/webcomponentsjs#^1.0.0",
+    "polymer-redux": "^1.0.5"
+  }
+}
