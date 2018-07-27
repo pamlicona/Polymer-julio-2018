@@ -1,0 +1,112 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+
+<dom-module id="loader-component">
+  <template>
+    <style>
+      :host {
+        display: block;
+        --loader-color: blue;
+      }
+
+      .loader {
+        height: 20px;
+        width: 0vw;
+        transition: width 1s ease-in;
+        background-color: var(--loader-color);
+      }
+    </style>
+
+    <div class="loader"></div>
+
+  </template>
+
+  <script>
+    (function loaderComponent(customElements) {
+      'use strict';
+
+      class LoaderComponent extends Polymer.Element {
+        static get is() { return 'loader-component'; }
+        static get properties() {
+          return {
+            speed: {
+              type: String,
+              reflectToAttribute: true,
+              observer: '_startLoader'
+            },
+            width: {
+              type: Number,
+              value: 0
+            },
+            totalWidth: {
+              type: Number,
+              value: 100
+            }
+          }
+        }
+
+        connectedCallback() {
+          super.connectedCallback();
+          // things to do
+          console.log(this.speed);
+        }
+
+        _getRandomInteger(min, max) {
+          return Math.floor(Math.random() * (max - min + 1)) + min;
+        };
+
+        _startLoader() {
+          console.log('start loader');
+          this._showLoader(this.width);
+        }
+
+        _showLoader(width) {
+          const { minWidth, maxWidth, minSpeed, maxSpeed } = this._getSpeedAndWidth();
+          const randomWidth = this._getRandomInteger(minWidth, maxWidth);
+          const randomTime = this._getRandomInteger(minSpeed, maxSpeed);
+          width = width + randomWidth;
+
+          this._setStyles(width, randomTime)
+        }
+
+        _getSpeedAndWidth() {
+          const minWidth = 1;
+          const maxWidth = this.speed == 'fast' ? 60 : 20;
+
+          const minSpeed = this.speed == 'fast' ? 1 : 6;
+          const maxSpeed = this.speed == 'fast' ? 4 : 10;
+
+          return { minWidth, maxWidth, minSpeed, maxSpeed };
+        }
+
+        _setStyles(width, timeToTransition) {
+          const loader = this.shadowRoot.querySelector('.loader');
+
+          if (width < this.totalWidth) {
+            loader.style.transition = `width ${timeToTransition}s ease`;
+            loader.style.width = `${width}vw`;
+            setTimeout(() => {
+              this._showLoader(width);
+            }, timeToTransition * 1000);
+          } else {
+            loader.style.transition = `width 3s ease`;
+            loader.style.width = `100vw`;
+            setTimeout(() => {
+              this._dispatchEvent('finish-event', `finish in ${this.speed} mode`);
+            }, 3000);
+          }
+
+        }
+
+        _dispatchEvent(event, detail, bubbles = true) {
+          this.dispatchEvent(new CustomEvent(event, {
+            bubbles: bubbles,
+            composed: true,
+            detail: detail
+          }));
+        }
+
+      }
+      customElements.define(LoaderComponent.is, LoaderComponent);
+    })(window.customElements);
+  </script>
+</dom-module>

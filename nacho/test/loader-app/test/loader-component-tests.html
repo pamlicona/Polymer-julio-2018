@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Test Loader</title>
+  <script src="../bower_components/webcomponentsjs/webcomponents-loader.js"></script>
+  <script src="../bower_components/web-component-tester/browser.js"></script>
+
+  <link rel="import" href="../bower_components/test-fixture/test-fixture.html">
+  <link rel="import" href="../src/loader-component.html">
+</head>
+<body>
+  <test-fixture id="loader-fast">
+    <template>
+      <loader-component speed="fast"></loader-component>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="loader-slow">
+    <template>
+      <loader-component speed="slow"></loader-component>
+    </template>
+  </test-fixture>
+
+  <script>
+  //No sirve con propiedades que no estan declaradas
+    suite('Suite 1 Time', () => {
+      let loaderFast;
+      let loaderSlow;
+
+      setup(() => {
+        loaderFast = fixture('loader-fast');
+        loaderSlow = fixture('loader-slow');
+      })
+      test('Slow: rango de 6 a 10 segundos', () => {
+        const timeSlow = loaderSlow._calculaTime() / 1000;
+        console.log(timeSlow);
+        expect(timeSlow).to.have.within(6, 10);
+      });
+      test('Fast: rango de 1 a 4 segundos', () => {
+        const timeFast = loaderFast._calculaTime() / 1000;
+        console.log(timeFast);
+        expect(timeFast).to.have.within(1, 4);
+      });
+    });
+
+    suite('Suite 2 Width', () => {
+      let loaderFast;
+      let loaderSlow;
+      setup( () => {
+        loaderFast = fixture('loader-fast');
+        loaderSlow = fixture('loader-slow');
+      })
+      test('Slow: rango de 1% a 20% en width', () => {
+        const widthSlow = loaderSlow._calculaWidth();
+        console.log(widthSlow);
+        expect(widthSlow).to.have.within(1, 20);
+      });
+      test('Fast: rango de 1% a 60% en width', () => {
+        const widthFast = loaderFast._calculaWidth();
+        console.log(widthFast);
+        expect(widthFast).to.have.within(1, 60);
+      });
+    });
+
+    suite('Suite 3 Validation Message', () => {
+      let loaderFast;
+      let loaderSlow;
+      setup( () => {
+        loaderFast = fixture('loader-fast');
+        loaderSlow = fixture('loader-slow');
+      });
+
+      test('Slow: message "finish in slow mode"', (done) => {
+        loaderSlow.addEventListener('load-finished', (event) => {
+          console.log(event.detail.message);
+          assert.equal(event.detail.message, 'finish in slow mode');
+          done();
+        });
+        loaderSlow.startLoader();
+      }).timeout(60000);
+
+      test('Fast: message "finish in fast mode"', (done) => {
+        loaderFast.addEventListener('load-finished', (event) => {
+          console.log(event.detail.message);
+          assert.equal(event.detail.message, 'finish in fast mode');
+          done();
+        });
+        loaderFast.startLoader();
+      });
+    });
+
+
+  </script>
+
+</body>
+</html>

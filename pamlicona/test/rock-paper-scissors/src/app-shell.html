@@ -4,6 +4,7 @@
 <link rel="import" href="/bower_components/app-route/app-route.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
 <link rel="import" href="game-pvsc.html">
+<link rel="import" href="game-pvsp.html">
 
 <dom-module id="app-shell">
   <template>
@@ -33,6 +34,12 @@
         font-size: 26px;
         align-items: center;
       }
+
+      .selection__info {
+        border: 2px solid;
+        padding: 30px 20px 30px 40px;
+        background-color: aliceblue;
+      }
     </style>
 
     <header>
@@ -49,12 +56,17 @@
 
     <div class="selection">
       <paper-button class="selection__button" on-tap="_changeSelection" data-args="pvsc">Player VS Computer</paper-button>
+      <ul class="selection__info">
+        <li>Mario win Bowser</li>
+        <li>Bowser win Princess</li>
+        <li>Princess win Mario</li>
+      </ul>
       <paper-button class="selection__button" on-tap="_changeSelection" data-args="pvsp">Player VS Player</paper-button>
     </div>
 
     <iron-pages selected="[[data.page]]" fallback-selection="list" attr-for-selected="page-name">
-      <game-pvsc page-name="pvsc" route="[[subroute]]"></game-pvsc>
-      <!--game-pvsp page-name="pvsp" route="[[subroute]]"></game-pvsp-->
+      <game-pvsc page-name="pvsc"></game-pvsc>
+      <game-pvsp page-name="pvsp"></game-pvsp>
       <game-win page-name="win" route="[[subroute]]"></game-win>
     </iron-pages>
 

@@ -10,6 +10,7 @@
         grid-template-columns: 0.3fr 1fr 1fr 1fr 0.3fr;
         align-items: center;
         justify-content: center;
+        margin-top: 60px;
       }
 
       .radios__rock {
@@ -33,17 +34,17 @@
 
     </style>
 
-    <paper-radio-group on-iron-select="_getSelection" class="radios">
-      <paper-radio-button class="radios__rock" name="rock">
-        <img src="src/assets/img/Mario-Bros.png" />
+    <paper-radio-group class="radios">
+      <paper-radio-button on-tap="_getSelection" checked="false" class="radios__rock" name="rock">
+        <img src="src/assets/img/Mario-Bros.png" id="rock"/>
       </paper-radio-button>
 
-      <paper-radio-button class="radios__paper" name="paper">
-        <img src="src/assets/img/princess.png" />
+      <paper-radio-button on-tap="_getSelection" checked="false" class="radios__paper" name="paper">
+        <img src="src/assets/img/princess.png" id="paper"/>
       </paper-radio-button>
 
-      <paper-radio-button class="radios__scissors" name="scissors">
-        <img src="src/assets/img/bowser.png" />
+      <paper-radio-button on-tap="_getSelection" checked="false" class="radios__scissors" name="scissors">
+        <img src="src/assets/img/bowser.png" id="scissors"/>
       </paper-radio-button>
     </paper-radio-group>
 
@@ -65,7 +66,8 @@
       }
 
       _getSelection(event) {
-        this.set('typeSelection', event.detail.item.name);
+        console.log(event.target.id)
+        this.set('typeSelection', event.target.id);
         this._sendSelection();
       }
 

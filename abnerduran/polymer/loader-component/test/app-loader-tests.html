@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="../bower_components/webcomponentsjs/webcomponents-loader.js"></script>
+  <script src="../bower_components/web-component-tester/browser.js"></script>
+
+  <link rel="import" href="../bower_components/test-fixture/test-fixture.html">
+  <link rel="import" href="../src/loader-component.html">
+  <link rel="import" href="../src/shell.html">
+</head>
+<body>
+  <test-fixture id="my-loader">
+    <template>
+      <loader-component></loader-component>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="app-shell">
+    <template>
+      <app-shell></app-shell>
+    </template>
+  </test-fixture>
+
+  <script>
+    suite('Suite 1 - Time', () => {
+      let myLoader;
+      setup( () => {
+        myLoader = fixture('my-loader');
+      })
+      test('Slow speed time between 6 - 10 seconds', () => {
+        myLoader.speed = 'slow';
+        const { minWidth, maxWidth, minSpeed, maxSpeed } = myLoader._getSpeedAndWidth()
+        const randomTime = myLoader._getRandomInteger(minSpeed, maxSpeed);
+        assert.isAtMost(randomTime, 10, `${randomTime} is less than or equal to 10`);
+        assert.isAtLeast(randomTime, 6, `${randomTime} is greater than or equal to 6`);
+      });
+      test('Fast speed time between 1 - 4 seconds', () => {
+        myLoader.speed = 'fast';
+        const { minWidth, maxWidth, minSpeed, maxSpeed } = myLoader._getSpeedAndWidth()
+        const randomTime = myLoader._getRandomInteger(minSpeed, maxSpeed);
+        assert.isAtMost(randomTime, 4, `${randomTime} is less than or equal to 4`);
+        assert.isAtLeast(randomTime, 1, `${randomTime} is greater than or equal to 1`);
+      });
+    });
+
+    suite('Suite 2 - Width', () => {
+      let myLoader;
+      setup( () => {
+        myLoader = fixture('my-loader');
+      })
+      test('Slow speed width between 1 - 20', () => {
+        myLoader.speed = 'slow';
+        const { minWidth, maxWidth, minSpeed, maxSpeed } = myLoader._getSpeedAndWidth()
+        const randomWidth = myLoader._getRandomInteger(minWidth, maxWidth);
+        assert.isAtMost(randomWidth, 20, `${randomWidth} is less than or equal to 20`);
+        assert.isAtLeast(randomWidth, 1, `${randomWidth} is greater than or equal to 1`);
+      });
+      test('Fast speed width between 1 - 60', () => {
+        myLoader.speed = 'fast';
+        const { minWidth, maxWidth, minSpeed, maxSpeed } = myLoader._getSpeedAndWidth()
+        const randomWidth = myLoader._getRandomInteger(minWidth, maxWidth);        
+        assert.isAtMost(randomWidth, 60, `${randomWidth} is less than or equal to 60`);
+        assert.isAtLeast(randomWidth, 1, `${randomWidth} is greater than or equal to 1`);
+      });
+    })
+
+    suite('Suite 3 - Add Event Listener', () => {
+      let myLoader;
+      setup( () => {
+        myLoader = fixture('my-loader');
+      })
+      test('Event detail should be finish in slow mode', () => {
+        const msg = 'finish in slow mode';
+        myLoader.addEventListener('finish-event', (event) => {
+          assert.equal(event.detail, msg);
+        });
+        myLoader._dispatchEvent('finish-event', msg)
+      });
+      test('Event detail should be finish in speed mode', () => {
+        const msg = 'finish in speed mode';
+        myLoader.addEventListener('finish-event', (event) => {
+          assert.equal(event.detail, msg);
+        });
+        myLoader._dispatchEvent('finish-event', msg)
+      });
+    })
+  </script>
+
+</body>
+</html>
