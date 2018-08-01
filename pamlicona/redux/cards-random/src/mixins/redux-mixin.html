@@ -1,0 +1,40 @@
+<link rel="import" href="../../bower_components/polymer-redux/polymer-redux.html">
+<script src="../../node_modules/redux/dist/redux.js"></script>
+<script>
+  const initial = {
+      start: false,
+      subjectWord: '?',
+      verbWord: '?',
+      adjectiveWord: '?',
+      placeWord: '?'
+  	};
+  	const reducer = (state, action) => {
+  	  console.log(action)
+      switch (action.type) {
+      	case "CHANGE_START":
+          return Object.assign({}, state, {
+          	start: action.start
+          });
+        case "CHANGE_SUBJECT":
+          return Object.assign({}, state, {
+          	subjectWord: action.subjectWord
+          });
+        case "CHANGE_VERB":
+          return Object.assign({}, state, {
+          	verbWord: action.verbWord
+          });
+        case "CHANGE_ADJECTIVE":
+          return Object.assign({}, state, {
+          	adjectiveWord: action.adjectiveWord
+          });
+        case "CHANGE_PLACE":
+          return Object.assign({}, state, {
+          	placeWord: action.placeWord
+          });        
+      	default :
+          return state;
+      }
+  	};
+  	const store = Redux.createStore(reducer, initial);
+  	const ReduxMixin = PolymerRedux(store);
+</script>

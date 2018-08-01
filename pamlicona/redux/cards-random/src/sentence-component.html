@@ -29,7 +29,7 @@
       (function sentenceComponent(customElements){
         'use strict';
 
-        class SentenceComponent extends Polymer.Element {
+        class SentenceComponent extends ReduxMixin(Polymer.Element) {
           static get is() { return 'sentence-component'; }
           static get properties() {
             return {
@@ -39,19 +39,19 @@
               },
               subjectWord: {
                 type: String,
-                value: ''
+                statePath: 'subjectWord'
               },
               verbWord: {
                 type: String,
-                value: ''
+                statePath: 'verbWord'
               },
               adjectiveWord: {
                 type: String,
-                value: ''
+                statePath: 'adjectiveWord'
               },
               placeWord: {
                 type: String,
-                value: ''
+                statePath: 'placeWord'
               }
             }
           }
@@ -64,6 +64,10 @@
 
           _formSentence(placeWord, adjectiveWord, verbWord, subjectWord) {
             this.sentence = `${subjectWord} ${verbWord} ${adjectiveWord} ${placeWord}`
+            this.dispatch({
+              type: 'CHANGE_START',
+              start: false,
+            });
           }
         }
         customElements.define(SentenceComponent.is, SentenceComponent);

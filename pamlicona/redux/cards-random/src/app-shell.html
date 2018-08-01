@@ -1,6 +1,7 @@
   <link rel="import" href="/bower_components/polymer/polymer-element.html">
   <link rel="import" href="card-component.html">
   <link rel="import" href="sentence-component.html">
+  <link rel="import" href="mixins/redux-mixin.html">
 
   <dom-module id="app-shell">
     <template>
@@ -31,53 +32,35 @@
           cursor: pointer;
         }
       </style>
+
       <div class="container-cards">
-        <card-component
-          type-card="subject"
-          start-random="[[start]]"
-          list="[[listSubject]]"
-          on-send-word="setValues"
-        ></card-component>
-        <card-component
-          type-card="verb"
-          start-random="[[start]]"
-          list="[[listVerb]]"
-          on-send-word="setValues"
-        ></card-component>
-        <card-component
-          type-card="adjective"
-          start-random="[[start]]"
-          list="[[listAdjective]]"
-          on-send-word="setValues"
-        ></card-component>
-        <card-component
-          type-card="place"
-          start-random="[[start]]"
-          list="[[listPlace]]"
-          on-send-word="setValues"
-        ></card-component>
+        <card-component subject start-random="[[start]]" list="[[listSubject]]"></card-component>
+
+        <card-component verb start-random="[[start]]" list="[[listVerb]]"></card-component>
+
+        <card-component adjective start-random="[[start]]" list="[[listAdjective]]"></card-component>
+
+        <card-component place start-random="[[start]]" list="[[listPlace]]"></card-component>
       </div>
+
       <div class="button">
         <button class="button__button" on-click="startGame">Jugar</button>
       </div>
-      <sentence-component
-        subject-word=[[subjectWord]]
-        verb-word=[[verbWord]]
-        adjective-word=[[adjectiveWord]]
-        place-word=[[placeWord]]
-      ></sentence-component>
+
+      <sentence-component></sentence-component>
+
     </template>
     <script>
       (function appShell(customElements){
         'use strict';
 
-        class AppShell extends Polymer.Element {
+        class AppShell extends ReduxMixin(Polymer.Element) {
           static get is() { return 'app-shell'; }
           static get properties() {
             return {
               start: {
                 type: Boolean,
-                value: false
+                statePath: 'start'
               },
               listSubject: {
                 type: Array,
@@ -98,23 +81,11 @@
             }
           }
 
-          setValues(event) {
-            let typeCard = event.detail.type;
-            let word = event.detail.word;
-            if (typeCard === 'subject') {
-              this.set('subjectWord', word);
-            } else if (typeCard === 'verb') {
-              this.set('verbWord', word);
-            } else if (typeCard === 'adjective') {
-              this.set('adjectiveWord', word);
-            } else if (typeCard === 'place') {
-              this.set('placeWord', word);
-            }
-            this.set('start', false);
-          }
-
           startGame() {
-            this.set('start', true);
+            this.dispatch({
+              type: 'CHANGE_START',
+              start: true,
+            });
           }
         }
         customElements.define(AppShell.is, AppShell);
