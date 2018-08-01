@@ -1,0 +1,72 @@
+  <link rel="import" href="/bower_components/polymer/polymer-element.html">
+
+  <dom-module id="sentence-component">
+    <template>
+      <style>
+        :host {
+          --color-text: gray;
+          --color-border: orange;
+        }
+
+        .sentence {
+          display: flex;
+          justify-content: center;
+          margin-top: 40px;
+          font-size: 20px;
+          text-decoration: underline;
+          text-underline-position: under;
+          text-decoration-color: var(--color-border);
+          color: var(--color-text);
+          text-decoration-style: double;
+        }
+      </style>
+
+      <div class="sentence">
+        <p class="sentence__text">[[sentence]]</p>
+      </div>
+    </template>
+    <script>
+      (function sentenceComponent(customElements){
+        'use strict';
+
+        class SentenceComponent extends Polymer.Element {
+          static get is() { return 'sentence-component'; }
+          static get properties() {
+            return {
+              sentence: {
+                type: String,
+                value: ''
+              },
+              subjectWord: {
+                type: String,
+                value: ''
+              },
+              verbWord: {
+                type: String,
+                value: ''
+              },
+              adjectiveWord: {
+                type: String,
+                value: ''
+              },
+              placeWord: {
+                type: String,
+                value: ''
+              }
+            }
+          }
+
+          static get observers() {
+            return [
+              '_formSentence(placeWord, adjectiveWord, verbWord, subjectWord)'
+            ]
+          }
+
+          _formSentence(placeWord, adjectiveWord, verbWord, subjectWord) {
+            this.sentence = `${subjectWord} ${verbWord} ${adjectiveWord} ${placeWord}`
+          }
+        }
+        customElements.define(SentenceComponent.is, SentenceComponent);
+      })(window.customElements);
+    </script>
+  </dom-module>

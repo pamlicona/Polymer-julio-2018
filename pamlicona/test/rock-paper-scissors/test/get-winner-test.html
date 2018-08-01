@@ -12,148 +12,95 @@
   <link rel="import" href="../src/get-winner.html">
 </head>
 <body>
-  <test-fixture id="rockVsPaper">
+  <test-fixture id="game">
     <template>
-      <get-winner player-one-selection="rock" player-two-selection="paper"></get-winner>
-    </template>
-  </test-fixture>
-
-  <test-fixture id="paperVsScissors">
-    <template>
-      <get-winner player-one-selection="paper" player-two-selection="scissors"></get-winner>
-    </template>
-  </test-fixture>
-
-  <test-fixture id="scissorsVsRock">
-    <template>
-      <get-winner player-one-selection="scissors" player-two-selection="rock"></get-winner>
-    </template>
-  </test-fixture>
-
-  <test-fixture id="paperVsRock">
-    <template>
-      <get-winner player-one-selection="paper" player-two-selection="rock"></get-winner>
-    </template>
-  </test-fixture>
-
-  <test-fixture id="scissorsVsPaper">
-    <template>
-      <get-winner player-one-selection="scissors" player-two-selection="paper"></get-winner>
-    </template>
-  </test-fixture>
-
-  <test-fixture id="rockVsScissors">
-    <template>
-      <get-winner player-one-selection="rock" player-two-selection="scissors"></get-winner>
-    </template>
-  </test-fixture>
-
-  <test-fixture id="paperVsPaper">
-    <template>
-      <get-winner player-one-selection="paper" player-two-selection="paper"></get-winner>
-    </template>
-  </test-fixture>
-
-  <test-fixture id="scissorsVsScissors">
-    <template>
-      <get-winner player-one-selection="scissors" player-two-selection="scissors"></get-winner>
-    </template>
-  </test-fixture>
-
-  <test-fixture id="rockVsRock">
-    <template>
-      <get-winner player-one-selection="rock" player-two-selection="rock"></get-winner>
+      <get-winner></get-winner>
     </template>
   </test-fixture>
 
   <script>
     suite('Return winner', () => {
-      let rockVsPaper;
-      let paperVsScissors;
-      let scissorsVsRock;
-      let paperVsRock;
-      let scissorsVsPaper;
-      let rockVsScissors;
+      let game;
       setup(function() {
-        rockVsPaper = fixture('rockVsPaper');
-        paperVsScissors = fixture('paperVsScissors');
-        scissorsVsRock = fixture('scissorsVsRock');
-        paperVsRock = fixture('paperVsRock');
-        scissorsVsPaper = fixture('scissorsVsPaper');
-        rockVsScissors = fixture('rockVsScissors');
+        game = fixture('game');
       })
       test('Rock vs Paper win Paper', (done) => {
-        rockVsPaper.addEventListener('my-winner', (event) => {
+        game.addEventListener('my-winner', (event) => {
           assert.equal(event.detail.winner, 'paper');
           done();
         });
-        rockVsPaper._winner();
+        game.playerOneSelection = 'rock';
+        game.playerTwoSelection = 'paper';
       });
       test('Rock vs Scissors win Rock', (done) => {
-        scissorsVsRock.addEventListener('my-winner', (event) => {
+        game.addEventListener('my-winner', (event) => {
           assert.equal(event.detail.winner, 'rock');
           done();
         });
-        scissorsVsRock._winner();
+        game.playerOneSelection = 'rock';
+        game.playerTwoSelection = 'scissors';
       });
       test('Paper vs Scissors win Scissors', (done) => {
-        paperVsScissors.addEventListener('my-winner', (event) => {
+        game.addEventListener('my-winner', (event) => {
           assert.equal(event.detail.winner, 'scissors');
           done();
         });
-        paperVsScissors._winner();
+        game.playerOneSelection = 'paper';
+        game.playerTwoSelection = 'scissors';
       });
       test('Paper vs Rock win Paper', (done) => {
-        paperVsRock.addEventListener('my-winner', (event) => {
+        game.addEventListener('my-winner', (event) => {
           assert.equal(event.detail.winner, 'paper');
           done();
         });
-        paperVsRock._winner();
+        game.playerOneSelection = 'paper';
+        game.playerTwoSelection = 'rock';
       });
       test('Scissors vs Rock win Rock', (done) => {
-        rockVsScissors.addEventListener('my-winner', (event) => {
+        game.addEventListener('my-winner', (event) => {
           assert.equal(event.detail.winner, 'rock');
           done();
         });
-        rockVsScissors._winner();
+        game.playerOneSelection = 'scissors';
+        game.playerTwoSelection = 'rock';
       });
       test('Scissors vs Paper win Scissors', (done) => {
-        scissorsVsPaper.addEventListener('my-winner', (event) => {
+        game.addEventListener('my-winner', (event) => {
           assert.equal(event.detail.winner, 'scissors');
           done();
         });
-        scissorsVsPaper._winner();
+        game.playerOneSelection = 'scissors';
+        game.playerTwoSelection = 'paper';
       });
     })
     suite('Return draw', () => {
-      let paperVsPaper;
-      let scissorsVsScissors;
-      let scissorsVsRock;
+      let game;
       setup(function() {
-        paperVsPaper = fixture('paperVsPaper');
-        scissorsVsScissors = fixture('scissorsVsScissors');
-        rockVsRock = fixture('rockVsRock');
+        game = fixture('game');
       })
       test('Paper vs Paper is Draw', (done) => {
-        paperVsPaper.addEventListener('my-winner', (event) => {
+        game.addEventListener('my-winner', (event) => {
           assert.equal(event.detail.winner, 'draw');
           done();
         });
-        paperVsPaper._winner();
+        game.playerOneSelection = 'paper';
+        game.playerTwoSelection = 'paper';
       });
       test('Scissors vs Scissors is Draw', (done) => {
-        scissorsVsScissors.addEventListener('my-winner', (event) => {
+        game.addEventListener('my-winner', (event) => {
           assert.equal(event.detail.winner, 'draw');
           done();
         });
-        scissorsVsScissors._winner();
+        game.playerOneSelection = 'scissors';
+        game.playerTwoSelection = 'scissors';
       });
       test('Rock vs Rock is Draw', (done) => {
-        rockVsRock.addEventListener('my-winner', (event) => {
+        game.addEventListener('my-winner', (event) => {
           assert.equal(event.detail.winner, 'draw');
           done();
         });
-        rockVsRock._winner();
+        game.playerOneSelection = 'rock';
+        game.playerTwoSelection = 'rock';
       });
     })
   </script>

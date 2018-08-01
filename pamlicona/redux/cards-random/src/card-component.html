@@ -1,0 +1,82 @@
+  <link rel="import" href="/bower_components/polymer/polymer-element.html">
+
+  <dom-module id="card-component">
+    <template>
+      <style>
+        :host {
+          --color-text: gray;
+        }
+
+        .card-container {
+          border: 3px solid;
+          min-width: 120px;
+          text-align: center;
+          min-height: 89px;
+          box-shadow: 0 0 0 6px hsl(0, 0%, 80%);
+          border-color: orange;
+        }
+
+        .card-container__text {
+          margin-top: 34px;
+          color: var(--color-text);
+        }
+      </style>
+
+      <div class="card-container">
+        <p class="card-container__text">[[word]]</p>
+      </div>
+    </template>
+    <script>
+      (function cardComponent(customElements){
+        'use strict';
+
+        class CardComponent extends Polymer.Element {
+          static get is() { return 'card-component'; }
+          static get properties() {
+            return {
+              list: {
+                type: Array,
+                value: []
+              },
+              typeCard: {
+                type: String,
+                value: ''
+              },
+              word: {
+                type: String,
+                value: '?'
+              },
+              startRandom: {
+                type: Boolean,
+                value: false,
+                observer: '_startRandom'
+              }
+            }
+          }
+
+          _sendEvent() {
+            this.dispatchEvent(new CustomEvent('send-word', {
+              detail: {
+                word: this.word,
+                type: this.typeCard
+              }
+            }))
+          }
+
+          _getRandomNumber() {
+            let randomNumber = Math.floor(Math.random() * 7);
+            return randomNumber
+          }
+
+          _startRandom(newValue, oldValue) {
+            if (oldValue !== undefined) {
+              let positionList = this._getRandomNumber();
+              this.word = this.list[positionList];
+              this._sendEvent();
+            }
+          }
+        }
+        customElements.define(CardComponent.is, CardComponent);
+      })(window.customElements);
+    </script>
+  </dom-module>
