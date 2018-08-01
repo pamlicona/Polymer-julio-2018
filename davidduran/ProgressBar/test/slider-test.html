@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Test</title>
+  <script src="../bower_components/webcomponentsjs/webcomponents-loader.js"></script>
+  <script src="../bower_components/web-component-tester/browser.js"></script>
+
+  <link rel="import" href="../bower_components/test-fixture/test-fixture.html">
+  <link rel="import" href="../src/slider-component.html">
+</head>
+<body>
+  <test-fixture id="slider-1">
+    <template>
+      <slider-component 	
+      	speed="slow" time="100" percentage="15">
+      </slider-component>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="slider-2">
+    <template>
+      <slider-component 
+      	speed="fast" time="10" percentage="25"
+      ></slider-component>
+    </template>
+  </test-fixture>
+
+  <script>
+    suite('Bar tests', () => {
+      let myView;
+      let myView2;
+      setup( () => {
+        myView = fixture('slider-1');
+        myView2 = fixture('slider-2');
+      })
+
+      //
+      //   SUITE 1
+      //
+      test('slow time range', () => {
+        //const name = myView.shadowRoot.querySelector('#myBar');
+        let time = myView.time;
+        time = time/10;
+        expect(time).to.have.within(6, 10);
+      });
+      test('fast time range', () => {
+        //const name = myView.shadowRoot.querySelector('#myBar');
+        let time = myView2.time;
+        time = time/10;
+        expect(time).to.have.within(1, 4);
+      });
+
+      //
+      //   SUITE 2
+      //
+      test('slow percentage range', () => {
+        //const name = myView.shadowRoot.querySelector('#myBar');
+        myView._speedChanged();
+        let p = myView.width;
+        expect(p).to.have.within(1, 20);
+      });
+      test('fast percentage range', () => {
+        //const name = myView.shadowRoot.querySelector('#myBar');
+        myView2._speedChanged();
+        let p = myView2.width;
+        expect(p).to.have.within(1, 60);
+      });
+      
+
+      //
+      //   SUITE 3
+      //
+      test('Event load should be Slow Mode', () => {
+        myView.addEventListener('load-finished', (event) => {
+          assert.equal(event.detail, 'finish in slow mode');
+        });
+        myView._testEvent();
+      });
+      test('Event load should be Fast Mode', () => {
+        myView2.addEventListener('load-finished', (event) => {
+          assert.equal(event.detail, 'finish in fast mode');
+        });
+        myView._testEvent();
+      });
+      
+
+    })
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,192 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="element-component.html">
+<link rel="import" href="logic-component.html">
+<link rel="import" href="styles-component.html">
+
+<link rel="import" href="/bower_components/app-route/app-route.html">
+<link rel="import" href="/bower_components/app-route/app-location.html">
+<link rel="import" href="/bower_components/iron-pages/iron-pages.html">
+
+<dom-module id="app-shell">
+  <template>
+    <style include="custom-styles">
+
+    </style>
+    <iron-pages selected="{{routeData.view}}" attr-for-selected="view" fallback-selection="home">
+      <section view="home">
+        <div class="header">
+          <div class="home" id="headerbg" style="background-position: 0px 0px;">
+            <div class="headerleft">
+              <div class="checks">
+                <label class="container">Player vs Player
+                  <input type="radio" on-click="_setModeGame" data-speed="PvP" name="mode">
+                  <span class="checkmark"></span>
+                </label>
+              </div>
+            </div>
+            <div class="headerright">
+              <div class="checks">
+                <label class="container">Player vs Computer
+                  <input type="radio" on-click="_setModeGame" data-speed="PvC" name="mode">
+                  <span class="checkmark"></span>
+                </label>
+              </div>
+            </div>
+            <div class="headermiddle"><div class="headerlogo"></div></div>
+          </div>
+        </div>
+        <div class="menulogo">
+          <div class="menuarea">
+            <div style="padding-top: 50px;">
+              <a on-click="_startGame">
+                <div id="playnow"></div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section view="PvP" >
+        <div class="header">
+          <div class="home whitoutrbg" style="background-position: 0px 0px;">
+            <div class="headerleft">
+              <h1 class="title__player">Player 1</h1>
+              <element-component on-selected-element="_getElement" player="One" ></element-component>
+            </div>
+            <div class="headerright">
+              <h1 class="title__player">Player 2</h1>
+              <element-component on-selected-element="_getElement" player="Two"> </element-component>
+            </div>
+            <div><div class="headerlogo"></div></div>
+          </div>
+        </div>
+        <div class="center">
+            <h1 class="title__player winner"></h1>
+        </div>
+      </section>
+
+      <section view="PvC" >
+        <div class="header">
+          <div class="home whitoutrbg" style="background-position: 0px 0px;">
+            <div class="headerleft">
+              <h1 class="title__player">Player 1</h1>
+              <element-component on-selected-element="_getElement" player="One" ></element-component>
+            </div>
+            <div on-click="_disabled" class="headerright">
+              <h1 class="title__player">Computer</h1>
+              <element-component on-selected-element="_getElement" player="Computer" element="[[elementComputer]]"> </element-component>
+            </div>
+            <div><div class="headerlogo"></div></div>
+          </div>
+        </div>
+        <div class="center">
+            <h1 class="title__player winner"></h1>
+        </div>
+      </section>
+
+    </iron-pages>
+  <!--
+    Routes
+  -->
+  <app-location route="{{route}}" use-hash-as-path></app-location>
+
+  <app-route
+     route = "{{route}}"
+     pattern = "/:view"
+     data = "{{routeData}}"
+     tail = "{{subroute}}">
+  </app-route>
+
+  <!--
+    Routes
+  -->
+  <logic-component on-logic-game="_showWinner" players={{players}}> </logic-component>
+
+  </template>
+  <script>
+    (function appShell(customElements){
+      'use strict';
+
+      class AppShell extends Polymer.Element {
+        static get is() { return 'app-shell'; }
+        static get properties() {
+          return {
+            players:{
+              type:Array,
+              value:[]
+            },
+            elementComputer:{
+              type:String,
+              value:''
+            },
+            elements:{
+              type:Array,
+              value:['fuego','tierra','agua']
+            }
+          }
+        }
+        connectedCallback() {
+          super.connectedCallback();
+          this._animated();
+        }
+        static get observers() {
+          return [
+            '_viewPage(route.path)'
+          ]
+        }
+        _animated(){
+          const banner = this.$.headerbg;
+          let y = 0;
+          setInterval(()=>{
+            banner.style.backgroundPosition = `0px ${y}px`;
+            y--;
+          },90);
+        }
+
+        _setModeGame(event){
+          const modeGame = event.target.getAttribute('data-speed');
+          this.modeGame = modeGame;
+        }
+
+        _startGame(){
+          this.set('route.path',`/${this.modeGame}`);
+        }
+
+        _getElement(event){
+          console.log("event M",event.detail.message);
+          this.push('players',{player:event.detail.player,value:event.detail.message});
+        }
+
+        _showWinner(event){
+          this._setWinner(event.detail.message.winner);
+        }
+
+        _disabled(event){
+          event.preventDefault()
+          return;
+        }
+
+        _viewPage(view){
+          console.log("view",view);
+          this._setWinner('');
+          this._resetOpacity(false);
+          this.set('players',[]);
+          if(this.routeData.view=='PvC'){
+            this.elementComputer = this.elements[Math.floor(Math.random()*this.elements.length)];
+          }
+        }
+        _setWinner(value){
+          this.shadowRoot.querySelectorAll('.winner').forEach((component)=>{
+            component.innerHTML = value;
+          });
+        }
+        _resetOpacity(value){
+          this.shadowRoot.querySelectorAll('element-component').forEach((component)=>{
+            component.resetOpacity(value);
+          });
+        }
+      }
+      customElements.define(AppShell.is, AppShell);
+    })(window.customElements);
+  </script>
+</dom-module>

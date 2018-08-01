@@ -1,0 +1,116 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="my-view1">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+        padding: 10px;
+        height: 100%;
+      }
+      a{
+        text-decoration: none;
+      }
+      .options {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .left,
+      .right {
+        align-items: center;
+        display: flex;
+        justify-content: center;
+        position: relative;
+      }
+
+      .left {
+        background: url(../images/human.jpg) center no-repeat;
+        background-size: contain;
+        height: 87.5vh;
+        width: 35%;
+      }
+
+      .content {
+        color: #FFF;
+        font-size: 3rem;
+        z-index: 2;
+        text-align: center;
+      }
+
+      .content,
+      .opacity {
+        opacity: 0;
+        transition: all .3s linear;
+      }
+
+      .content {
+        transition: all .5s linear;
+      }
+
+      .right:hover .opacity,
+      .left:hover .opacity {
+        opacity: 1;
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: 0;
+        background: #000000;
+        opacity: 0.5;
+      }
+
+      .right:hover .content,
+      .left:hover .content {
+        opacity: 1;
+      }
+
+      .right {
+        background: url(../images/sauron.jpg) center no-repeat;
+        background-size: contain;
+        height: 87.5vh;
+        width: 35%;
+      }
+    </style>
+
+    <div class="options">
+      <div class="left">
+        <a name="human-vs-human" href="#human-vs-human">
+          <div class="opacity"></div>
+          <div class="content">Human
+            <br>vs
+            <br>Human</div>
+        </a>
+      </div>
+      <div class="right">
+        <a name="human-vs-computer" href="#human-vs-computer">
+          <div class="opacity"></div>
+          <div class="content">Human
+            <br>vs
+            <br>Computer</div>
+        </a>
+      </div>
+
+    </div>
+  </template>
+
+  <script>
+    class MyView1 extends Polymer.Element {
+      static get is() { return 'my-view1'; }
+    }
+
+    window.customElements.define(MyView1.is, MyView1);
+  </script>
+</dom-module>

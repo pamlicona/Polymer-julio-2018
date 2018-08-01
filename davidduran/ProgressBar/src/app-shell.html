@@ -1,0 +1,79 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="slider-component.html">
+
+<dom-module id="app-shell">
+  
+  <template>
+    <style>
+      :host {
+        text-align: center;
+      }
+      slider-component {
+        display: block;
+      }
+      form {
+        margin-top: 40px;
+      }
+    </style>
+
+    <h1>Progress Bar</h1>
+    <slider-component  speed="[[speed]]" time="[[time]]" percentage="[[percentage]]" ></slider-component>
+    <button on-click="speedF">Fast</button> 
+    <button on-click="speedS">Slow</button> 
+    <button on-click="reset">Reset</button> 
+  </template>
+
+
+  <script>
+    (function appShell(customElements) {
+      'use strict';
+
+      class AppShell extends Polymer.Element {
+        static get is() { return 'app-shell'; }
+        static get properties() {
+          return {
+            color: {
+              type : String,
+              value : ""
+            },
+            speed:{
+              type: String,
+              value: ""
+            },
+            time:{
+              type: String,
+              value: ""
+            },
+            percentage:{
+              type: String,
+              value: ""
+            }
+        
+          }
+        }
+
+       speedF(){
+        this.time = this.getRandomInt(10, 40);
+        this.percentage = this.getRandomInt(1,60);
+        this.speed = "fast";
+       }
+
+       speedS(){
+        this.time= this.getRandomInt(60, 100);
+        this.percentage = this.getRandomInt(1,20);
+        this.speed = "slow";
+       }
+       reset(){
+        this.speed = "reset";
+       }  
+       getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+        
+      }
+    customElements.define(AppShell.is, AppShell);
+    })(window.customElements);
+  </script>
+
+
+</dom-module>

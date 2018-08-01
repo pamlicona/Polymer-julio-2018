@@ -1,0 +1,57 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+
+<dom-module id="my-faq">
+    <template>
+        <style>
+            :host {
+                display: block;
+                padding: 10px 20px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+                color: #000;
+                margin: 5vh 0 10vh;
+            }
+
+            h1,
+            ul,
+            a {
+                text-align: center;
+            }
+
+            a {
+                width: 100%;
+            }
+
+            ul {
+                list-style-type: none;
+            }
+
+            ul li {
+                margin: 30px 0;
+            }
+        </style>
+
+        <h1>How to play?</h1>
+
+        <ul>
+            <li>Orc wins a hobbit</li>
+            <li>Hobbit wins an Elf</li>
+            <li>Elf wins an Orc</li>
+        </ul>
+
+        <a name="view1" href="#view1">Regresar</a>
+
+    </template>
+
+    <script>
+        class MyFaq extends Polymer.Element {
+            static get is() { return 'my-faq'; }
+        }
+
+        
+
+        window.customElements.define(MyFaq.is, MyFaq);
+    </script>
+</dom-module>

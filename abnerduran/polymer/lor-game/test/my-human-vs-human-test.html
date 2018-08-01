@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>my-view1</title>
+
+    <script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../bower_components/web-component-tester/browser.js"></script>
+
+    <!-- Import the element to test -->
+    <link rel="import" href="../src/my-human-vs-human.html">
+</head>
+
+<body>
+    <test-fixture id="my-human-human">
+        <template>
+            <my-human-vs-human></my-human-vs-human>
+        </template>
+    </test-fixture>
+
+    <script>
+        // Human vs Human
+        suite('Human vs Human options test', function () {
+            let myHumanHuman;
+            setup(() => {
+                myHumanHuman = fixture('my-human-human');
+            })
+            test('Player 1: Hobbit, Player 2: Orc => Orc wins', function () {
+                myHumanHuman.firstOption = "Orc";
+                myHumanHuman.secondOption = "Hobbit";
+                const result = myHumanHuman._getResult();
+                assert.equal(result, 'Orc wins');
+            });
+            test('Player 1: Elf, Player 2: Orc => Elf wins', function () {
+                myHumanHuman.firstOption = "Orc";
+                myHumanHuman.secondOption = "Elf";
+                const result = myHumanHuman._getResult();
+                assert.equal(result, 'Elf wins');
+            });
+        });
+
+        suite('Human vs Human events', function () {
+            let myHumanHuman;
+            setup(() => {
+                myHumanHuman = fixture('my-human-human');
+            })
+
+            test('Player 1 option selected', function () {
+                const option = "Hobbit";
+                myHumanHuman.firstOption = option;
+                myHumanHuman.addEventListener('first-option-selected', () => {
+                    assert.equal(event.detail, option);
+                });
+                myHumanHuman._dispatchEvent('first-option-selected', option);
+            });
+
+            test('Player 2 option selected', function (done) {
+                const option = "Elf";
+                myHumanHuman.firstOption = option;
+                myHumanHuman.secondOption = option;
+                myHumanHuman.addEventListener('second-option-selected', () => {
+                    assert.equal(event.detail, option);
+                    done();
+                });
+                myHumanHuman._secondOptionSelected();
+            });
+        });
+    </script>
+</body>
+
+</html>

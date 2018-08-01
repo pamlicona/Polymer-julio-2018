@@ -1,0 +1,42 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+
+<dom-module id="my-view404">
+  <template>
+    <style>
+      :host {
+        display: block;
+        padding: 10px 20px;
+        background: url(../images/error.jpg) no-repeat;
+        background-size: cover;
+        height: 90vh;
+        width: 100vw;
+        overflow: hidden;
+      }
+
+      h1 {
+        font-size: 3rem;
+        color: #fff;
+      }
+    </style>
+
+    <h1>Oops you hit a 404.
+      <br>
+      <a href="[[rootPath]]#view1">Head back to home.</a>
+    </h1>
+  </template>
+
+  <script>
+    class MyView404 extends Polymer.Element {
+      static get is() { return 'my-view404'; }
+      static get properties() {
+        return {
+          // This shouldn't be neccessary, but the Analyzer isn't picking up
+          // Polymer.Element#rootPath
+          rootPath: String,
+        };
+      }
+    }
+
+    window.customElements.define(MyView404.is, MyView404);
+  </script>
+</dom-module>
