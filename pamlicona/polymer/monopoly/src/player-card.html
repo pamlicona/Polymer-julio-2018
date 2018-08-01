@@ -1,0 +1,94 @@
+  <link rel="import" href="/bower_components/polymer/polymer-element.html">
+  <link rel="import" href="/bower_components/polymer/lib/elements/dom-if.html">
+  <link rel="import" href="/bower_components/titanium-currency/titanium-currency.html">
+
+  <dom-module id="player-card">
+    <template>
+      <style>
+        .notIsDetail {
+          grid-template-colums: 1fr;
+          max-width: 300px;
+        }
+
+        .isDetail {
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .player-info {
+          display: grid;
+          background-image: url('assets/img/background-player-card.png');
+        }
+
+        .player-info__image img {
+          width: 100%;
+        }
+
+        .player-info__details {
+          text-align: center;
+          color: white;
+          font-family: sans-serif;
+          padding-bottom: 20px;
+        }
+
+        h2 {
+          font-weight: 100;
+        }
+      </style>
+
+      <div class$="{{_isDetailPlayer(detailPlayer)}} player-info">
+        <div class="player-info__image">
+          <img src="[[playerInfo.avatar]]">
+        </div>
+        <div class="player-info__details">
+          <h2>[[playerInfo.name]]</h2>
+          <titanium-currency value="[[playerInfo.money]]" decimal-places="2" thousands-separators></titanium-currency>
+          <template is="dom-if" if="[[detailPlayer]]">
+            <div>
+              <span>Casilla Actual</span>
+              <p>[[playerInfo.casilla]]</p>
+            </div>
+            <div>
+              <span>No. de propiedades</span>
+              <p>[[propertiesNumber]]</p>
+            </div>
+          </template>
+        </div>
+      </div>
+
+    </template>
+    <script>
+      (function playerCard(customElements){
+        'use strict';
+
+        class PlayerCard extends Polymer.Element {
+          static get is() { return 'player-card'; }
+          static get properties() {
+            return {
+              playerInfo: {
+                type: Object,
+                value: {}
+              },
+              detailPlayer: {
+                type: Boolean,
+                value: false
+              },
+              propertiesNumber: {
+                type: Number,
+                computed: '_getProperties(playerInfo)'
+              }
+            }
+          }
+
+          _isDetailPlayer(detail) {
+            return detail ? 'isDetail' : 'notIsDetail' ;
+          }
+
+          _getProperties(player) {
+            const numberProperties = player.properties.length;
+            return numberProperties;
+          }
+        }
+        customElements.define(PlayerCard.is, PlayerCard);
+      })(window.customElements);
+    </script>
+  </dom-module>

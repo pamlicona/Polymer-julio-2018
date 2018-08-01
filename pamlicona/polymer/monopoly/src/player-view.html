@@ -1,0 +1,87 @@
+  <link rel="import" href="/bower_components/polymer/polymer-element.html">
+  <link rel="import" href="/bower_components/app-route/app-route.html">
+  <link rel="import" href="/bower_components/iron-ajax/iron-ajax.html">
+  <link rel="import" href="player-card.html">
+
+  <dom-module id="player-view">
+    <template>
+      <style>
+      </style>
+
+      <app-route
+        route="[[route]]"
+        pattern="/:idPlayer"
+        data="{{data}}">
+      </app-route>
+
+      <iron-ajax
+        id="getPlayer"
+        url=""
+        handle-as="json"
+        on-response="_setPlayerInfo"
+        last-response="{{response}}"
+        on-iron-ajax-error="_showError">
+      </iron-ajax>
+
+      <!--player-card player-info="[[response]]" detail-player></player-card-->
+      <player-card player-info="[[playerInfo]]" detail-player></player-card>
+
+    </template>
+    <script>
+      (function playerView(customElements){
+        'use strict';
+
+        class PlayerView extends Polymer.Element {
+          static get is() { return 'player-view'; }
+          static get properties() {
+            return {
+              playerInfo: {
+                type: Object,
+                value: {
+                  id: 1,
+                  name: "Pamela Martínez",
+                  avatar: "http://www.viveusa.mx/sites/default/files/styles/large/public/img_4835.png?itok=s60lx0kf",
+                  casilla: 2,
+                  status: "playing",
+                  money: 500000,
+                  properties: [1, 2, 12]
+                }
+              },
+              idPlayer: String,
+              newBox: Number
+            }
+          }
+
+          static get observers() {
+            return [
+              '_idChange(data.idPlayer)'
+            ]
+          }
+
+          // Set the new id of user and generate request
+          _idChange(id) {
+            this.set('idPlayer', id);
+            //this.$.getPlayer.generateRequest();
+          }
+
+          // Set response of request in playerInfo
+          _setPlayerInfo(request) {
+            const response = JSON.parse(request.detail.response);
+            this.set('playerInfo', response);
+          }
+
+          // Recibe el valor de los dados y actualiza la casilla
+          setNewBox(event) {
+            const resultDice = event.detail.result;
+            const newBox = this.playerInfo.casilla + resultDice;
+            if (newBox > 39) {
+              this.set('newBox', resultDice - 1);
+            } else {  
+              this.set('newBox', newBox);
+            }
+          }          
+        }
+        customElements.define(PlayerView.is, PlayerView);
+      })(window.customElements);
+    </script>
+  </dom-module>
