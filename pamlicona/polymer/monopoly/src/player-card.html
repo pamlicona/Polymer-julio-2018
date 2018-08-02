@@ -5,18 +5,30 @@
   <dom-module id="player-card">
     <template>
       <style>
+        :host {
+          --primary-color: #9ee0b5;
+        }
+
         .notIsDetail {
-          grid-template-colums: 1fr;
+          grid-template-columns: 1fr;
           max-width: 300px;
+          background-image: url('assets/img/background-player-card.png');
         }
 
         .isDetail {
           grid-template-columns: 1fr 1fr;
+          align-items: center;
+          color: #FF2029;
+          border: 3px solid var(--primary-color);
+          max-height: 438px;
+          background-image: url('assets/img/background-detail-player.jpg');
+          background-position: bottom;
+          max-width: 852px;
         }
 
         .player-info {
+          box-shadow: 0 10px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
           display: grid;
-          background-image: url('assets/img/background-player-card.png');
         }
 
         .player-info__image img {
@@ -27,11 +39,46 @@
           text-align: center;
           color: white;
           font-family: sans-serif;
-          padding-bottom: 20px;
         }
 
         h2 {
           font-weight: 100;
+        }
+
+        .isDetailTitle {
+          color: black;
+          background-color: white;
+          margin: 0;
+          padding: 20px;
+          font-size: 39px;
+          margin-bottom: 69px;
+        }
+
+        .details__currency {
+          font-size: 34px;
+          padding-top: 31px;
+        }
+
+        .details__info {
+          display: grid;
+          align-items: center;
+          justify-content: center;
+          font-size: 26px;
+          grid-template-columns: 1fr 1fr;
+          border-top: 3px solid white;
+          font-weight: 100;
+        }
+
+        .box {
+          margin-top: 56px;
+        }
+
+        .details__info p {
+          font-size: 36px;
+          border-left: 3px solid white;
+          padding-bottom: 25px;
+          margin: 0;
+          padding-top: 25px;
         }
       </style>
 
@@ -40,15 +87,15 @@
           <img src="[[playerInfo.avatar]]">
         </div>
         <div class="player-info__details">
-          <h2>[[playerInfo.name]]</h2>
-          <titanium-currency value="[[playerInfo.money]]" decimal-places="2" thousands-separators></titanium-currency>
+          <h2 class$="{{_isDetailPlayerTitle(detailPlayer)}}">[[playerInfo.name]]</h2>
+          <titanium-currency class="details__currency" value="[[playerInfo.money]]" decimal-places="2" thousands-separators></titanium-currency>
           <template is="dom-if" if="[[detailPlayer]]">
-            <div>
+            <div class="details__info box">
               <span>Casilla Actual</span>
               <p>[[playerInfo.casilla]]</p>
             </div>
-            <div>
-              <span>No. de propiedades</span>
+            <div class="details__info properties">
+              <span>Propiedades</span>
               <p>[[propertiesNumber]]</p>
             </div>
           </template>
@@ -81,6 +128,10 @@
 
           _isDetailPlayer(detail) {
             return detail ? 'isDetail' : 'notIsDetail' ;
+          }
+
+          _isDetailPlayerTitle(detail) {
+            return detail ? 'isDetailTitle' : '' ;
           }
 
           _getProperties(player) {

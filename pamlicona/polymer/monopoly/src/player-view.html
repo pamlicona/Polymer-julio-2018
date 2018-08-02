@@ -1,4 +1,5 @@
   <link rel="import" href="/bower_components/polymer/polymer-element.html">
+  <link rel="import" href="/bower_components/polymer/lib/elements/dom-if.html">
   <link rel="import" href="/bower_components/app-route/app-route.html">
   <link rel="import" href="/bower_components/iron-ajax/iron-ajax.html">
   <link rel="import" href="player-card.html">
@@ -6,6 +7,29 @@
   <dom-module id="player-view">
     <template>
       <style>
+        :host {
+          --color-text-error: white;
+        }
+
+        * {
+          margin: 0;
+          padding: 0;
+        }
+
+        .error {
+          background-image: url('assets/img/background-player-card.png');
+          color: var(--color-text-error);
+          background-size: cover;
+          align-items: center;
+          display: grid;
+          justify-content: center;
+          grid-template-columns: 1fr;
+          text-align: center;
+          font-family: sans-serif;
+          font-size: 50px;
+          padding: 50px;
+          min-height: 590px;
+        }
       </style>
 
       <app-route
@@ -23,8 +47,16 @@
         on-iron-ajax-error="_showError">
       </iron-ajax>
 
-      <!--player-card player-info="[[response]]" detail-player></player-card-->
-      <player-card player-info="[[playerInfo]]" detail-player></player-card>
+      <template is="dom-if" if="[[!error]]">
+        <!--player-card player-info="{{response}}" detail-player></player-card-->
+        <player-card player-info="[[playerInfo]]" detail-player></player-card>
+      </template>
+
+      <template is="dom-if" if="[[error]]">
+        <div class="error">
+          <p>Sucedio un error<br>Por favor intenta nuevamente</p>
+        </div>
+      </template>
 
     </template>
     <script>
@@ -47,6 +79,10 @@
                   properties: [1, 2, 12]
                 }
               },
+              error: {
+                type: Boolean,
+                value: false
+              },
               idPlayer: String,
               newBox: Number
             }
@@ -56,6 +92,10 @@
             return [
               '_idChange(data.idPlayer)'
             ]
+          }
+
+          _showError() {
+            this.set('error', true);
           }
 
           // Set the new id of user and generate request
@@ -68,6 +108,7 @@
           _setPlayerInfo(request) {
             const response = JSON.parse(request.detail.response);
             this.set('playerInfo', response);
+            this.set('error', false);
           }
 
           // Recibe el valor de los dados y actualiza la casilla
